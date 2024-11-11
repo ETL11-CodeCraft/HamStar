@@ -49,11 +49,6 @@ public class Travel : MonoBehaviour
 
             //TODO :: 기념품 획득
             //TODO :: 햄스터 보이도록 설정
-            //TODO :: 여행중 마크 제거
-            if(travelIcon != null)
-            {
-                travelIcon.SetActive(false);
-            }
 
             Debug.Log("도착");
         }
@@ -64,11 +59,11 @@ public class Travel : MonoBehaviour
             isTraveling = true;
             //출발
             //TODO :: 햄스터 안보이도록 설정
-            //TODO :: 여행중 마크 생성
-            if(travelIcon != null)
-            {
-                travelIcon.SetActive(true);
-            }
+        }
+
+        if (travelIcon != null)
+        {
+            travelIcon.SetActive(isTraveling);
         }
     }
 
