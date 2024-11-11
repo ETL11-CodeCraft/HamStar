@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3caf90d9f0ecf444e865b5fbaa0930af
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117803
+  packageName: Android Runtime Permissions
+  packageVersion: 1.2.1
+  assetPath: Assets/Plugins/AndroidRuntimePermissions/AndroidRuntimePermissions.Runtime.asmdef
+  uploadId: 649294
