@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 struct SouvenirData
@@ -17,10 +17,10 @@ struct SouvenirData
 
 public class SouvenirManager : MonoBehaviour
 {
-    [SerializeField] private List<Sprite> souvenirSprites = new List<Sprite>(8);
-    private List<SouvenirData> souvenirList = new List<SouvenirData>(8)     //ÀÌÈÄ µ¥ÀÌÅÍ¸¦ ÀĞ´Â ¹æ½ÄÀ¸·Î º¯°æ
+    [SerializeField] private List<Sprite> _souvenirSprites = new List<Sprite>(8);
+    private List<SouvenirData> _souvenirList = new List<SouvenirData>(8)     //ì´í›„ ë°ì´í„°ë¥¼ ì½ëŠ” ë°©ì‹ìœ¼ë¡œ ë³€ê²½
     {
-        //ÀÓ½Ã µ¥ÀÌÅÍ
+        //ì„ì‹œ ë°ì´í„°
         new SouvenirData("statue_of_liberty","statue_of_liberty",0),
         new SouvenirData("eiffel_tower", "eiffel_tower", 1),
         new SouvenirData("pyramid", "pyramid", 2),
@@ -31,34 +31,37 @@ public class SouvenirManager : MonoBehaviour
         new SouvenirData("eiffel_tower", "eiffel_tower", 1),
         new SouvenirData("pyramid", "pyramid", 2),
     };
-    private Vector2 origin = new Vector2(-140f, 500f);
-    private float screenWidth;
+    private Vector2 _origin = new Vector2(-140f, 500f);
+    private float _screenWidth;
     private const float DELTA_X = 280f;
     private const float DELTA_Y = -230f;
     private const int ROW = 4;
     private const int COL = 2;
-    [SerializeField] private Souvenir souvenirPrefab;
-    private Dictionary<int,Souvenir> souvenirItems = new Dictionary<int,Souvenir>(8);
-    [SerializeField] SouvenirInfo souvenirInfo;
+    [SerializeField] private Souvenir _souvenirPrefab;
+    private Dictionary<int,Souvenir> _souvenirItems = new Dictionary<int,Souvenir>(8);
+    [SerializeField] SouvenirInfo _souvenirInfo;
 
     private void Start()
     {
-        screenWidth = Screen.width;
+        _screenWidth = Screen.width;
 
-        for(int i=0;i<souvenirList.Count;i++)
+        for(int i=0;i<_souvenirList.Count;i++)
         {
-            var obj = Instantiate(souvenirPrefab);
+            var obj = Instantiate(_souvenirPrefab);
 
-            //±âº» Info ¼³Á¤
-            Sprite objSprite = souvenirSprites[Mathf.Clamp(souvenirList[i].id, 0, souvenirSprites.Count - 1)];
-            obj.SetSouvenir(souvenirList[i].name, objSprite, souvenirList[i].desc, souvenirList[i].id);
+            //ê¸°ë³¸ Info ì„¤ì •
+            Sprite objSprite = _souvenirSprites[Mathf.Clamp(_souvenirList[i].id, 0, _souvenirSprites.Count - 1)];
+            obj.SetSouvenir(_souvenirList[i].name, objSprite, _souvenirList[i].desc, _souvenirList[i].id);
 
-            //À§Ä¡ ¼³Á¤
+            //ìœ„ì¹˜ ì„¤ì •
             obj.transform.SetParent(transform);
-            obj.transform.localPosition = origin + new Vector2(((i % COL == 0) ? 0 : DELTA_X) + screenWidth * (i / (ROW*COL)), DELTA_Y * ((i / COL) % ROW));
+            obj.transform.localPosition = _origin + new Vector2(((i % COL == 0) ? 0 : DELTA_X) + _screenWidth * (i / (ROW*COL)), DELTA_Y * ((i / COL) % ROW));
 
-            //OnClickAction ¼³Á¤
-            obj.onClickAction += souvenirInfo.ActiveInfo;
+            //OnClickAction ì„¤ì •
+            obj.onClickAction += _souvenirInfo.ActiveInfo;
+
+            //ì¶”í›„ íšë“í•œ ê¸°ë…í’ˆì„ ì‰½ê²Œ ì°¾ì„ ìˆ˜ ìˆë„ë¡ Dictionary ì‚¬ìš©
+            _souvenirItems.Add(_souvenirList[i].id, obj);
         }
     }
 }

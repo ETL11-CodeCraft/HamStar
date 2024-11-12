@@ -4,16 +4,20 @@ using UnityEngine.UI;
 
 public class SouvenirInfo : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI souvenirName;
-    [SerializeField] private TextMeshProUGUI souvenirDesc;
-    [SerializeField] private Image souvenirImg;
+    [SerializeField] private TextMeshProUGUI _souvenirName;
+    [SerializeField] private TextMeshProUGUI _souvenirDesc;
+    [SerializeField] private Image _souvenirImg;
 
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
 
     public void ActiveInfo(Souvenir souvenir)
     {
-        souvenirName.text = souvenir.souvenirName;
-        souvenirDesc.text = souvenir.souvenirDescription;
-        souvenirImg.sprite = souvenir.souvenirSprite;
+        _souvenirName.text = souvenir.souvenirName;
+        _souvenirDesc.text = souvenir.souvenirDescription;
+        _souvenirImg.sprite = souvenir.souvenirSprite;
 
         gameObject.SetActive(true);
     }
