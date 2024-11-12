@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ProductSlot : MonoBehaviour
@@ -20,6 +21,8 @@ public class ProductSlot : MonoBehaviour
 
     public int Price { get { return _price; } set { _price = value; } }
 
+    public event UnityAction ClickEventHandler;
+
     public void RefreshSlot()
     {
         _image.sprite = _productImage;
@@ -30,5 +33,6 @@ public class ProductSlot : MonoBehaviour
     private void Start()
     {
         _button = GetComponent<Button>();
+        _button.onClick.AddListener(ClickEventHandler);
     }
 }

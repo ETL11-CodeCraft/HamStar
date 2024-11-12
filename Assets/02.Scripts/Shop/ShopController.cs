@@ -18,6 +18,7 @@ public class ShopController : MonoBehaviour
     public void OpenShop()
     {
         _shopCanvas.enabled = true;
+        RefreshShop();
     }
 
     public void CloseShop()
@@ -43,8 +44,10 @@ public class ShopController : MonoBehaviour
     private void Start()
     {
         _shopCanvas = GetComponent<Canvas>();
-
-        RefreshShop();
+        CloseShop();
+        CloseItemPopup();
+        _shopSuccessPanel.SetActive(false);
+        _shopFailPanel.SetActive(false);
     }
 
     private void RefreshShop()
@@ -60,6 +63,16 @@ public class ShopController : MonoBehaviour
             slot.ProjectImage = product.productImage;
             slot.Name = product.productName;
             slot.Price = product.price;
+            slot.ClickEventHandler += () =>
+            {
+                OpenItemPopup();
+                ProductController productController = _itemPanel.GetComponent<ProductController>();
+                if (productController != null)
+                {
+                    productController.SetProduct(product);
+                    productController.Refresh();
+                }
+            };
             slot.RefreshSlot();
 
             obj.transform.SetParent(_scrollView.transform);
@@ -69,7 +82,7 @@ public class ShopController : MonoBehaviour
 
             obj.transform.localPosition = new Vector3(202 + (i % _columns) * 401,
                 -224 - (Mathf.Round(i / _columns) * 431), 0); // 상품 2열로 배치
-            Debug.Log($"localPosition: [{i}] {-199 + (i % _columns) * 401}, {207 - Mathf.Round(i / _columns) * 431}");
+            Debug.Log($"localPosition: [{i}] {202 + (i % _columns) * 401}, {-224 - Mathf.Round(i / _columns) * 431}");
         }
     }
 }
