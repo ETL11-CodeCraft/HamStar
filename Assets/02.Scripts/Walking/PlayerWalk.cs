@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Minimap : MonoBehaviour
+public class PlayerWalk : MonoBehaviour
 {
     private IGPS _gps => _unit.gps;
 

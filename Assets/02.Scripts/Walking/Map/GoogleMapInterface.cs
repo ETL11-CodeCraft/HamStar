@@ -6,7 +6,7 @@ using System;
 public class GoogleMapInterface : MonoBehaviour
 {
     private const string BASE_URL = "https://maps.googleapis.com/maps/api/staticmap?";
-    private const string API_KEY = "AIzaSyBfpTTdjktwg5_d5WVNSpoB8XSDEsgR9Ss";
+    private const string API_KEY = "";
     private Texture2D _cachedTexture;
 
 
