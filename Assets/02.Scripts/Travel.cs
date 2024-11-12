@@ -6,14 +6,15 @@ using UnityEngine.XR;
 
 public class Travel : MonoBehaviour
 {
-    [SerializeField] private GameObject travelIcon;
-    [SerializeField] private TextMeshProUGUI remainTravelText;
-    string travelStartTime;
-    DateTime startTime;
-    string travelEndTime;
-    DateTime endTime;
-    bool isTraveling = false;
-    Coroutine HideCoroutine;
+    [SerializeField] private GameObject _travelIcon;
+    [SerializeField] private TextMeshProUGUI _remainTravelText;
+    string _travelStartTime;
+    DateTime _startTime;
+    string _travelEndTime;
+    DateTime _endTime;
+    bool _isTraveling = false;
+    Coroutine _HideCoroutine;
+
 
     private void Start()
     {
@@ -25,8 +26,8 @@ public class Travel : MonoBehaviour
         else
         {
             var rand = UnityEngine.Random.Range(-3.5f, 3.5f);
-            travelStartTime = DateTime.Now.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss");
-            travelEndTime = DateTime.Now.AddHours(16 + rand).ToString("yyyy-MM-dd HH:mm:ss");
+            _travelStartTime = DateTime.Now.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss");
+            _travelEndTime = DateTime.Now.AddHours(16 + rand).ToString("yyyy-MM-dd HH:mm:ss");
         }
 
         RefreshTravel();
@@ -37,15 +38,15 @@ public class Travel : MonoBehaviour
     /// </summary>
     public void RefreshTravel()
     {
-        endTime = DateTime.ParseExact(travelEndTime, "yyyy-MM-dd HH:mm:ss", null);
-        if (endTime < DateTime.Now)
+        _endTime = DateTime.ParseExact(_travelEndTime, "yyyy-MM-dd HH:mm:ss", null);
+        if (_endTime < DateTime.Now)
         {
-            isTraveling = false;
+            _isTraveling = false;
             //도착
             //출발 시간 및 도착시간 재설정
             var rand = UnityEngine.Random.Range(-3.5f, 3.5f);
-            travelStartTime = DateTime.Now.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss");
-            travelEndTime = DateTime.Now.AddHours(16 + rand).ToString("yyyy-MM-dd HH:mm:ss");
+            _travelStartTime = DateTime.Now.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss");
+            _travelEndTime = DateTime.Now.AddHours(16 + rand).ToString("yyyy-MM-dd HH:mm:ss");
 
             //TODO :: 기념품 획득
             //TODO :: 햄스터 보이도록 설정
@@ -53,34 +54,34 @@ public class Travel : MonoBehaviour
             Debug.Log("도착");
         }
 
-        startTime = DateTime.ParseExact(travelStartTime, "yyyy-MM-dd HH:mm:ss", null);
-        if (isTraveling == false && startTime < DateTime.Now)
+        _startTime = DateTime.ParseExact(_travelStartTime, "yyyy-MM-dd HH:mm:ss", null);
+        if (_isTraveling == false && _startTime < DateTime.Now)
         {
-            isTraveling = true;
+            _isTraveling = true;
             //출발
             //TODO :: 햄스터 안보이도록 설정
         }
 
-        if (travelIcon != null)
+        if (_travelIcon != null)
         {
-            travelIcon.SetActive(isTraveling);
+            _travelIcon.SetActive(_isTraveling);
         }
     }
 
     public void OnClickTravelIcon()
     {
-        GameObject textObj = remainTravelText.transform.parent.gameObject;
+        GameObject textObj = _remainTravelText.transform.parent.gameObject;
         //TODO :: 남은 시간 표시
-        var remainTime = endTime - DateTime.Now;
-        remainTravelText.text = $"{remainTime.Hours}h {remainTime.Minutes}m left";
+        var remainTime = _endTime - DateTime.Now;
+        _remainTravelText.text = $"{remainTime.Hours}h {remainTime.Minutes}m left";
         textObj.SetActive(true);
         //TODO :: 3초뒤 사라지게 하기
 
-        if(HideCoroutine != null)
+        if(_HideCoroutine != null)
         {
-            StopCoroutine(HideCoroutine);
+            StopCoroutine(_HideCoroutine);
         }
-        HideCoroutine = StartCoroutine(C_HideText(textObj));
+        _HideCoroutine = StartCoroutine(C_HideText(textObj));
     }
 
     private IEnumerator C_HideText(GameObject obj)
