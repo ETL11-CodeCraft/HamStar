@@ -11,13 +11,12 @@ using UnityEngine.InputSystem.EnhancedTouch;
 using System;
 using UnityEngine.XR.Interaction.Toolkit.AR;
 
-public class SelectObject : MonoBehaviour
+public class FeedingManager : MonoBehaviour
 {
     [SerializeField] InputActionReference _dragCurrentPosition;
     [SerializeField] GameObject _sunflowerSeed;  //해바라기씨 오브젝트 
     [SerializeField] Camera _xrCamera;
     [SerializeField] Button _seedBtn; //먹이 버튼 
-    int _seedCount = 10; //해바라기씨 개수
     bool _isDraging = false;
     GameObject _spawnObject;
     GameObject _selectedObject;
@@ -40,7 +39,7 @@ public class SelectObject : MonoBehaviour
     private void Start()
     {
         _dragCurrentPosition.action.started += OnTouch;
-        _dragCurrentPosition.action.performed += OnDrag;
+        //_dragCurrentPosition.action.performed += OnDrag;
     }
 
 
@@ -76,17 +75,8 @@ public class SelectObject : MonoBehaviour
 
     private void OnMakeSeedButton()
     {
-        if (_seedCount <= 0)  //먹이 개수가 0 이상일 때만 버튼 누를 수 있음 
-        {
-            //버튼 비활성화 추가하기
-            return;
-        }
-        else
-        {
-            _seedCount--;
-            _spawnObject = Instantiate(_sunflowerSeed, _xrCamera.transform.position + _xrCamera.transform.forward * 0.5f, _xrCamera.transform.rotation);
-            _spawnObject.GetComponent<Rigidbody>().AddForce(_xrCamera.transform.forward * 90f, ForceMode.Force);
-
-        }
+        _spawnObject = Instantiate(_sunflowerSeed, _xrCamera.transform.position + _xrCamera.transform.forward * 0.5f, _xrCamera.transform.rotation);
+        _spawnObject.GetComponent<Rigidbody>().AddForce(_xrCamera.transform.forward * 90f, ForceMode.Force);
+        
     }
 }

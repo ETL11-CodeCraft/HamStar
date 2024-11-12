@@ -453,6 +453,9 @@ MonoBehaviour:
     type: 3}
   _xrCamera: {fileID: 2013412242}
   _seedBtn: {fileID: 779374369}
+  _draggable:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &700299879
 Transform:
   m_ObjectHideFlags: 0
