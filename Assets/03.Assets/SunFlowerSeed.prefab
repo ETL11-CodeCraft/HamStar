@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6206428737266147108}
   - component: {fileID: -1657574241814396134}
   - component: {fileID: -5594146905473756184}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SunFlowerSeed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3846937944950283577}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

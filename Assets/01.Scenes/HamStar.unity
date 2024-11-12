@@ -447,6 +447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff6bb59598b13f84490d69d8d4408438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _arRaycastManager: {fileID: 91744732}
   _dragCurrentPosition: {fileID: -7530398834462728267, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
   _sunflowerSeed: {fileID: 3846937944950283577, guid: 4826b4035a6b44644b7194a3c0f668d9,
@@ -455,7 +456,7 @@ MonoBehaviour:
   _seedBtn: {fileID: 779374369}
   _draggable:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!4 &700299879
 Transform:
   m_ObjectHideFlags: 0
