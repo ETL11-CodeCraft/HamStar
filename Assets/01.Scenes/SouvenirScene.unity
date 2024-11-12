@@ -338,9 +338,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c4cd99d4b6ed5444949d0e1823202fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  souvenirName: {fileID: 1302975178}
-  souvenirDesc: {fileID: 877483493}
-  souvenirImg: {fileID: 788552569}
+  _souvenirName: {fileID: 1302975178}
+  _souvenirDesc: {fileID: 877483493}
+  _souvenirImg: {fileID: 788552569}
 --- !u!114 &841469103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1245,13 +1245,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d8b68ec139aec049904ce381d0bef22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  souvenirSprites:
+  _souvenirSprites:
   - {fileID: 21300000, guid: b1ee79028a73dc2479bc4ec3a1eeb4b1, type: 3}
   - {fileID: 21300000, guid: 9a308e7bc5164d848a9c0bb13aa6ad8a, type: 3}
   - {fileID: 21300000, guid: d417082c61bbeba4ea673c5118b98cdf, type: 3}
-  souvenirPrefab: {fileID: -3857161107774438478, guid: 6c8ab26242c879d4f97543d61f91b515,
+  _souvenirPrefab: {fileID: -3857161107774438478, guid: 6c8ab26242c879d4f97543d61f91b515,
     type: 3}
-  souvenirInfo: {fileID: 841469102}
+  _souvenirInfo: {fileID: 841469102}
 --- !u!222 &1401609919
 CanvasRenderer:
   m_ObjectHideFlags: 0

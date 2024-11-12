@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 struct SouvenirData
@@ -61,7 +62,10 @@ public class SouvenirManager : MonoBehaviour
             obj.onClickAction += _souvenirInfo.ActiveInfo;
 
             //추후 획득한 기념품을 쉽게 찾을 수 있도록 Dictionary 사용
-            _souvenirItems.Add(_souvenirList[i].id, obj);
+            if(_souvenirItems.ContainsKey(_souvenirList[i].id))
+            {
+                _souvenirItems.Add(_souvenirList[i].id, obj);
+            }
         }
     }
 }
