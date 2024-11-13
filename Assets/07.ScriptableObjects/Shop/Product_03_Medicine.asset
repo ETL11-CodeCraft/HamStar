@@ -19,7 +19,7 @@ MonoBehaviour:
   description: "\uD751\uD654 \uC0C1\uD0DC\uC758 \uD584\uC2A4\uD130\uB97C \uCE58\uB8CC\uD560
     \uC218 \uC788\uC2B5\uB2C8\uB2E4.\n\uC0AC\uC6A9 \uD6C4 \uC2A4\uD2B8\uB808\uC2A4
     \uC218\uCE58\uAC00 0\uC774 \uB429\uB2C8\uB2E4."
-  type: 0
+  type: 1
   price: 500
   quantity: -1
   prefab: {fileID: 0}

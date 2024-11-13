@@ -9,7 +9,7 @@ public class Product : ScriptableObject
     public string productName;
     [TextAreaAttribute]
     public string description;
-    public int type;
+    public ItemType type;
     public int price;
     public int quantity;
     public GameObject prefab;

@@ -537,6 +537,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 405147638}
+  - component: {fileID: 405147641}
   - component: {fileID: 405147640}
   - component: {fileID: 405147639}
   m_Layer: 5
@@ -545,7 +546,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &405147638
 RectTransform:
   m_ObjectHideFlags: 0
@@ -604,6 +605,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405147637}
   m_CullTransparentMesh: 1
+--- !u!114 &405147641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405147637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 628b3653ef062f140a156c7cfb680412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &452081744
 GameObject:
   m_ObjectHideFlags: 0
@@ -1560,6 +1573,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 754850321}
+  - component: {fileID: 754850324}
   - component: {fileID: 754850323}
   - component: {fileID: 754850322}
   m_Layer: 5
@@ -1568,7 +1582,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &754850321
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1627,6 +1641,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 754850320}
   m_CullTransparentMesh: 1
+--- !u!114 &754850324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 754850320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 628b3653ef062f140a156c7cfb680412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &845312680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1640,6 +1666,7 @@ GameObject:
   - component: {fileID: 845312683}
   - component: {fileID: 845312682}
   - component: {fileID: 845312681}
+  - component: {fileID: 845312686}
   m_Layer: 5
   m_Name: TestUI
   m_TagString: Untagged
@@ -1740,6 +1767,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a411e7acccf7b640b99accce6d21e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &845312686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845312680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25118b1efc08a3342a73a6ad3570331a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &862047852
@@ -3124,13 +3163,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1246617715}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c767f6a1ee8cc6146bf918bcc4efa89b, type: 3}
+  m_Script: {fileID: 11500000, guid: 778dd7ebda0cf1646b9d0c17b76873bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _scrollView: {fileID: 1921948937}
   _itemPanel: {fileID: 2017365121}
-  _shopSuccessPanel: {fileID: 754850320}
-  _shopFailPanel: {fileID: 405147637}
+  _coinText: {fileID: 976874787}
   _slotPrefab: {fileID: 2239160749353296071, guid: f257a78e239bdad47b2362b80391e6c6,
     type: 3}
   _shopData: {fileID: 11400000, guid: 551b17db913cb234c8dab8d7fb2eb839, type: 2}
@@ -3790,7 +3828,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2017365121}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: baa0f1d440120bc4eb4aa2de3e7cb1cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 566d23a785271ef45977650aaec00e7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _productNameText: {fileID: 862047854}
@@ -3798,6 +3836,8 @@ MonoBehaviour:
   _productImage: {fileID: 147148504}
   _cancelButton: {fileID: 657010114}
   _buyButton: {fileID: 161453123}
+  _shopSuccessPanel: {fileID: 754850320}
+  _shopFailPanel: {fileID: 405147637}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

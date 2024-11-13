@@ -1,3 +1,5 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class ShopController : MonoBehaviour
@@ -6,19 +8,19 @@ public class ShopController : MonoBehaviour
 
     [SerializeField] GameObject _scrollView;
     [SerializeField] GameObject _itemPanel;
-    [SerializeField] GameObject _shopSuccessPanel;
-    [SerializeField] GameObject _shopFailPanel;
+    [SerializeField] TextMeshProUGUI _coinText;
 
     [SerializeField] GameObject _slotPrefab;
     [SerializeField] ShopData _shopData;
     [SerializeField] ProductData _productData;
 
-    private int _columns = 2;
+    private int _columns = 2; // 상풍 목록 레이아웃: 열
 
     public void OpenShop()
     {
         _shopCanvas.enabled = true;
         RefreshShop();
+        RefeshCoin();
     }
 
     public void CloseShop()
@@ -46,8 +48,11 @@ public class ShopController : MonoBehaviour
         _shopCanvas = GetComponent<Canvas>();
         CloseShop();
         CloseItemPopup();
-        _shopSuccessPanel.SetActive(false);
-        _shopFailPanel.SetActive(false);
+    }
+
+    private void RefeshCoin()
+    {
+        _coinText.text = GameManager.coin + "C";
     }
 
     private void RefreshShop()
@@ -70,6 +75,7 @@ public class ShopController : MonoBehaviour
                 if (productController != null)
                 {
                     productController.SetProduct(product);
+                    productController.BuyAction = Buy;
                     productController.Refresh();
                 }
             };
@@ -84,5 +90,14 @@ public class ShopController : MonoBehaviour
                 -224 - (Mathf.Round(i / _columns) * 431), 0); // 상품 2열로 배치
             Debug.Log($"localPosition: [{i}] {202 + (i % _columns) * 401}, {-224 - Mathf.Round(i / _columns) * 431}");
         }
+    }
+
+    private void Buy(Product product)
+    {
+        Debug.Log($"구매=> coin: {GameManager.coin}, price: {product.price}");
+        GameManager.coin -= product.price;
+        product.quantity -= 1;
+        RefeshCoin();
+        _itemPanel.SetActive(false);
     }
 }
