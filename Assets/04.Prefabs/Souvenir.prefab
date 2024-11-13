@@ -133,3 +133,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4121af2652ace234f8fcb582a4e35cbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  souvenirButton: {fileID: 0}
+  souvenirImage: {fileID: 0}

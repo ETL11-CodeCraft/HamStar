@@ -15,9 +15,9 @@ public class SouvenirInfo : MonoBehaviour
 
     public void ActiveInfo(Souvenir souvenir)
     {
-        _souvenirName.text = souvenir.souvenirName;
-        _souvenirDesc.text = souvenir.souvenirDescription;
-        _souvenirImg.sprite = souvenir.souvenirSprite;
+        _souvenirName.text = souvenir.SouvenirName;
+        _souvenirDesc.text = souvenir.SouvenirDescription;
+        _souvenirImg.sprite = souvenir.SouvenirSprite;
 
         gameObject.SetActive(true);
     }
