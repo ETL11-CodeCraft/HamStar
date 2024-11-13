@@ -3,28 +3,14 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class SaveManager : MonoBehaviour
+public class SaveManager
 {
-    public static SaveManager instance;
-
-    private void Awake()
-    {
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
-
     #region Travel
-    public TravelData travelData { get; private set; }
+    public static TravelData travelData { get; private set; }
     private const string TRAVEL_DATA_PATH = "/TravelData.json";
     
 
-    public TravelData LoadTravelData()
+    public static TravelData LoadTravelData()
     {
         if (File.Exists(Application.dataPath + TRAVEL_DATA_PATH))
         {
@@ -51,7 +37,7 @@ public class SaveManager : MonoBehaviour
     /// <summary>
     /// SaveData의 내용을 기반으로 Json 파일 생성
     /// </summary>
-    public void SaveTravelData()
+    public static void SaveTravelData()
     {
         File.WriteAllText(Application.dataPath + TRAVEL_DATA_PATH, JsonUtility.ToJson(travelData));
     }

@@ -18,17 +18,10 @@ public class Travel : MonoBehaviour
 
     private void Start()
     {
-        if (false)
-        {
-            //데이터를 로드하는 부분
-            //현재는 SaveData를 받아올 수 없음
-        }
-        else
-        {
-            var rand = UnityEngine.Random.Range(-3.5f, 3.5f);
-            _travelStartTime = DateTime.Now.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss");
-            _travelEndTime = DateTime.Now.AddHours(16 + rand).ToString("yyyy-MM-dd HH:mm:ss");
-        }
+        //데이터 읽어오기
+        var loadedData = SaveManager.LoadTravelData();
+        _travelStartTime = loadedData.travelStartTime;
+        _travelEndTime = loadedData.travelEndTime;
 
         RefreshTravel();
     }
@@ -68,14 +61,18 @@ public class Travel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 여행 아이콘을 터치했을때 남은시간이 나오도록 하는 함수
+    /// </summary>
     public void OnClickTravelIcon()
     {
+        //TODO :: 시간이 표시 되는 중 여행이 끝나 아이콘이 사라지며 발생할 수 있는 오류 처리
         GameObject textObj = _remainTravelText.transform.parent.gameObject;
-        //TODO :: 남은 시간 표시
+        //남은 시간 표시
         var remainTime = _endTime - DateTime.Now;
         _remainTravelText.text = $"{remainTime.Hours}h {remainTime.Minutes}m left";
         textObj.SetActive(true);
-        //TODO :: 3초뒤 사라지게 하기
+        //3초뒤 사라지게 하기
 
         if(_HideCoroutine != null)
         {
