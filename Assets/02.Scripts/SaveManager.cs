@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class SaveManager
@@ -43,6 +44,36 @@ public class SaveManager
     }
 
     #endregion
+
+    #region Inventory
+    public static InventoryData inventoryData { get; private set; }
+    private const string INVENTORY_DATA_PATH = "/InventoryData.json";
+
+    public static InventoryData LoadInventoryData()
+    {
+        if (File.Exists(Application.dataPath + INVENTORY_DATA_PATH))
+        {
+            string input = File.ReadAllText(Application.dataPath + INVENTORY_DATA_PATH);
+            inventoryData = JsonConvert.DeserializeObject<InventoryData>(input);
+            Debug.Log($"{INVENTORY_DATA_PATH} reac text: \n{input}");
+            Debug.Log($"inventory.coin => {inventoryData.coin}");
+        }
+        else
+        {
+            inventoryData = new InventoryData();
+            inventoryData.quantityForProductId = new Dictionary<int, int>(0);
+            SaveInventoryData();
+        }
+
+        return inventoryData;
+    }
+
+    public static void SaveInventoryData()
+    {
+        string output = JsonConvert.SerializeObject(inventoryData);
+        File.WriteAllText(Application.dataPath + INVENTORY_DATA_PATH, output);
+    }
+    #endregion
 }
 
 /// <summary>
@@ -53,4 +84,14 @@ public class TravelData
 {
     public string travelStartTime;  //여행을 시작할 시간
     public string travelEndTime;    //여행이 끝나고 돌아올 시간
+}
+
+/// <summary>
+/// 보유 아이템 데이터를 관리하는 클래스
+/// </summary>
+[System.Serializable]
+public class InventoryData
+{
+    public int coin;
+    public Dictionary<int, int> quantityForProductId;
 }

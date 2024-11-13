@@ -102,9 +102,23 @@ public class ShopController : MonoBehaviour
         } 
         else
         {
-            // 인벤토리?의 product.id 의 count 값 +1 해주기
+            AddInventoryData(product.id);
+            SaveManager.SaveInventoryData();
         }
         RefeshCoin();
         _itemPanel.SetActive(false);
+    }
+
+    private void AddInventoryData(int productId)
+    {
+        var dict = SaveManager.inventoryData.quantityForProductId;
+        if (dict.ContainsKey(productId))
+        {
+            SaveManager.inventoryData.quantityForProductId[productId] += 1;
+        }
+        else
+        {
+            SaveManager.inventoryData.quantityForProductId.Add(productId, 1);
+        }
     }
 }
