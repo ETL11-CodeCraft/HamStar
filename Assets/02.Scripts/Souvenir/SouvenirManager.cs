@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DG.Tweening;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -42,10 +43,13 @@ public class SouvenirManager : MonoBehaviour
     private Dictionary<int,Souvenir> _souvenirItems = new Dictionary<int,Souvenir>(8);
     private List<int> _uncollectedItems = new List<int>(8);
     [SerializeField] SouvenirInfo _souvenirInfo;
+    private int _pageIdx = 0;
+    private float _panelOrigin;
 
     private void Start()
     {
         _screenWidth = Screen.width;
+        _panelOrigin = transform.position.x;
 
         for(int i=0;i<_souvenirList.Count;i++)
         {
@@ -70,6 +74,26 @@ public class SouvenirManager : MonoBehaviour
                 _uncollectedItems.Add(curItem.id);
             }
         }
+    }
+
+    
+    public void MoveNextPage()
+    {
+        if (_pageIdx >= _souvenirList.Count / (COL * ROW)) return;
+
+        _pageIdx++;
+        transform.DOMoveX(_panelOrigin - _pageIdx * _screenWidth, 0.5f);
+
+        print($"{_pageIdx} -> {_panelOrigin - _pageIdx * _screenWidth}");
+    }
+    public void MovePrevPage()
+    {
+        if (_pageIdx <= 0) return;
+
+        _pageIdx--;
+        transform.DOMoveX(_panelOrigin - _pageIdx * _screenWidth, 0.5f);
+
+        print($"{_pageIdx} -> {_panelOrigin - _pageIdx * _screenWidth}");
     }
 
     public void CollectSouvenir()
