@@ -57,7 +57,7 @@ public class ShopController : MonoBehaviour
 
     private void RefreshShop()
     {
-        for (int i = 0; i < _shopData.list.Count; i++)
+        for (int i = 0; i < _shopData.productIds.Count; i++)
         {
             Product product = GetProduct(i);
             
@@ -96,7 +96,14 @@ public class ShopController : MonoBehaviour
     {
         Debug.Log($"구매=> coin: {GameManager.coin}, price: {product.price}");
         GameManager.coin -= product.price;
-        product.quantity -= 1;
+        if (product.type == ItemType.PlayGround)
+        {
+            product.quantity -= 1;
+        } 
+        else
+        {
+            // 인벤토리?의 product.id 의 count 값 +1 해주기
+        }
         RefeshCoin();
         _itemPanel.SetActive(false);
     }
