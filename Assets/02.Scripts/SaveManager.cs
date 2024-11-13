@@ -8,7 +8,7 @@ public class SaveManager
     #region Travel
     public static TravelData travelData { get; private set; }
     private const string TRAVEL_DATA_PATH = "/TravelData.json";
-    
+
 
     public static TravelData LoadTravelData()
     {
