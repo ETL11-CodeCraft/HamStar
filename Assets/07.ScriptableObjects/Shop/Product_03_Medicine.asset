@@ -21,5 +21,5 @@ MonoBehaviour:
     \uC218\uCE58\uAC00 0\uC774 \uB429\uB2C8\uB2E4."
   type: 1
   price: 500
-  quantity: -1
+  quantity: 9999
   prefab: {fileID: 0}
