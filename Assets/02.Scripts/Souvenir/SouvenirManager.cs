@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-struct SouvenirData
+struct SouvenirStruct
 {
-    public SouvenirData(string souvenirName, string souvenirDescription, int souvenirID)
+    public SouvenirStruct(string souvenirName, string souvenirDescription, int souvenirID)
     {
         name = souvenirName;
         desc = souvenirDescription;
@@ -20,18 +20,18 @@ struct SouvenirData
 public class SouvenirManager : MonoBehaviour
 {
     [SerializeField] private List<Sprite> _souvenirSprites = new List<Sprite>(8);
-    private List<SouvenirData> _souvenirList = new List<SouvenirData>(8)     //이후 데이터를 읽는 방식으로 변경
+    private List<SouvenirStruct> _souvenirList = new List<SouvenirStruct>(8)     //이후 데이터를 읽는 방식으로 변경
     {
         //임시 데이터
-        new SouvenirData("statue_of_liberty","statue_of_liberty",0),
-        new SouvenirData("eiffel_tower", "eiffel_tower", 1),
-        new SouvenirData("pyramid", "pyramid", 2),
-        new SouvenirData("statue_of_liberty","statue_of_liberty",0),
-        new SouvenirData("eiffel_tower", "eiffel_tower", 1),
-        new SouvenirData("pyramid", "pyramid", 2),
-        new SouvenirData("statue_of_liberty","statue_of_liberty",0),
-        new SouvenirData("eiffel_tower", "eiffel_tower", 1),
-        new SouvenirData("pyramid", "pyramid", 2),
+        new SouvenirStruct("statue_of_liberty","statue_of_liberty",0),
+        new SouvenirStruct("eiffel_tower", "eiffel_tower", 1),
+        new SouvenirStruct("pyramid", "pyramid", 2),
+        new SouvenirStruct("statue_of_liberty","statue_of_liberty",0),
+        new SouvenirStruct("eiffel_tower", "eiffel_tower", 1),
+        new SouvenirStruct("pyramid", "pyramid", 2),
+        new SouvenirStruct("statue_of_liberty","statue_of_liberty",0),
+        new SouvenirStruct("eiffel_tower", "eiffel_tower", 1),
+        new SouvenirStruct("pyramid", "pyramid", 2),
     };
     private Vector2 _origin = new Vector2(-140f, 500f);
     private float _screenWidth;
@@ -48,6 +48,8 @@ public class SouvenirManager : MonoBehaviour
 
     private void Start()
     {
+        SaveManager.LoadSouvenirData();
+
         _screenWidth = Screen.width;
         _panelOrigin = transform.position.x;
 
@@ -68,10 +70,17 @@ public class SouvenirManager : MonoBehaviour
             obj.onClickAction += _souvenirInfo.ActiveInfo;
 
             //추후 획득한 기념품을 쉽게 찾을 수 있도록 Dictionary 사용
-            if(_souvenirItems.ContainsKey(curItem.id))
+            if(!_souvenirItems.ContainsKey(curItem.id))
             {
                 _souvenirItems.Add(curItem.id, obj);
-                _uncollectedItems.Add(curItem.id);
+                if(!SaveManager.souvenirData.collectedSouvenir.Contains(curItem.id))
+                {
+                    _uncollectedItems.Add(curItem.id);
+                }
+                else
+                {
+                    obj.IsCollected = true;
+                }
             }
         }
     }
@@ -83,8 +92,6 @@ public class SouvenirManager : MonoBehaviour
 
         _pageIdx++;
         transform.DOMoveX(_panelOrigin - _pageIdx * _screenWidth, 0.5f);
-
-        print($"{_pageIdx} -> {_panelOrigin - _pageIdx * _screenWidth}");
     }
     public void MovePrevPage()
     {
@@ -92,8 +99,6 @@ public class SouvenirManager : MonoBehaviour
 
         _pageIdx--;
         transform.DOMoveX(_panelOrigin - _pageIdx * _screenWidth, 0.5f);
-
-        print($"{_pageIdx} -> {_panelOrigin - _pageIdx * _screenWidth}");
     }
 
     public void CollectSouvenir()
@@ -107,6 +112,9 @@ public class SouvenirManager : MonoBehaviour
 
         _souvenirItems[ItemId].IsCollected = true;
         _uncollectedItems.Remove(ItemId);
+
+        SaveManager.AddCollectedSouvenir(ItemId);
+
         if (_uncollectedItems.Count <= 0)
         {
             //축하합니다. 모든 기념품을 획득하였습니다.

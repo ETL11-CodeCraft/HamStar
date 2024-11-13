@@ -203,7 +203,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1401609918}
         m_TargetAssemblyTypeName: SouvenirManager, Assembly-CSharp
-        m_MethodName: MoveRight
+        m_MethodName: MoveNextPage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1492,7 +1492,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1401609918}
         m_TargetAssemblyTypeName: SouvenirManager, Assembly-CSharp
-        m_MethodName: MoveLeft
+        m_MethodName: MovePrevPage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
