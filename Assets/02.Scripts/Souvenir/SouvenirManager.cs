@@ -40,6 +40,7 @@ public class SouvenirManager : MonoBehaviour
     private const int COL = 2;
     [SerializeField] private Souvenir _souvenirPrefab;
     private Dictionary<int,Souvenir> _souvenirItems = new Dictionary<int,Souvenir>(8);
+    private List<int> _uncollectedItems = new List<int>(8);
     [SerializeField] SouvenirInfo _souvenirInfo;
 
     private void Start()
@@ -49,10 +50,11 @@ public class SouvenirManager : MonoBehaviour
         for(int i=0;i<_souvenirList.Count;i++)
         {
             var obj = Instantiate(_souvenirPrefab);
+            var curItem = _souvenirList[i];
 
             //기본 Info 설정
-            Sprite objSprite = _souvenirSprites[Mathf.Clamp(_souvenirList[i].id, 0, _souvenirSprites.Count - 1)];
-            obj.SetSouvenir(_souvenirList[i].name, objSprite, _souvenirList[i].desc, _souvenirList[i].id);
+            Sprite objSprite = _souvenirSprites[Mathf.Clamp(curItem.id, 0, _souvenirSprites.Count - 1)];
+            obj.SetSouvenir(curItem.name, objSprite, curItem.desc, curItem.id);
 
             //위치 설정
             obj.transform.SetParent(transform);
@@ -62,10 +64,28 @@ public class SouvenirManager : MonoBehaviour
             obj.onClickAction += _souvenirInfo.ActiveInfo;
 
             //추후 획득한 기념품을 쉽게 찾을 수 있도록 Dictionary 사용
-            if(_souvenirItems.ContainsKey(_souvenirList[i].id))
+            if(_souvenirItems.ContainsKey(curItem.id))
             {
-                _souvenirItems.Add(_souvenirList[i].id, obj);
+                _souvenirItems.Add(curItem.id, obj);
+                _uncollectedItems.Add(curItem.id);
             }
+        }
+    }
+
+    public void CollectSouvenir()
+    {
+        if(_uncollectedItems.Count <= 0)
+        {
+            //이미 모든 기념품을 획득하였습니다.
+            return;
+        }
+        var ItemId = _uncollectedItems[Random.Range(0,_uncollectedItems.Count)];
+
+        _souvenirItems[ItemId].IsCollected = true;
+        _uncollectedItems.Remove(ItemId);
+        if (_uncollectedItems.Count <= 0)
+        {
+            //축하합니다. 모든 기념품을 획득하였습니다.
         }
     }
 }
