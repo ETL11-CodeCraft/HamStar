@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 3036d14754ed8b34f8986bc63dc87919
+timeCreated: 1524819255
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117803
+  packageName: Android Runtime Permissions
+  packageVersion: 1.2.1
+  assetPath: Assets/Plugins/AndroidRuntimePermissions/AndroidRuntimePermissions.cs
+  uploadId: 649294
