@@ -41,6 +41,9 @@ public class Travel : MonoBehaviour
             _travelStartTime = DateTime.Now.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss");
             _travelEndTime = DateTime.Now.AddHours(16 + rand).ToString("yyyy-MM-dd HH:mm:ss");
 
+            //재설정 된 시간 저장
+            SaveManager.SetTravelData(_travelStartTime, _travelEndTime);
+
             //TODO :: 기념품 획득
             //TODO :: 햄스터 보이도록 설정
 
