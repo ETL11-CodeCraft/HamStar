@@ -1,3 +1,5 @@
+using System;
+
 /// <summary>
 /// 기기의 위도, 경도 정보
 /// </summary>
@@ -11,4 +13,6 @@ public interface IGPS
     /// 경도
     /// </summary>
     float longitude { get; }
+
+    event Action<float, float> onLocationChanged;
 }
