@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d9549e84fd9f666448ee5c58fb1d65fe
+timeCreated: 1563308328
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117803
+  packageName: Android Runtime Permissions
+  packageVersion: 1.2.1
+  assetPath: Assets/Plugins/AndroidRuntimePermissions/README.txt
+  uploadId: 649294
