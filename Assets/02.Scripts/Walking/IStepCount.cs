@@ -4,7 +4,7 @@ public interface IStepCount
 
     int[] thisWeekStepCount { get; }
 
-    int chestCount { get; }
+    int coinChestCount { get; }
 
     int firstStepCount { get; }
 }

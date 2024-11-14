@@ -9,7 +9,7 @@ public class MockStepCount : MonoBehaviour, IStepCount
 
     public int[] thisWeekStepCount { get; } = { 1, 2, 3, 4, 5, 6, 7 };
 
-    public int chestCount { get; } = 1;
+    public int coinChestCount { get; } = 1;
 
     public int firstStepCount { get; } = 60000;
 }

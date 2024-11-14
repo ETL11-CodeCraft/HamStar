@@ -54,3 +54,15 @@ public class TravelData
     public string travelStartTime;  //여행을 시작할 시간
     public string travelEndTime;    //여행이 끝나고 돌아올 시간
 }
+
+/// <summary>
+/// 걸음 수 관련 데이터를 관리하는 클래스
+/// </summary>
+[System.Serializable]
+public class WalkData
+{
+    public string pastWalkCount;   //어제까지의 걸음 수
+    public string[] thisWeekWalkCount;  //금주의 일간 걸음 수
+    public string chestCount;   //보물상자의 수
+    public string currentPlayDate;  //최근 플레이 날짜
+}
