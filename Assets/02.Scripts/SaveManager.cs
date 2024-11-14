@@ -43,6 +43,53 @@ public class SaveManager
     }
 
     #endregion
+
+    #region Hamster
+    public static HamsterStatData hamsterStatData { get; private set; }
+    private const string HAMSTER_DATA_PATH = "/HamsterData.json";
+
+
+    public static HamsterStatData LoadHamsterData()
+    {
+        if (File.Exists(Application.dataPath + HAMSTER_DATA_PATH))
+        {
+            string loadData = File.ReadAllText(Application.dataPath + HAMSTER_DATA_PATH);
+            hamsterStatData = JsonUtility.FromJson<HamsterStatData>(loadData);
+            Debug.Log(loadData);
+        }
+        else
+        {
+            //세이브데이터 초기화
+            //게임을 처음 실행한다면 해당 코드 실행
+            hamsterStatData = new HamsterStatData();
+
+            hamsterStatData.fullness = 100;
+            hamsterStatData.cleanliness = 100;
+            hamsterStatData.closeness = 100;
+            hamsterStatData.stress = 0;
+
+            SaveHamsterData();
+        }
+
+        return hamsterStatData;
+    }
+
+    public static void SaveHamsterData()
+    {
+        File.WriteAllText(Application.dataPath + HAMSTER_DATA_PATH, JsonUtility.ToJson(hamsterStatData));
+    }
+
+    public static void SetHamsterData(int fullness, int cleanliness, int closeness, int stress)
+    {
+        hamsterStatData.fullness = fullness;
+        hamsterStatData.cleanliness = cleanliness;
+        hamsterStatData.closeness = closeness;
+        hamsterStatData.stress = stress;
+
+        SaveHamsterData();
+    }
+
+    #endregion
 }
 
 /// <summary>
@@ -53,4 +100,12 @@ public class TravelData
 {
     public string travelStartTime;  //여행을 시작할 시간
     public string travelEndTime;    //여행이 끝나고 돌아올 시간
+}
+
+public class HamsterStatData
+{
+    public int fullness;
+    public int cleanliness;
+    public int closeness;
+    public int stress;
 }

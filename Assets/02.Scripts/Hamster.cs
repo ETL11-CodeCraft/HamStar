@@ -146,10 +146,12 @@ public class Hamster : MonoBehaviour
         _closenessSlider.maxValue = 100;
         _stressSlider.maxValue = 100;
 
-        _fullnessSlider.value = _fullness;
-        _cleanlinessSlider.value = _cleanliness;
-        _closenessSlider.value = _closeness;
-        _stressSlider.value = _stress;
+        SaveManager.LoadHamsterData();
+
+        fullness = SaveManager.hamsterStatData.fullness;
+        cleanliness = SaveManager.hamsterStatData.cleanliness;
+        closeness = SaveManager.hamsterStatData.closeness;
+        stress = SaveManager.hamsterStatData.stress;
 
         _increseStressCoroutine = StartCoroutine(IncreseStress());
     }
