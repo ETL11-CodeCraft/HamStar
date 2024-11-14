@@ -21,4 +21,4 @@ MonoBehaviour:
   type: 2
   price: 500
   quantity: 1
-  prefab: {fileID: 0}
+  prefab: {fileID: 6428903596881296658, guid: 30e8aeb7dd2d42c4dace335f847432f8, type: 3}
