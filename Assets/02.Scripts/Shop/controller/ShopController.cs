@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class ShopController : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class ShopController : MonoBehaviour
     [SerializeField] GameObject _slotPrefab;
     [SerializeField] ShopData _shopData;
     [SerializeField] ProductData _productData;
+
+    [SerializeField] HamsterWheelPlacementController _placementController;
 
     private int _columns = 2; // 상풍 목록 레이아웃: 열
 
@@ -76,6 +79,7 @@ public class ShopController : MonoBehaviour
                 {
                     productController.SetProduct(product);
                     productController.BuyAction = Buy;
+                    productController.PlacementAction = Placement;
                     productController.Refresh();
                 }
             };
@@ -94,19 +98,30 @@ public class ShopController : MonoBehaviour
 
     private void Buy(Product product)
     {
-        Debug.Log($"구매=> coin: {GameManager.coin}, price: {product.price}");
+        Debug.Log($"구매=> coin: {GameManager.coin}, price: {product.price}, type: {product.type}");
         GameManager.coin -= product.price;
+        RefeshCoin();
         if (product.type == ItemType.PlayGround)
         {
             product.quantity -= 1;
-        } 
+        }
         else
         {
             AddInventoryData(product.id);
-            SaveManager.SaveInventoryData();
         }
-        RefeshCoin();
-        _itemPanel.SetActive(false);
+        SaveManager.inventoryData.coin = GameManager.coin;
+        SaveManager.SaveInventoryData();
+        CloseItemPopup();
+    }
+
+    private void Placement(Product product)
+    {
+        CloseItemPopup();
+        CloseShop();
+
+        // 쳇바퀴 배치하기
+        _placementController.HamsterWheelPrefab = product.prefab;
+        _placementController.IsPlacementMode = true;
     }
 
     private void AddInventoryData(int productId)

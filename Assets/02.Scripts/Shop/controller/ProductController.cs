@@ -17,6 +17,7 @@ public class ProductController : MonoBehaviour
     Product _product;
 
     public Action<Product> BuyAction;
+    public Action<Product> PlacementAction;
 
     public void SetProduct(Product product)
     {
@@ -48,6 +49,7 @@ public class ProductController : MonoBehaviour
             else if (_product.type == ItemType.PlayGround)
             {
                 // 설치 모드로
+                PlacementAction.Invoke(_product);
             }
         });
     }
