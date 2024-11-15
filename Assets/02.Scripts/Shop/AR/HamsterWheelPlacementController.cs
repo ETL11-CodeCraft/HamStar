@@ -8,9 +8,11 @@ public class HamsterWheelPlacementController : MonoBehaviour
 {
     [SerializeField] InputActionReference _dragCurrentPosition;
     [SerializeField] InputActionReference _tapStartPosition;
+    [SerializeField] InputActionReference _pressHoldAction;
     [SerializeField] ARRaycastManager _arRaycastManager;
     [SerializeField] Camera _xrCamera;
     [SerializeField] GameObject _placementPrefab;
+    [SerializeField] GameObject _rotationPrefab;
     [SerializeField] LayerMask _targetLayer;
     
     private GameObject _hamsterWheelPrefab;
@@ -35,17 +37,20 @@ public class HamsterWheelPlacementController : MonoBehaviour
     {
         _dragCurrentPosition.action.performed += OnDrag;
         _tapStartPosition.action.started += OnTap;
-        _tapStartPosition.action.performed += OnLongTap;
+        _pressHoldAction.action.performed += OnLongTap;
 
         _center = new Vector2(_xrCamera.pixelWidth / 2, _xrCamera.pixelHeight / 2);
         
         _placementPrefab = Instantiate(_placementPrefab);
         _placementPrefab.SetActive(false);
+        _rotationPrefab = Instantiate(_rotationPrefab);
+        _rotationPrefab.SetActive(false);
     }
 
     private void Update()
     {
-        _placementPrefab.SetActive(_isPlacementMode);
+        _placementPrefab.SetActive(_isPlacementMode && !_isRotationMode);
+        _rotationPrefab.SetActive(_isPlacementMode && _isRotationMode);
 
         if (_isPlacementMode && _currentHamsterWheel == null)
         {
@@ -53,6 +58,14 @@ public class HamsterWheelPlacementController : MonoBehaviour
             {
                 _placementPrefab.transform.position = _hits[0].pose.position + _hits[0].pose.up * 0.01f;
                 _placementPrefab.transform.rotation = _hits[0].pose.rotation;
+            }
+        } 
+        else if (_isRotationMode && _currentHamsterWheel != null)
+        {
+            if (_arRaycastManager.Raycast(_center, _hits, TrackableType.Planes) && _hits.Count > 0)
+            {
+                _rotationPrefab.transform.position = _currentHamsterWheel.transform.position;
+                _rotationPrefab.transform.rotation = _currentHamsterWheel.transform.rotation;
             }
         }
     }
@@ -64,9 +77,9 @@ public class HamsterWheelPlacementController : MonoBehaviour
         Vector2 dragPosition = context.ReadValue<Vector2>();
         Ray ray = _xrCamera.ScreenPointToRay(dragPosition);
 
-        if (_isPlacementMode && Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, _targetLayer))
+        if (_isPlacementMode && !_isRotationMode && Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, _targetLayer))
         {
-            Debug.Log("Hit info => " + hitInfo.collider.gameObject.name);
+            Debug.Log("OnDrag -> Hit info => " + hitInfo.collider.gameObject.name);
             if (hitInfo.collider.gameObject == _currentHamsterWheel)
             {
                 if (_arRaycastManager.Raycast(dragPosition, _hits, TrackableType.Planes) && _hits.Count > 0)
@@ -84,6 +97,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private void OnTap(InputAction.CallbackContext context)
     {
         if (!_isPlacementMode) return;
+        Debug.Log($"OnTap => {context.time} {context.startTime} {context.duration}");
 
         Vector2 tapPosition = context.ReadValue<Vector2>();
 
@@ -113,6 +127,12 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private void OnLongTap(InputAction.CallbackContext context)
     {
         if (!_isPlacementMode) return;
-        Debug.Log("OnLongTap");
+        Debug.Log($"OnLongTap => {context.time} {context.startTime} {context.duration}");
+        _isRotationMode = !_isRotationMode;
+    }
+
+    private void SavePlacementData()
+    {
+        // 쳇바퀴 배치 정보 저장
     }
 }
