@@ -8,21 +8,22 @@ public class Travel : MonoBehaviour
 {
     [SerializeField] private GameObject _travelIcon;
     [SerializeField] private TextMeshProUGUI _remainTravelText;
-    string _travelStartTime;
     DateTime _startTime;
-    string _travelEndTime;
     DateTime _endTime;
     bool _isTraveling = false;
     Coroutine _HideCoroutine;
+    private DataLoader _dataLoader;
+    private TravelData _travelData;
 
+
+    private void Awake()
+    {
+        _dataLoader = new DataLoader();
+        _travelData = _dataLoader.Load<TravelData>();
+    }
 
     private void Start()
     {
-        //데이터 읽어오기
-        var loadedData = SaveManager.LoadTravelData();
-        _travelStartTime = loadedData.travelStartTime;
-        _travelEndTime = loadedData.travelEndTime;
-
         RefreshTravel();
     }
 
@@ -31,18 +32,18 @@ public class Travel : MonoBehaviour
     /// </summary>
     public void RefreshTravel()
     {
-        _endTime = DateTime.ParseExact(_travelEndTime, "yyyy-MM-dd HH:mm:ss", null);
+        _endTime = DateTime.ParseExact(_travelData.travelEndTime, "yyyy-MM-dd HH:mm:ss", null);
         if (_endTime < DateTime.Now)
         {
             _isTraveling = false;
             //도착
             //출발 시간 및 도착시간 재설정
             var rand = UnityEngine.Random.Range(-3.5f, 3.5f);
-            _travelStartTime = DateTime.Now.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss");
-            _travelEndTime = DateTime.Now.AddHours(16 + rand).ToString("yyyy-MM-dd HH:mm:ss");
+            _travelData.travelStartTime = DateTime.Now.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss");
+            _travelData.travelEndTime = DateTime.Now.AddHours(16 + rand).ToString("yyyy-MM-dd HH:mm:ss");
 
             //재설정 된 시간 저장
-            SaveManager.SetTravelData(_travelStartTime, _travelEndTime);
+            _dataLoader.Save(_travelData);
 
             //TODO :: 기념품 획득
             //TODO :: 햄스터 보이도록 설정
@@ -50,7 +51,7 @@ public class Travel : MonoBehaviour
             Debug.Log("도착");
         }
 
-        _startTime = DateTime.ParseExact(_travelStartTime, "yyyy-MM-dd HH:mm:ss", null);
+        _startTime = DateTime.ParseExact(_travelData.travelStartTime, "yyyy-MM-dd HH:mm:ss", null);
         if (_isTraveling == false && _startTime < DateTime.Now)
         {
             _isTraveling = true;
