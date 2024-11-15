@@ -138,6 +138,14 @@ public class Hamster : MonoBehaviour
     [SerializeField] private Image _stressColor;
     private float _stressInterval = 5f;
     private Coroutine _increseStressCoroutine;
+    private DataLoader _dataLoader;
+    private HamsterStatData _hamsterStatData;
+
+    private void Awake()
+    {
+        _dataLoader = new DataLoader();
+        _hamsterStatData = _dataLoader.Load<HamsterStatData>();
+    }
 
     private void Start()
     {
@@ -146,12 +154,10 @@ public class Hamster : MonoBehaviour
         _closenessSlider.maxValue = 100;
         _stressSlider.maxValue = 100;
 
-        SaveManager.LoadHamsterData();
-
-        fullness = SaveManager.hamsterStatData.fullness;
-        cleanliness = SaveManager.hamsterStatData.cleanliness;
-        closeness = SaveManager.hamsterStatData.closeness;
-        stress = SaveManager.hamsterStatData.stress;
+        fullness = _hamsterStatData.fullness;
+        cleanliness = _hamsterStatData.cleanliness;
+        closeness = _hamsterStatData.closeness;
+        stress = _hamsterStatData.stress;
 
         _increseStressCoroutine = StartCoroutine(IncreseStress());
     }
@@ -173,6 +179,7 @@ public class Hamster : MonoBehaviour
         {
             var deltaStress = (4 - fullness / 25) + (4 - cleanliness / 25) + (4 - closeness / 25);
             stress += deltaStress;
+            _dataLoader.Save(_hamsterStatData);
 
             yield return new WaitForSeconds(_stressInterval);
         }
