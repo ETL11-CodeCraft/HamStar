@@ -187,8 +187,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 7970071694063613923}
   m_AABB:
-    m_Center: {x: 0, y: -0.00051536574, z: 0.0049812323}
-    m_Extent: {x: 0.0056987535, y: 0.0071087843, z: 0.0049722395}
+    m_Center: {x: 0.000030237716, y: -0.0003652256, z: 0.004402854}
+    m_Extent: {x: 0.0047311685, y: 0.006599148, z: 0.004393861}
   m_DirtyAABB: 0
 --- !u!1 &3212457556736384560
 GameObject:
@@ -203,6 +203,7 @@ GameObject:
   - component: {fileID: 958565698244079964}
   - component: {fileID: 2556970794138114182}
   - component: {fileID: 5779394548151545561}
+  - component: {fileID: 3458231807567911254}
   m_Layer: 0
   m_Name: Hamster
   m_TagString: Untagged
@@ -269,9 +270,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.17828935
-  m_Height: 0.57276905
+  m_Height: 0.54559445
   m_Direction: 2
-  m_Center: {x: -0.00035232733, y: 0.17700705, z: 0.029259026}
+  m_Center: {x: -0.00035232733, y: 0.17700705, z: 0.01567168}
 --- !u!54 &2556970794138114182
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -312,6 +313,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_DestroyOnRemoval: 1
+--- !u!114 &3458231807567911254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3212457556736384560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f79ff04ffcb55646a914afa831c643f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _seed: {fileID: 0}
+  _currentState: 0
 --- !u!1 &3600248549717965409
 GameObject:
   m_ObjectHideFlags: 0

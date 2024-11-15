@@ -14,11 +14,10 @@ using UnityEngine.XR.Interaction.Toolkit.AR;
 public class FeedingManager : MonoBehaviour
 {
     [SerializeField] ARRaycastManager _arRaycastManager;
-    [SerializeField] ARAnchorManager _arAnchorManager;
     [SerializeField] InputActionReference _dragCurrentPosition;
     [SerializeField] InputActionReference _tapStartPosition;
-    [SerializeField] GameObject _sunflowerSeed;  //해바라기씨 오브젝트 
-    [SerializeField] GameObject _hamster;  //햄스터 오브젝트 
+    [SerializeField] GameObject _sunflowerSeedPrefab;  //해바라기씨 오브젝트 
+    [SerializeField] GameObject _hamsterPrefab;  //햄스터 프리팹
     [SerializeField] Camera _xrCamera;
     [SerializeField] Button _seedBtn; //먹이 버튼 
 
@@ -61,7 +60,6 @@ public class FeedingManager : MonoBehaviour
     private void Start()
     {
         
-        //_tapStartPosition.action.started += OnMakeHamster;
         _dragCurrentPosition.action.started += OnTouch;
         _dragCurrentPosition.action.performed += OnDrag;
         _dragCurrentPosition.action.canceled += OnTouchOut;
@@ -71,7 +69,7 @@ public class FeedingManager : MonoBehaviour
     {
         if (!_isHamsterSpawned)
         {
-            Invoke("SpawnHamsterAtCenter", 1f);
+            Invoke("SpawnHamsterAtCenter", 5f);
         }
 
     }
@@ -129,8 +127,19 @@ public class FeedingManager : MonoBehaviour
 
     private void OnMakeSeedButton()
     {
-        _spawnObject = Instantiate(_sunflowerSeed, _xrCamera.transform.position + _xrCamera.transform.forward * 0.5f, _xrCamera.transform.rotation);
+        _spawnObject = Instantiate(_sunflowerSeedPrefab, _xrCamera.transform.position + _xrCamera.transform.forward * 0.5f, _xrCamera.transform.rotation);
+        _spawnObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
         _spawnObject.GetComponent<Rigidbody>().AddForce(_xrCamera.transform.forward * 90f, ForceMode.Force);
+
+        if (_playerObject != null) 
+        {
+            Hamster hamsterScript = _playerObject.GetComponent<Hamster>();
+            if (hamsterScript != null)
+            {
+                hamsterScript.SetSeeed(_spawnObject);
+            }
+        }
+
     }
 
     //private void ButtonDown()
@@ -144,22 +153,6 @@ public class FeedingManager : MonoBehaviour
     //    _isClick = false;
     //}
 
-    private void OnMakeHamster(InputAction.CallbackContext context)
-    {
-        Debug.Log("OnMakeHamster");
-        Vector2 TouchPosition = context.ReadValue<Vector2>();
-        Ray ray = _xrCamera.ScreenPointToRay(TouchPosition);
-        if (_arRaycastManager.Raycast(ray, _hits, TrackableType.Planes))
-        {
-            Debug.Log("바닥입니다");
-            Pose hitPose = _hits[0].pose;
-            _hamster.transform.position = hitPose.position - ray.direction * 0.05f;
-        }
-        else
-        {
-            Debug.Log("바닥이 아닙니다");
-        }
-    }
 
 
     private void SpawnHamsterAtCenter()
@@ -174,7 +167,7 @@ public class FeedingManager : MonoBehaviour
                 Pose hitPose = _hits[0].pose;  // 첫 번째로 감지된 평면의 위치 가져오기
 
                 // 햄스터 오브젝트 생성
-                _playerObject = Instantiate(_hamster, hitPose.position, hitPose.rotation);
+                _playerObject = Instantiate(_hamsterPrefab, hitPose.position, hitPose.rotation);
 
                 _isHamsterSpawned = true;
                 Debug.Log("햄스터가 화면 중앙 바닥에 생성되었습니다.");
