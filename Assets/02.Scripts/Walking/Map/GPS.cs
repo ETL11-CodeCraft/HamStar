@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Android;
@@ -16,6 +17,7 @@ public class GPS : MonoBehaviour, IGPS
     private float _waitTime = 0;
     private bool _receiveGPS = false;
 
+    public event Action<float, float> onLocationChanged;
 
     void Start()
     {
@@ -77,6 +79,7 @@ public class GPS : MonoBehaviour, IGPS
             li = Input.location.lastData;
             _latitude = li.latitude;
             _longitude = li.longitude;
+            onLocationChanged?.Invoke(_latitude, _longitude);
             yield return new WaitForSeconds(_resendTime);
         }
     }

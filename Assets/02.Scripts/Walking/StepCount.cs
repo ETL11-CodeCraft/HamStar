@@ -7,12 +7,20 @@ using UnityEngine.UI;
 /// 걸음 수를 세고, 금주의 일간 걸음 수를 그래프로 나타낸다.
 /// 걸음 수를 토대로 보물상자의 수를 더하고, 보물상자를 오픈하면 모두 열리고 코인이 더해지는 스크립트
 /// </summary>
-public class StepCount : MonoBehaviour
+public class StepCount : MonoBehaviour, IStepCount
 {
-    [SerializeField] public Text walkCountText;
-    private bool isFirstPlay = true;
-    private int firstStepCount = 0;
-    private int chestCount = 0;
+    public int stepCount => _stepCount;
+
+    public int[] thisWeekStepCount => _thisWeekStepCount;
+
+    public int coinChestCount => _chestCount;
+
+    public int firstStepCount => _firstStepCount;
+
+    private int _firstStepCount;
+    private int _stepCount;
+    private int[] _thisWeekStepCount = new int[7];
+    private int _chestCount;
 
     private void Awake()
     {
@@ -28,34 +36,22 @@ public class StepCount : MonoBehaviour
 #if UNITY_ANDROID
         InputSystem.EnableDevice(AndroidStepCounter.current);
         AndroidStepCounter.current.MakeCurrent();
-        //if(isFirstPlay)   //첫 플레이시에 불러온 걸음 수를 저장해 0부터 시작하게한다.
-        //{
-        //    firstStepCount = AndroidStepCounter.current.stepCounter.ReadValue();
-        //    isFirstPlay = false;
-        //}
+        //SaveManager.LoadWalkData();
 #elif UNITY_EDITOR
 
 #endif
     }
 
-    void Update()
-    {
-#if UNITY_ANDROID
-        walkCountText.text = (AndroidStepCounter.current.stepCounter.ReadValue() - firstStepCount).ToString();
-#elif UNITY_EDITOR
 
-#endif
-    }
-
-    void ChestOpen()
+    void ChestOpen()    //현재 가지고 있는 coinChestCount만큼 모두 오픈
     {
-        if(chestCount > 0)
+        if(coinChestCount > 0)
         {
-            for(int i = 0;  i < chestCount; i++)
+            for(int i = 0;  i < coinChestCount; i++)
             {
-                int randomCoin = Random.Range(80, 120);
+                int randomCoin = Random.Range(80, 120); //정규함수 그래프로 변경할까.(80 ~ 120)이 95%인 50 ~ 200 함수
                 //coinText.text = randomCoin.ToString();
-                //GameManager.coint += randomCoin;
+                GameManager.coin += randomCoin;
             }
         }
     }
