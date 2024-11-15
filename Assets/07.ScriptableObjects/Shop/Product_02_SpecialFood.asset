@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d567aa2f7c88ae74b8244b907641ee81, type: 3}
+  m_Name: Product_02_SpecialFood
+  m_EditorClassIdentifier: 
+  id: 1
+  productImage: {fileID: 8706619048834826526, guid: 215687feeab0b7445b4a1cd86c82c2e1,
+    type: 3}
+  productName: "\uB3D9\uACB0 \uAC74\uC870 \uD2B8\uB9BF(10\uAC1C)"
+  description: "\uBC14\uC0AD\uD558\uACE0 \uAC74\uAC15\uD55C \uB2E8\uBC31\uC9C8 \uAC04\uC2DD,
+    \uD584\uC2A4\uD130\uAC00 \uBA39\uAE30 \uC88B\uC740 \uD06C\uAE30\uC785\uB2C8\uB2E4.\r\n
+    \uD584\uC2A4\uD130\uC758 \uD3EC\uB9CC\uAC10\uC744 50\uB9CC\uD07C \uC62C\uB9AC\uBA70,
+    \uCE5C\uBC00\uB3C4\uB97C 5\uB9CC\uD07C \uC62C\uB9BD\uB2C8\uB2E4."
+  type: 0
+  price: 200
+  quantity: 9999
+  prefab: {fileID: 0}
