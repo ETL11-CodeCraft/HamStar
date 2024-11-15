@@ -43,6 +43,14 @@ public class SaveManager
         File.WriteAllText(Application.dataPath + TRAVEL_DATA_PATH, JsonUtility.ToJson(travelData));
     }
 
+    public static void SetTravelData(string travelStartTime, string travelEndTime)
+    {
+        travelData.travelStartTime = travelStartTime;
+        travelData.travelEndTime = travelEndTime;
+
+        SaveTravelData();
+    }
+
     #endregion
 
     #region Inventory
