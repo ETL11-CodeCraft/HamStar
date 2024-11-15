@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using NUnit.Framework;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -129,6 +130,48 @@ public class SaveManager
     }
 
     #endregion
+    #region Souvenir
+
+    public static SouvenirData souvenirData { get; private set; }
+    private const string SOUVENIR_DATA_PATH = "/SouvenirData.json";
+
+
+    public static SouvenirData LoadSouvenirData()
+    {
+        if (File.Exists(Application.dataPath + SOUVENIR_DATA_PATH))
+        {
+            string loadData = File.ReadAllText(Application.dataPath + SOUVENIR_DATA_PATH);
+            souvenirData = JsonUtility.FromJson<SouvenirData>(loadData);
+            Debug.Log(loadData);
+        }
+        else
+        {
+            //세이브데이터 초기화
+            //게임을 처음 실행한다면 해당 코드 실행
+            souvenirData = new SouvenirData();
+
+            SaveSouvenirData();
+        }
+
+        return souvenirData;
+    }
+
+    /// <summary>
+    /// SaveData의 내용을 기반으로 Json 파일 생성
+    /// </summary>
+    public static void SaveSouvenirData()
+    {
+        File.WriteAllText(Application.dataPath + SOUVENIR_DATA_PATH, JsonUtility.ToJson(souvenirData));
+    }
+
+    public static void AddCollectedSouvenir(int id)
+    {
+        souvenirData.collectedSouvenir.Add(id);
+
+        SaveSouvenirData();
+    }
+
+    #endregion
 }
 
 /// <summary>
@@ -141,6 +184,10 @@ public class TravelData
     public string travelEndTime;    //여행이 끝나고 돌아올 시간
 }
 
+public class SouvenirData
+{
+    public List<int> collectedSouvenir = new List<int>(8);
+}
 /// <summary>
 /// 보유 아이템 데이터를 관리하는 클래스
 /// </summary>
