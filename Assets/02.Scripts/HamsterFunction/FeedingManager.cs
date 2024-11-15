@@ -136,7 +136,8 @@ public class FeedingManager : MonoBehaviour
             Hamster hamsterScript = _playerObject.GetComponent<Hamster>();
             if (hamsterScript != null)
             {
-                hamsterScript.SetSeeed(_spawnObject);
+                //seed 프리팹 생성시, Seeds리스트에 추가 
+                hamsterScript.AddSeed(_spawnObject);
             }
         }
 
