@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/01.Scenes/HamstarScene.unity
     guid: a31648b0ed9a4b54dba28c3887c51eb9
-  - enabled: 1
+  - enabled: 0
     path: Assets/01.Scenes/HamStar.unity
     guid: 51e6b88190a400b4a92a50eb1b8925ad
   m_configObjects:

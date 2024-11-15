@@ -285,8 +285,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b2d79a43bb0f94db3118e795a6c15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  travelIcon: {fileID: 1143835763}
-  remainTravelText: {fileID: 666098856}
+  _travelIcon: {fileID: 1143835763}
+  _remainTravelText: {fileID: 666098856}
 --- !u!4 &611524379
 Transform:
   m_ObjectHideFlags: 0
@@ -1077,6 +1077,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 59607679}
   - {fileID: 1142616857}
-  - {fileID: 611524379}
   - {fileID: 696659560}
   - {fileID: 1406187969}
+  - {fileID: 611524379}

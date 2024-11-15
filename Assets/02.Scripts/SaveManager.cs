@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class SaveManager
@@ -42,6 +42,91 @@ public class SaveManager
     public static void SaveTravelData()
     {
         File.WriteAllText(Application.dataPath + TRAVEL_DATA_PATH, JsonUtility.ToJson(travelData));
+    }
+
+    public static void SetTravelData(string travelStartTime, string travelEndTime)
+    {
+        travelData.travelStartTime = travelStartTime;
+        travelData.travelEndTime = travelEndTime;
+
+        SaveTravelData();
+    }
+
+    #endregion
+
+    #region Inventory
+    public static InventoryData inventoryData { get; private set; }
+    private const string INVENTORY_DATA_PATH = "/InventoryData.json";
+
+    public static InventoryData LoadInventoryData()
+    {
+        if (File.Exists(Application.dataPath + INVENTORY_DATA_PATH))
+        {
+            string input = File.ReadAllText(Application.dataPath + INVENTORY_DATA_PATH);
+            inventoryData = JsonConvert.DeserializeObject<InventoryData>(input);
+            Debug.Log($"{INVENTORY_DATA_PATH} reac text: \n{input}");
+            Debug.Log($"inventory.coin => {inventoryData.coin}");
+        }
+        else
+        {
+            inventoryData = new InventoryData();
+            inventoryData.quantityForProductId = new Dictionary<int, int>(0);
+            SaveInventoryData();
+        }
+
+        return inventoryData;
+    }
+
+    public static void SaveInventoryData()
+    {
+        string output = JsonConvert.SerializeObject(inventoryData);
+        File.WriteAllText(Application.dataPath + INVENTORY_DATA_PATH, output);
+    }
+    #endregion
+
+    #region Hamster
+    public static HamsterStatData hamsterStatData { get; private set; }
+    private const string HAMSTER_DATA_PATH = "/HamsterData.json";
+
+
+    public static HamsterStatData LoadHamsterData()
+    {
+        if (File.Exists(Application.dataPath + HAMSTER_DATA_PATH))
+        {
+            string loadData = File.ReadAllText(Application.dataPath + HAMSTER_DATA_PATH);
+            hamsterStatData = JsonUtility.FromJson<HamsterStatData>(loadData);
+            Debug.Log(loadData);
+        }
+        else
+        {
+            //세이브데이터 초기화
+            //게임을 처음 실행한다면 해당 코드 실행
+            hamsterStatData = new HamsterStatData();
+
+            hamsterStatData.fullness = 100;
+            hamsterStatData.cleanliness = 100;
+            hamsterStatData.closeness = 100;
+            hamsterStatData.stress = 0;
+
+            SaveHamsterData();
+        }
+
+        return hamsterStatData;
+    }
+
+    public static void SaveHamsterData()
+    {
+        File.WriteAllText(Application.dataPath + HAMSTER_DATA_PATH, JsonUtility.ToJson(hamsterStatData));
+    }
+
+    public static void SetHamsterData(int fullness, int cleanliness, int closeness, int stress)
+    {
+        hamsterStatData.fullness = fullness;
+        hamsterStatData.cleanliness = cleanliness;
+        hamsterStatData.closeness = closeness;
+        hamsterStatData.stress = stress;
+
+        SaveHamsterData();
     }
 
     #endregion
@@ -102,4 +187,21 @@ public class TravelData
 public class SouvenirData
 {
     public List<int> collectedSouvenir = new List<int>(8);
+}
+/// <summary>
+/// 보유 아이템 데이터를 관리하는 클래스
+/// </summary>
+[System.Serializable]
+public class InventoryData
+{
+    public int coin;
+    public Dictionary<int, int> quantityForProductId;
+}
+
+public class HamsterStatData
+{
+    public int fullness;
+    public int cleanliness;
+    public int closeness;
+    public int stress;
 }
