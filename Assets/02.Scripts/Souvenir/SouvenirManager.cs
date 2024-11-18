@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 struct SouvenirStruct
 {
@@ -45,6 +46,14 @@ public class SouvenirManager : MonoBehaviour
     private DataLoader _dataLoader;
     private SouvenirData _souvenirData;
 
+    [SerializeField] private Transform _canvasTransform;
+    private SwipeControls _swipeControls;
+    private float _minimumSwipeMagnitude = 10f;
+    private Vector2 _swipeDir;
+    private float _canvasOrigin;
+    private int _canvasIdx = 1;
+
+
     private void Awake()
     {
         _dataLoader = new DataLoader();
@@ -53,8 +62,14 @@ public class SouvenirManager : MonoBehaviour
 
     private void Start()
     {
+        _swipeControls = new SwipeControls();
+        _swipeControls.Player.Enable();
+        _swipeControls.Player.Touch.canceled += ProcessTouchComplete;
+        _swipeControls.Player.Swipe.performed += ProcessSwipeDelta;
+
         _screenWidth = Screen.width;
         _panelOrigin = transform.position.x;
+        _canvasOrigin = _canvasTransform.position.x + _screenWidth; //현재 시작지점이 기념품이라 임시로 설정
 
         for(int i=0;i<_souvenirList.Count;i++)
         {
@@ -86,6 +101,33 @@ public class SouvenirManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void ProcessTouchComplete(InputAction.CallbackContext context)
+    {
+        Debug.LogWarning($"Swipe Magnitude : {_swipeDir.magnitude}");
+        if (Mathf.Abs(_swipeDir.magnitude) < _minimumSwipeMagnitude) return;
+
+        if(_swipeDir.x > 0)
+        {
+            Debug.LogWarning("SWIPE RIGHT");
+            if (_canvasIdx <= 0) return;
+
+            _canvasIdx--;
+            _canvasTransform.DOMoveX(_canvasOrigin - _canvasIdx * _screenWidth, 0.5f);
+        }
+        else if(_swipeDir.x < 0)
+        {
+            Debug.LogWarning("SWIPE LEFT");
+            if (_canvasIdx >= 1) return;
+
+            _canvasIdx++;
+            _canvasTransform.DOMoveX(_canvasOrigin - _canvasIdx * _screenWidth, 0.5f);
+        }
+    }
+    public void ProcessSwipeDelta(InputAction.CallbackContext context)
+    {
+        _swipeDir = context.ReadValue<Vector2>();
     }
 
     
