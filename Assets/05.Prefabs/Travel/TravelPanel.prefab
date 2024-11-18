@@ -286,7 +286,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4507028119501394073}
         m_TargetAssemblyTypeName: Travel, Assembly-CSharp
         m_MethodName: OnClickTravelIcon
         m_Mode: 1
@@ -495,3 +495,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _travelIcon: {fileID: 46242273725886067}
   _remainTravelText: {fileID: 5253981275609761179}
+  _souvenirManager: {fileID: 0}

@@ -1330,6 +1330,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 632727323289954030, guid: 7247484d06566714eb12a53b568490f0,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1864625077}
+    - target: {fileID: 632727323289954030, guid: 7247484d06566714eb12a53b568490f0,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickTravelIcon
+      objectReference: {fileID: 0}
     - target: {fileID: 3640816607132475900, guid: 7247484d06566714eb12a53b568490f0,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1445,6 +1455,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4507028119501394073, guid: 7247484d06566714eb12a53b568490f0,
+        type: 3}
+      propertyPath: _souvenirManager
+      value: 
+      objectReference: {fileID: 1401609918}
     - target: {fileID: 8366667500194733925, guid: 7247484d06566714eb12a53b568490f0,
         type: 3}
       propertyPath: m_Name
@@ -1985,6 +2000,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750147273}
   m_CullTransparentMesh: 1
+--- !u!114 &1864625077 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4507028119501394073, guid: 7247484d06566714eb12a53b568490f0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1205968824}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9b2d79a43bb0f94db3118e795a6c15d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

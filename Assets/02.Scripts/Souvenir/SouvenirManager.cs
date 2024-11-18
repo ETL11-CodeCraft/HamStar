@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -52,6 +53,7 @@ public class SouvenirManager : MonoBehaviour
     private Vector2 _swipeDir;
     private float _canvasOrigin;
     private int _canvasIdx = 1;
+    public Action travelRefreshAction;
 
 
     private void Awake()
@@ -108,6 +110,8 @@ public class SouvenirManager : MonoBehaviour
         Debug.LogWarning($"Swipe Magnitude : {_swipeDir.magnitude}");
         if (Mathf.Abs(_swipeDir.magnitude) < _minimumSwipeMagnitude) return;
 
+        travelRefreshAction?.Invoke();
+
         if(_swipeDir.x > 0)
         {
             Debug.LogWarning("SWIPE RIGHT");
@@ -153,7 +157,7 @@ public class SouvenirManager : MonoBehaviour
             //이미 모든 기념품을 획득하였습니다.
             return;
         }
-        var ItemId = _uncollectedItems[Random.Range(0,_uncollectedItems.Count)];
+        var ItemId = _uncollectedItems[UnityEngine.Random.Range(0,_uncollectedItems.Count)];
 
         _souvenirItems[ItemId].IsCollected = true;
         _uncollectedItems.Remove(ItemId);
