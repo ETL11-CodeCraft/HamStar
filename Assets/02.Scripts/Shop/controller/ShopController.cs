@@ -18,6 +18,14 @@ public class ShopController : MonoBehaviour
     [SerializeField] HamsterWheelPlacementController _placementController;
 
     private int _columns = 2; // »óÇ³ ¸ñ·Ï ·¹ÀÌ¾Æ¿ô: ¿­
+    private DataLoader _dataLoader;
+    private InventoryData _inventoryData;
+
+    private void Awake()
+    {
+        _dataLoader = new DataLoader();
+        _inventoryData = _dataLoader.Load<InventoryData>();
+    }
 
     public void OpenShop()
     {
@@ -109,8 +117,8 @@ public class ShopController : MonoBehaviour
         {
             AddInventoryData(product.id);
         }
-        SaveManager.inventoryData.coin = GameManager.coin;
-        SaveManager.SaveInventoryData();
+        _inventoryData.coin = GameManager.coin;
+        _dataLoader.Save(_inventoryData);
         CloseItemPopup();
     }
 
@@ -126,14 +134,31 @@ public class ShopController : MonoBehaviour
 
     private void AddInventoryData(int productId)
     {
-        var dict = SaveManager.inventoryData.quantityForProductId;
-        if (dict.ContainsKey(productId))
+        var list = _inventoryData.quantityForProductId;
+        for (int i=0; i<list.Count; i++)
         {
-            SaveManager.inventoryData.quantityForProductId[productId] += 1;
+            if (list[i].productId == productId)
+            {
+                var quantity = list[i].quantity;
+                _inventoryData.quantityForProductId.Remove(list[i]);
+
+                inventoryItem availableItem = new inventoryItem();
+                availableItem.productId = productId;
+                availableItem.quantity = quantity + 1;
+
+                _inventoryData.quantityForProductId.Insert(i, availableItem);
+
+                _dataLoader.Save(_inventoryData);
+
+                return;
+            }
         }
-        else
-        {
-            SaveManager.inventoryData.quantityForProductId.Add(productId, 1);
-        }
+
+        inventoryItem item = new inventoryItem();
+        item.productId = productId;
+        item.quantity = 1;
+        _inventoryData.quantityForProductId.Add(item);
+
+        _dataLoader.Save(_inventoryData);
     }
 }

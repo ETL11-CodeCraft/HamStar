@@ -42,11 +42,17 @@ public class SouvenirManager : MonoBehaviour
     [SerializeField] SouvenirInfo _souvenirInfo;
     private int _pageIdx = 0;
     private float _panelOrigin;
+    private DataLoader _dataLoader;
+    private SouvenirData _souvenirData;
+
+    private void Awake()
+    {
+        _dataLoader = new DataLoader();
+        _souvenirData = _dataLoader.Load<SouvenirData>();
+    }
 
     private void Start()
     {
-        SaveManager.LoadSouvenirData();
-
         _screenWidth = Screen.width;
         _panelOrigin = transform.position.x;
 
@@ -70,7 +76,7 @@ public class SouvenirManager : MonoBehaviour
             if(!_souvenirItems.ContainsKey(curItem.id))
             {
                 _souvenirItems.Add(curItem.id, obj);
-                if(!SaveManager.souvenirData.collectedSouvenir.Contains(curItem.id))
+                if(!_souvenirData.collectedSouvenir.Contains(curItem.id))
                 {
                     _uncollectedItems.Add(curItem.id);
                 }
@@ -110,7 +116,8 @@ public class SouvenirManager : MonoBehaviour
         _souvenirItems[ItemId].IsCollected = true;
         _uncollectedItems.Remove(ItemId);
 
-        SaveManager.AddCollectedSouvenir(ItemId);
+        _souvenirData.collectedSouvenir.Add(ItemId);
+        _dataLoader.Save(_souvenirData);
 
         if (_uncollectedItems.Count <= 0)
         {
