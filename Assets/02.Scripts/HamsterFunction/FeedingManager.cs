@@ -15,14 +15,19 @@ public class FeedingManager : MonoBehaviour
 {
     [SerializeField] ARRaycastManager _arRaycastManager;
     [SerializeField] InputActionReference _dragCurrentPosition;
-    [SerializeField] InputActionReference _tapStartPosition;
+    [SerializeField] InputActionReference _longPress;
     [SerializeField] GameObject _sunflowerSeedPrefab;  //해바라기씨 오브젝트 
+    [SerializeField] GameObject _sunflowerGoldSeedPrefab;  //해바라기씨 (특식) 오브젝트 
     [SerializeField] GameObject _hamsterPrefab;  //햄스터 프리팹
+    [SerializeField] GameObject _potionPrefab;  //햄스터 프리팹
     [SerializeField] Camera _xrCamera;
-    [SerializeField] Button _seedBtn; //먹이 버튼 
+    [SerializeField] Button _feedBtn; //먹이 버튼 
+    [SerializeField] Button _seedBtn; //씨앗 버튼
+    [SerializeField] Button _goldSeedBtn; //골드씨앗 버튼
+    [SerializeField] Button _potionBtn; //물약 버튼
+    [SerializeField] Button _loveBtn; //애정주기 버튼
 
-
-    bool _isClick = false; //클릭중인지 판단
+    bool _isActiveFeed = false;
     bool _isDraging = false;
     bool _isHamsterSpawned = false;
     float _clickTime; //클릭중인 시간
@@ -34,8 +39,20 @@ public class FeedingManager : MonoBehaviour
     private List<ARRaycastHit> _hits = new List<ARRaycastHit>();
     private void Awake()
     {
+        _seedBtn.gameObject.SetActive(_isActiveFeed);
+        _goldSeedBtn.gameObject.SetActive(_isActiveFeed);
 
-        // 버튼 리스너 추가
+        // 먹이 버튼 리스너 추가
+        if (_feedBtn != null)
+        {
+            _feedBtn.onClick.AddListener(OnShowOtherButton);
+        }
+        else
+        {
+            Debug.Log("_feedBtn is null");
+        }
+
+        // 씨앗 버튼 리스너 추가 
         if (_seedBtn != null)
         {
             _seedBtn.onClick.AddListener(OnMakeSeedButton);
@@ -55,11 +72,30 @@ public class FeedingManager : MonoBehaviour
         {
             Debug.Log("Seed Button is not assigned.");
         }
+
+        // 특식 버튼 리스너 추가
+        if (_goldSeedBtn != null)
+        {
+            _goldSeedBtn.onClick.AddListener(OnMakeGoldSeedButton);
+        }
+        else
+        {
+            Debug.Log("goldSeedBtn is null");
+        }
+
+        if (_potionBtn != null)
+        {
+            _potionBtn.onClick.AddListener(OnMakePotion);
+        }
+        else
+        {
+            Debug.Log("potion is null");
+        }
     }
 
     private void Start()
     {
-        
+        _longPress.action.performed += OnLongPress;
         _dragCurrentPosition.action.started += OnTouch;
         _dragCurrentPosition.action.performed += OnDrag;
         _dragCurrentPosition.action.canceled += OnTouchOut;
@@ -72,6 +108,23 @@ public class FeedingManager : MonoBehaviour
             Invoke("SpawnHamsterAtCenter", 5f);
         }
 
+    }
+
+    private void OnLongPress(InputAction.CallbackContext context)
+    {
+        _spawnObject = Instantiate(_sunflowerSeedPrefab, _xrCamera.transform.position + _xrCamera.transform.forward * 0.5f, _xrCamera.transform.rotation);
+        _spawnObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
+        _spawnObject.GetComponent<Rigidbody>().AddForce(_xrCamera.transform.forward * 90f, ForceMode.Force);
+
+        if (_playerObject != null)
+        {
+            Hamster hamsterScript = _playerObject.GetComponent<Hamster>();
+            if (hamsterScript != null)
+            {
+                //seed 프리팹 생성시, Seeds리스트에 추가 
+                hamsterScript.AddSeed(_spawnObject);
+            }
+        }
     }
 
     private void OnTouch(InputAction.CallbackContext context)
@@ -124,7 +177,19 @@ public class FeedingManager : MonoBehaviour
         }
 
     }
-
+    private void OnShowOtherButton()
+    {
+        _isActiveFeed = !_isActiveFeed;
+        _seedBtn.gameObject.SetActive(_isActiveFeed);
+        _goldSeedBtn.gameObject.SetActive(_isActiveFeed);
+    }
+    private void OnMakePotion()
+    {
+        Debug.Log("Make Potion");
+        _spawnObject = Instantiate(_potionPrefab, _xrCamera.transform.position + _xrCamera.transform.forward * 0.5f, _xrCamera.transform.rotation);
+        _spawnObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
+        _spawnObject.GetComponent<Rigidbody>().AddForce(_xrCamera.transform.forward * 90f, ForceMode.Force);
+    }
     private void OnMakeSeedButton()
     {
         _spawnObject = Instantiate(_sunflowerSeedPrefab, _xrCamera.transform.position + _xrCamera.transform.forward * 0.5f, _xrCamera.transform.rotation);
@@ -140,21 +205,24 @@ public class FeedingManager : MonoBehaviour
                 hamsterScript.AddSeed(_spawnObject);
             }
         }
-
     }
 
-    //private void ButtonDown()
-    //{
-    //    Debug.Log("버튼 다운");
-    //    _isClick = true;
-    //}
-    //private void ButtonUp()
-    //{
-    //    Debug.Log("버튼 업");
-    //    _isClick = false;
-    //}
+    private void OnMakeGoldSeedButton()
+    {
+        _spawnObject = Instantiate(_sunflowerGoldSeedPrefab, _xrCamera.transform.position + _xrCamera.transform.forward * 0.5f, _xrCamera.transform.rotation);
+        _spawnObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
+        _spawnObject.GetComponent<Rigidbody>().AddForce(_xrCamera.transform.forward * 90f, ForceMode.Force);
 
-
+        if (_playerObject != null)
+        {
+            Hamster hamsterScript = _playerObject.GetComponent<Hamster>();
+            if (hamsterScript != null)
+            {
+                //seed 프리팹 생성시, Seeds리스트에 추가 
+                hamsterScript.AddSeed(_spawnObject);
+            }
+        }
+    }
 
     private void SpawnHamsterAtCenter()
     {
@@ -173,7 +241,6 @@ public class FeedingManager : MonoBehaviour
                 _isHamsterSpawned = true;
                 Debug.Log("햄스터가 화면 중앙 바닥에 생성되었습니다.");
             }
-
         }
         else
         {

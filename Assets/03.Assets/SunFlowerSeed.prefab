@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 7797490937738045145}
   - component: {fileID: 4375584036989606575}
   - component: {fileID: -8619926433942391757}
-  - component: {fileID: -3934754661378471040}
   m_Layer: 6
   m_Name: SunFlowerSeed
   m_TagString: feed
@@ -138,15 +137,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2432090755550338912, guid: 31f6567ab4f82c645a88ce11298cea88, type: 3}
---- !u!114 &-3934754661378471040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517434587375277834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a35a2eb2fe4e77e469d7e37b8ae6483c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
