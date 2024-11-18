@@ -1554,13 +1554,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d8b68ec139aec049904ce381d0bef22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _souvenirSprites:
-  - {fileID: 21300000, guid: b1ee79028a73dc2479bc4ec3a1eeb4b1, type: 3}
-  - {fileID: 21300000, guid: 9a308e7bc5164d848a9c0bb13aa6ad8a, type: 3}
-  - {fileID: 21300000, guid: d417082c61bbeba4ea673c5118b98cdf, type: 3}
-  - {fileID: 21300000, guid: e3ff0b7e0e847ff47afe3e5199320780, type: 3}
-  - {fileID: 21300000, guid: 747cc6bacf1799444b7e0d13315fc0f5, type: 3}
-  - {fileID: 21300000, guid: 43f3d74957b487947b01e2c2d4ddb1dd, type: 3}
+  _souvenirList:
+  - {fileID: 11400000, guid: f50f7d49932789c4096df6d580036504, type: 2}
+  - {fileID: 11400000, guid: 15087a90fee9a754cae5dbd9bb2d203b, type: 2}
+  - {fileID: 11400000, guid: 80e419df45b4b5544a0e8cecb27ee522, type: 2}
+  - {fileID: 11400000, guid: e817ae7783d04574eb8326cfe494b002, type: 2}
+  - {fileID: 11400000, guid: 4d0dd713951c45649b42318e580c8a2d, type: 2}
+  - {fileID: 11400000, guid: b9421530031df2f458334b840c512a97, type: 2}
   _souvenirPrefab: {fileID: -3857161107774438478, guid: 6c8ab26242c879d4f97543d61f91b515,
     type: 3}
   _souvenirInfo: {fileID: 841469102}
