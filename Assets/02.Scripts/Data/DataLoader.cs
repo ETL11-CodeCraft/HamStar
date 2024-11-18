@@ -6,7 +6,7 @@ public class DataLoader
     public T Load<T>() where T : new()
     {
         T data = default;
-        string dataPath = Application.dataPath + typeof(T) + ".json";
+        string dataPath = Application.persistentDataPath + typeof(T) + ".json";
         if (File.Exists(dataPath))
         {
             string loadData = File.ReadAllText(dataPath);
@@ -23,7 +23,7 @@ public class DataLoader
 
     public void Save<T>(T data)
     {
-        string dataPath = Application.dataPath + typeof(T) + ".json";
+        string dataPath = Application.persistentDataPath + typeof(T) + ".json";
 
         File.WriteAllText(dataPath, JsonUtility.ToJson(data));
     }
