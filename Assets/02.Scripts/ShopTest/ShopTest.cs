@@ -1,4 +1,4 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 
 public class ShopTest : MonoBehaviour
@@ -6,8 +6,10 @@ public class ShopTest : MonoBehaviour
     [SerializeField] TextMeshProUGUI _coinText;
     [SerializeField] TextMeshProUGUI _foodText;
     [SerializeField] TextMeshProUGUI _medicineText;
+    [SerializeField] private ProductData _productData;
     private DataLoader _dataLoader;
     private InventoryData _inventoryData;
+    private PlacementData _placementData;
 
     private void Awake()
     {
@@ -18,19 +20,22 @@ public class ShopTest : MonoBehaviour
     {
         _inventoryData = _dataLoader.Load<InventoryData>();
         RefreshText();
+
+        LoadPlacementData();
     }
 
     public void RefreshText()
     {
+        _inventoryData = _dataLoader.Load<InventoryData>();
         GameManager.coin = _inventoryData.coin;
-        _coinText.text = $"ÄÚÀÎ ({GameManager.coin})";
-        _foodText.text = $"ÀÏ¹Ý ¸ÔÀÌ ({GetQuantityForId(0)})\nÆ¯¼ö ¸ÔÀÌ ({GetQuantityForId(1)})";
-        _medicineText.text = $"Ä¡·á ¹°¾à ({GetQuantityForId(2)})";
+        _coinText.text = $"ì½”ì¸ ({GameManager.coin})";
+        _foodText.text = $"ì¼ë°˜ ë¨¹ì´ ({GetQuantityForId(0)})\níŠ¹ìˆ˜ ë¨¹ì´ ({GetQuantityForId(1)})";
+        _medicineText.text = $"ì¹˜ë£Œ ë¬¼ì•½ ({GetQuantityForId(2)})";
     }
 
     private int GetQuantityForId(int id)
     {
-        var item = _inventoryData.quantityForProductId.Find((x) => { if (x.productId == id) return true; return false; });
+        var item = _inventoryData.quantityForProductId.Find((x) => x.productId == id);
         return item.quantity;
     }
 
@@ -47,4 +52,20 @@ public class ShopTest : MonoBehaviour
         _dataLoader.Save(_inventoryData);
     }
 
+    private void LoadPlacementData()
+    {
+        // ì³‡ë°”í€´ ë°°ì¹˜ ì •ë³´ ë¡œë“œ
+        _placementData = _dataLoader.Load<PlacementData>();
+
+        _placementData.placements.ForEach(p =>
+        {
+            Product product = GetProduct(p.productId);
+            Instantiate(product.prefab, p.position, p.rotation);
+        });
+    }
+
+    private Product GetProduct(int id)
+    {
+        return _productData.list.Find((v) => v.id == id);
+    }
 }

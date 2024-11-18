@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -15,15 +17,20 @@ public class HamsterWheelPlacementController : MonoBehaviour
     [SerializeField] GameObject _placementPrefab;
     [SerializeField] GameObject _rotationPrefab;
     [SerializeField] LayerMask _targetLayer;
-    
+    [SerializeField] GameObject _buttonUIPanel;
+    [SerializeField] ARAnchorManager _arAnchorManager;
+
+    public UnityAction CancelAction;
+    public UnityAction<Product> ApplyAction;
+
     private GameObject _hamsterWheelPrefab;
     private List<ARRaycastHit> _hits = new List<ARRaycastHit>();
     private GameObject _currentHamsterWheel;
     private bool _isPlacementMode = false;
     private bool _isRotationMode = false;
-    private bool _isOK;
     private Vector3 _center;
     private bool _isDragging;
+    private Product _product;
 
     public bool IsPlacementMode {
         get { return _isPlacementMode; }
@@ -33,6 +40,11 @@ public class HamsterWheelPlacementController : MonoBehaviour
     public GameObject HamsterWheelPrefab
     {
         set { _hamsterWheelPrefab = value; }
+    }
+
+    public Product Product { 
+        get { return _product; } 
+        set { _product = value; } 
     }
 
     private void Start()
@@ -49,12 +61,36 @@ public class HamsterWheelPlacementController : MonoBehaviour
         _placementPrefab.SetActive(false);
         _rotationPrefab = Instantiate(_rotationPrefab);
         _rotationPrefab.SetActive(false);
+
+        Transform cancleTr = _buttonUIPanel.transform.Find("CancelButton");
+        Transform applyTr = _buttonUIPanel.transform.Find("ApplyButton");
+        if (cancleTr != null)
+        {
+            cancleTr.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                CancelAction.Invoke();
+                _isPlacementMode = false;
+                _isRotationMode = false;
+                Destroy(_currentHamsterWheel.gameObject);
+                _currentHamsterWheel = null;
+            });
+        }
+        if (applyTr != null)
+        {
+           applyTr.GetComponent<Button>().onClick.AddListener(() => {
+               ApplyAction.Invoke(Product);
+               SavePlacementData();
+               _isPlacementMode = false;
+               _isRotationMode = false;
+           });
+        }
     }
 
     private void Update()
     {
         _placementPrefab.SetActive(_isPlacementMode && !_isRotationMode);
         _rotationPrefab.SetActive(_isPlacementMode && _isRotationMode);
+        _buttonUIPanel.SetActive(_isPlacementMode);
 
         if (_isPlacementMode && _currentHamsterWheel == null)
         {
@@ -128,6 +164,11 @@ public class HamsterWheelPlacementController : MonoBehaviour
             if (_arRaycastManager.Raycast(tapPosition, _hits, TrackableType.Planes) && _hits.Count > 0)
             {
                 _currentHamsterWheel = Instantiate(_hamsterWheelPrefab, _hits[0].pose.position, Quaternion.identity);
+                //if (_hits[0].trackable is ARPlane plane)
+                //{
+                //    ARAnchor anchor = _arAnchorManager.AttachAnchor(plane, _hits[0].pose);
+                    
+                //}
                 Debug.Log("쳇바퀴 생성");
             }
         }
@@ -158,5 +199,10 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private void SavePlacementData()
     {
         // 쳇바퀴 배치 정보 저장
+        Placement placement = new Placement(_product.id, _currentHamsterWheel.transform.position, _currentHamsterWheel.transform.rotation);
+        DataLoader dataLoader = new DataLoader();
+        PlacementData placementData = dataLoader.Load<PlacementData>();
+        placementData.placements.Add(placement);
+        dataLoader.Save(placementData);
     }
 }
