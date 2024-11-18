@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.ARFoundation;
@@ -7,6 +7,7 @@ using UnityEngine.XR.ARSubsystems;
 public class HamsterWheelPlacementController : MonoBehaviour
 {
     [SerializeField] InputActionReference _dragCurrentPosition;
+    [SerializeField] InputActionReference _dragDelta;
     [SerializeField] InputActionReference _tapStartPosition;
     [SerializeField] InputActionReference _pressHoldAction;
     [SerializeField] ARRaycastManager _arRaycastManager;
@@ -22,6 +23,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private bool _isRotationMode = false;
     private bool _isOK;
     private Vector3 _center;
+    private bool _isDragging;
 
     public bool IsPlacementMode {
         get { return _isPlacementMode; }
@@ -36,6 +38,8 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private void Start()
     {
         _dragCurrentPosition.action.performed += OnDrag;
+        _dragCurrentPosition.action.canceled += (c) => _isDragging = false;
+        _dragDelta.action.performed += OnDragDelta;
         _tapStartPosition.action.started += OnTap;
         _pressHoldAction.action.performed += OnLongTap;
 
@@ -76,8 +80,9 @@ public class HamsterWheelPlacementController : MonoBehaviour
 
         Vector2 dragPosition = context.ReadValue<Vector2>();
         Ray ray = _xrCamera.ScreenPointToRay(dragPosition);
+        RaycastHit hitInfo;
 
-        if (_isPlacementMode && !_isRotationMode && Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, _targetLayer))
+        if (_isPlacementMode && !_isRotationMode && Physics.Raycast(ray, out hitInfo, Mathf.Infinity, _targetLayer))
         {
             Debug.Log("OnDrag -> Hit info => " + hitInfo.collider.gameObject.name);
             if (hitInfo.collider.gameObject == _currentHamsterWheel)
@@ -94,6 +99,23 @@ public class HamsterWheelPlacementController : MonoBehaviour
         }
     }
 
+    private void OnDragDelta(InputAction.CallbackContext context)
+    {
+        Vector2 dragDeltaValue = context.ReadValue<Vector2>();
+        //Debug.Log($"dragDelta => {dragDelta}");
+
+        if (_isPlacementMode && _isRotationMode)
+        {
+            _currentHamsterWheel.transform.Rotate(new Vector3(0, -dragDeltaValue.x, 0));
+            
+        }
+
+        if (dragDeltaValue.x >= 1 || dragDeltaValue.y >= 1) // 쳇바퀴 드래그 이동 중에 롱 탭 이벤트 발생하여 회전모드로 변경되는 현상 방지
+        {
+            _isDragging = true;
+        }
+    }
+
     private void OnTap(InputAction.CallbackContext context)
     {
         if (!_isPlacementMode) return;
@@ -106,7 +128,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
             if (_arRaycastManager.Raycast(tapPosition, _hits, TrackableType.Planes) && _hits.Count > 0)
             {
                 _currentHamsterWheel = Instantiate(_hamsterWheelPrefab, _hits[0].pose.position, Quaternion.identity);
-                Debug.Log("�¹��� ����");
+                Debug.Log("쳇바퀴 생성");
             }
         }
         else
@@ -117,7 +139,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
                 Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject == _currentHamsterWheel)
                 {
-                    Debug.Log("�¹��� ã��");
+                    Debug.Log("쳇바퀴 찾음");
                     _isPlacementMode = true;
                 }
             }
@@ -127,12 +149,14 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private void OnLongTap(InputAction.CallbackContext context)
     {
         if (!_isPlacementMode) return;
-        Debug.Log($"OnLongTap => {context.time} {context.startTime} {context.duration}");
-        _isRotationMode = !_isRotationMode;
+        Debug.Log($"OnLongTap => {context.time} isDragging: {_isDragging}");
+
+        if (!_isDragging)
+            _isRotationMode = !_isRotationMode;
     }
 
     private void SavePlacementData()
     {
-        // �¹��� ��ġ ���� ����
+        // 쳇바퀴 배치 정보 저장
     }
 }
