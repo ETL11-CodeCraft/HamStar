@@ -3429,6 +3429,7 @@ GameObject:
   - component: {fileID: 1078433414}
   - component: {fileID: 1078433413}
   - component: {fileID: 1078433412}
+  - component: {fileID: 1078433415}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -3485,12 +3486,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1024, y: 1366}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -3519,6 +3520,21 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1078433415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078433410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 384d1994731e4ad468f9aab7992c63c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _panel: {fileID: 1835491792}
+  _cancelButton: {fileID: 1466266774}
+  _applyButton: {fileID: 383208827}
 --- !u!1 &1101708339
 GameObject:
   m_ObjectHideFlags: 0
@@ -5227,7 +5243,7 @@ GameObject:
   - component: {fileID: 1835491795}
   - component: {fileID: 1835491794}
   m_Layer: 0
-  m_Name: Panel
+  m_Name: ButtonsPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5669,7 +5685,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -402, y: 2183924}
+  m_AnchoredPosition: {x: -402, y: 3704360.2}
   m_SizeDelta: {x: 804, y: -552}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1926673560
@@ -5909,8 +5925,7 @@ MonoBehaviour:
   _targetLayer:
     serializedVersion: 2
     m_Bits: 64
-  _buttonUIPanel: {fileID: 1835491792}
-  _arAnchorManager: {fileID: 738737457}
+  _buttonsUI: {fileID: 1078433415}
 --- !u!1 &2017365121
 GameObject:
   m_ObjectHideFlags: 0

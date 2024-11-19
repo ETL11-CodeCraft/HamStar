@@ -17,8 +17,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
     [SerializeField] GameObject _placementPrefab;
     [SerializeField] GameObject _rotationPrefab;
     [SerializeField] LayerMask _targetLayer;
-    [SerializeField] GameObject _buttonUIPanel;
-    [SerializeField] ARAnchorManager _arAnchorManager;
+    [SerializeField] PlacementButtonsUI _buttonsUI;
 
     public UnityAction CancelAction;
     public UnityAction<Product> ApplyAction;
@@ -31,6 +30,9 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private Vector3 _center;
     private bool _isDragging;
     private Product _product;
+
+    private MaterialPropertyBlock _propBlock;
+    private bool _isPlacePossible = false;
 
     public bool IsPlacementMode {
         get { return _isPlacementMode; }
@@ -45,6 +47,11 @@ public class HamsterWheelPlacementController : MonoBehaviour
     public Product Product { 
         get { return _product; } 
         set { _product = value; } 
+    }
+
+    private void Awake()
+    {
+        _propBlock = new MaterialPropertyBlock();
     }
 
     private void Start()
@@ -62,35 +69,30 @@ public class HamsterWheelPlacementController : MonoBehaviour
         _rotationPrefab = Instantiate(_rotationPrefab);
         _rotationPrefab.SetActive(false);
 
-        Transform cancleTr = _buttonUIPanel.transform.Find("CancelButton");
-        Transform applyTr = _buttonUIPanel.transform.Find("ApplyButton");
-        if (cancleTr != null)
+        _buttonsUI.OnCancel = () =>
         {
-            cancleTr.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                CancelAction.Invoke();
-                _isPlacementMode = false;
-                _isRotationMode = false;
-                Destroy(_currentHamsterWheel.gameObject);
-                _currentHamsterWheel = null;
-            });
-        }
-        if (applyTr != null)
+            CancelAction.Invoke();
+            _isPlacementMode = false;
+            _isRotationMode = false;
+            Destroy(_currentHamsterWheel.gameObject);
+            _currentHamsterWheel = null;
+        };
+
+        _buttonsUI.OnApply = () =>
         {
-           applyTr.GetComponent<Button>().onClick.AddListener(() => {
-               ApplyAction.Invoke(Product);
-               SavePlacementData();
-               _isPlacementMode = false;
-               _isRotationMode = false;
-           });
-        }
+            ApplyAction.Invoke(Product);
+            SavePlacementData();
+            _isPlacementMode = false;
+            _isRotationMode = false;
+        };
     }
 
     private void Update()
     {
         _placementPrefab.SetActive(_isPlacementMode && !_isRotationMode);
         _rotationPrefab.SetActive(_isPlacementMode && _isRotationMode);
-        _buttonUIPanel.SetActive(_isPlacementMode);
+        _buttonsUI.PanelVisible = _isPlacementMode;
+        _buttonsUI.ApplyInteractable = _isPlacePossible;
 
         if (_isPlacementMode && _currentHamsterWheel == null)
         {
@@ -120,16 +122,13 @@ public class HamsterWheelPlacementController : MonoBehaviour
 
         if (_isPlacementMode && !_isRotationMode && Physics.Raycast(ray, out hitInfo, Mathf.Infinity, _targetLayer))
         {
-            Debug.Log("OnDrag -> Hit info => " + hitInfo.collider.gameObject.name);
+            //Debug.Log("OnDrag -> Hit info => " + hitInfo.collider.gameObject.name);
             if (hitInfo.collider.gameObject == _currentHamsterWheel)
             {
                 if (_arRaycastManager.Raycast(dragPosition, _hits, TrackableType.Planes) && _hits.Count > 0)
                 {
                     _currentHamsterWheel.transform.position = _hits[0].pose.position;
-                    _currentHamsterWheel.transform.rotation = _hits[0].pose.rotation;
-
                     _placementPrefab.transform.position = _hits[0].pose.position + _hits[0].pose.up * 0.01f;
-                    _placementPrefab.transform.rotation = _hits[0].pose.rotation;
                 }
             }
         }
@@ -155,7 +154,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private void OnTap(InputAction.CallbackContext context)
     {
         if (!_isPlacementMode) return;
-        Debug.Log($"OnTap => {context.time} {context.startTime} {context.duration}");
+        //Debug.Log($"OnTap => {context.time} {context.startTime} {context.duration}");
 
         Vector2 tapPosition = context.ReadValue<Vector2>();
 
@@ -164,12 +163,23 @@ public class HamsterWheelPlacementController : MonoBehaviour
             if (_arRaycastManager.Raycast(tapPosition, _hits, TrackableType.Planes) && _hits.Count > 0)
             {
                 _currentHamsterWheel = Instantiate(_hamsterWheelPrefab, _hits[0].pose.position, Quaternion.identity);
-                //if (_hits[0].trackable is ARPlane plane)
-                //{
-                //    ARAnchor anchor = _arAnchorManager.AttachAnchor(plane, _hits[0].pose);
-                    
-                //}
                 Debug.Log("쳇바퀴 생성");
+                _isPlacePossible = true;
+                _currentHamsterWheel.GetComponent<HamsterWheel>().TriggerEnterAction = () =>
+                {
+                    Debug.Log("머티리얼 빨간색으로");
+                    _propBlock.SetColor("_BaseColor", new Color(1f, 0.3f, 0.3f, 0.4f));
+                    _placementPrefab.transform.GetChild(0).GetComponent<MeshRenderer>().SetPropertyBlock(_propBlock);
+                    _rotationPrefab.transform.GetChild(0).GetComponent<MeshRenderer>().SetPropertyBlock(_propBlock);
+                    _isPlacePossible = false;
+                };
+                _currentHamsterWheel.GetComponent<HamsterWheel>().TriggerExitAction = () =>
+                {
+                    Debug.Log("머티리얼 원래대로");
+                    _placementPrefab.transform.GetChild(0).GetComponent<MeshRenderer>().SetPropertyBlock(null);
+                    _rotationPrefab.transform.GetChild(0).GetComponent<MeshRenderer>().SetPropertyBlock(null);
+                    _isPlacePossible = true;
+                };
             }
         }
         else
@@ -177,10 +187,9 @@ public class HamsterWheelPlacementController : MonoBehaviour
             Ray ray = _xrCamera.ScreenPointToRay(tapPosition);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _targetLayer))
             {
-                Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject == _currentHamsterWheel)
                 {
-                    Debug.Log("쳇바퀴 찾음");
+                    //Debug.Log("쳇바퀴 찾음");
                     _isPlacementMode = true;
                 }
             }
