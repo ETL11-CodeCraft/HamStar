@@ -1747,6 +1747,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 80e419df45b4b5544a0e8cecb27ee522, type: 2}
   - {fileID: 11400000, guid: e817ae7783d04574eb8326cfe494b002, type: 2}
   - {fileID: 11400000, guid: 4d0dd713951c45649b42318e580c8a2d, type: 2}
+  - {fileID: 11400000, guid: ddb02736eab20c6429a88fdc7af771d7, type: 2}
+  - {fileID: 11400000, guid: 6f7d6b893ae97d245bb3279f38642c68, type: 2}
+  - {fileID: 11400000, guid: d5220e173652028408c6c0b130989e5c, type: 2}
+  - {fileID: 11400000, guid: 55ccc468c5d0901408fb16b48843c316, type: 2}
   - {fileID: 11400000, guid: b9421530031df2f458334b840c512a97, type: 2}
   _souvenirPrefab: {fileID: -3857161107774438478, guid: 6c8ab26242c879d4f97543d61f91b515,
     type: 3}
