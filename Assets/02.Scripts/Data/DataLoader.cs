@@ -7,6 +7,7 @@ public class DataLoader
     {
         T data = default;
         string dataPath = Application.persistentDataPath + typeof(T) + ".json";
+
         if (File.Exists(dataPath))
         {
             string loadData = File.ReadAllText(dataPath);
