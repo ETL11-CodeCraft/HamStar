@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - feed
+  - Hamster
+  - HamsterWheel
+  - Poop
   layers:
   - Default
   - TransparentFX
