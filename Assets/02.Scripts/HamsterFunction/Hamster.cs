@@ -23,14 +23,18 @@ public class Hamster : MonoBehaviour
     private int _closeness = 100;
     private int _stress = 0;
 
-    [SerializeField] private Slider _fullnessSlider;
-    [SerializeField] private Slider _cleanlinessSlider;
-    [SerializeField] private Slider _closenessSlider;
-    [SerializeField] private Slider _stressSlider;
-    [SerializeField] private Image _fullnessColor;
-    [SerializeField] private Image _cleanlinessColor;
-    [SerializeField] private Image _closenessColor;
-    [SerializeField] private Image _stressColor;
+    [SerializeField] private GameObject _fullnessPrefab;
+    [SerializeField] private GameObject _cleanlinessPrefab;
+    [SerializeField] private GameObject _closenessPrefab;
+    [SerializeField] private GameObject _stressPrefab;
+    private Slider _fullnessSlider;
+    private Slider _cleanlinessSlider;
+    private Slider _closenessSlider;
+    private Slider _stressSlider;
+    private Image _fullnessColor;
+    private Image _cleanlinessColor;
+    private Image _closenessColor;
+    private Image _stressColor;
     private float _stressInterval = 5f;
     private Coroutine _increseStressCoroutine;
     private DataLoader _dataLoader;
@@ -167,17 +171,29 @@ public class Hamster : MonoBehaviour
         _animator = GetComponent<Animator>();
         _currentState = HamsterState.Idle;
 
-        //_fullnessSlider.maxValue = 100;
-        //_cleanlinessSlider.maxValue = 100;
-        //_closenessSlider.maxValue = 100;
-        //_stressSlider.maxValue = 100;
+        //추후 수정예정
+        var hamsterPanel = GameObject.Find("HamsterPanel");
+
+        _fullnessSlider = Instantiate(_fullnessPrefab, hamsterPanel.transform).GetComponent<Slider>();
+        _cleanlinessSlider = Instantiate(_cleanlinessPrefab, hamsterPanel.transform).GetComponent<Slider>();
+        _closenessSlider = Instantiate(_closenessPrefab, hamsterPanel.transform).GetComponent<Slider>();
+        _stressSlider = Instantiate(_stressPrefab, hamsterPanel.transform).GetComponent<Slider>();
+        _fullnessColor = _fullnessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+        _cleanlinessColor = _cleanlinessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+        _closenessColor = _closenessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+        _stressColor = _stressSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+
+        _fullnessSlider.maxValue = 100;
+        _cleanlinessSlider.maxValue = 100;
+        _closenessSlider.maxValue = 100;
+        _stressSlider.maxValue = 100;
 
         fullness = _hamsterStatData.fullness;
         cleanliness = _hamsterStatData.cleanliness;
         closeness = _hamsterStatData.closeness;
         stress = _hamsterStatData.stress;
 
-        //_increseStressCoroutine = StartCoroutine(IncreseStress());
+        _increseStressCoroutine = StartCoroutine(IncreseStress());
     }
 
     void Update()

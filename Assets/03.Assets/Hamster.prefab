@@ -328,6 +328,14 @@ MonoBehaviour:
   _currentState: 0
   _healingEffect: {fileID: 1855475288486458, guid: 01303a4e5fa8c1f43896730c997cb6ce,
     type: 3}
+  _fullnessPrefab: {fileID: 4826436235547457323, guid: aeeba42809b244d44b1bc14c43c7af50,
+    type: 3}
+  _cleanlinessPrefab: {fileID: 5115588028633569878, guid: 9a473ee588b5bac40af94fb7144179d6,
+    type: 3}
+  _closenessPrefab: {fileID: 6608482040966869962, guid: 89c773e086c16e04dbdcd7def5e28f71,
+    type: 3}
+  _stressPrefab: {fileID: 5815183921577070713, guid: 4ff9427116eda2d46bef0b05e8d51868,
+    type: 3}
 --- !u!1 &3600248549717965409
 GameObject:
   m_ObjectHideFlags: 0
