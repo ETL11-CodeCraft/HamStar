@@ -136,7 +136,7 @@ public class FeedingManager : MonoBehaviour
 
         EventTrigger.Entry onPointerDownEntry_Potion = new EventTrigger.Entry();
         onPointerDownEntry_Potion.eventID = EventTriggerType.PointerDown;
-        onPointerDownEntry_Potion.callback.AddListener(eventData => 
+        onPointerDownEntry_Potion.callback.AddListener(eventData =>
         {
             Vector2 TouchPosition = ((PointerEventData)eventData).position;
 
@@ -174,7 +174,7 @@ public class FeedingManager : MonoBehaviour
                 Pose hitPose = _hits[0].pose;
 
                 Vector3 spawnPosition = hitPose.position + new Vector3(0, 0.1f, 0);
-                _spawnObject = Instantiate(_potionPrefab, spawnPosition, Quaternion.Euler(-58f,-131f,-34f));
+                _spawnObject = Instantiate(_potionPrefab, spawnPosition, Quaternion.Euler(-58f, -131f, -34f));
                 _spawnObject.GetComponent<Rigidbody>().isKinematic = false;
             }
             else
@@ -182,7 +182,7 @@ public class FeedingManager : MonoBehaviour
                 Debug.Log("No AR Plane found for seed placement");
             }
 
-            
+
         });
         _potionBtnTrigger.triggers.Add(OnPointerUpEntry_potion);
 
@@ -244,18 +244,7 @@ public class FeedingManager : MonoBehaviour
         {
             Debug.Log("_feedBtn is null");
         }
-
-        
-        if (_potionBtn != null)
-        {
-            _potionBtn.onClick.AddListener(OnMakePotion);
-        }
-        else
-        {
-            Debug.Log("potion is null");
-        }
-    }
-   
+    }   
     private void Update()
     {
         if (!_isHamsterSpawned)
@@ -270,13 +259,7 @@ public class FeedingManager : MonoBehaviour
         _seedBtn.gameObject.SetActive(_isActiveFeed);
         _goldSeedBtn.gameObject.SetActive(_isActiveFeed);
     }
-    private void OnMakePotion()
-    {
-        Debug.Log("Make Potion");
-        _spawnObject = Instantiate(_potionPrefab, _xrCamera.transform.position + _xrCamera.transform.forward * 0.5f, _xrCamera.transform.rotation);
-        _spawnObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
-        _spawnObject.GetComponent<Rigidbody>().AddForce(_xrCamera.transform.forward * 90f, ForceMode.Force);
-    }
+
     private void SpawnHamsterAtCenter()
     {
         // 화면 중앙 위치를 기준으로 레이캐스트 수행
