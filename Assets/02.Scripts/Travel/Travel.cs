@@ -8,6 +8,7 @@ public class Travel : MonoBehaviour
 {
     [SerializeField] private GameObject _travelIcon;
     [SerializeField] private TextMeshProUGUI _remainTravelText;
+    [SerializeField] private SouvenirManager _souvenirManager;
     DateTime _startTime;
     DateTime _endTime;
     bool _isTraveling = false;
@@ -24,6 +25,10 @@ public class Travel : MonoBehaviour
 
     private void Start()
     {
+        if(_souvenirManager != null)
+        {
+            _souvenirManager.travelRefreshAction += RefreshTravel;
+        }
         RefreshTravel();
     }
 
@@ -46,6 +51,10 @@ public class Travel : MonoBehaviour
             _dataLoader.Save(_travelData);
 
             //TODO :: 기념품 획득
+            if(_souvenirManager != null)
+            {
+                _souvenirManager.CollectSouvenir();
+            }
             //TODO :: 햄스터 보이도록 설정
 
             Debug.Log("도착");
