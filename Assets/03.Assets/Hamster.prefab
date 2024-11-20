@@ -326,8 +326,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 0
-  _seeds: []
-  _currentSeed: {fileID: 0}
+  _healingEffect: {fileID: 1855475288486458, guid: 01303a4e5fa8c1f43896730c997cb6ce,
+    type: 3}
 --- !u!1 &3600248549717965409
 GameObject:
   m_ObjectHideFlags: 0

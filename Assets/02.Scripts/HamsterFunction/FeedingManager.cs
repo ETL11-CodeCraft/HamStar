@@ -174,7 +174,8 @@ public class FeedingManager : MonoBehaviour
                 Pose hitPose = _hits[0].pose;
 
                 Vector3 spawnPosition = hitPose.position + new Vector3(0, 0.1f, 0);
-                _spawnObject = Instantiate(_potionPrefab, spawnPosition, Quaternion.identity);
+                _spawnObject = Instantiate(_potionPrefab, spawnPosition, Quaternion.Euler(-58f,-131f,-34f));
+                _spawnObject.GetComponent<Rigidbody>().isKinematic = false;
             }
             else
             {
@@ -276,10 +277,6 @@ public class FeedingManager : MonoBehaviour
         _spawnObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
         _spawnObject.GetComponent<Rigidbody>().AddForce(_xrCamera.transform.forward * 90f, ForceMode.Force);
     }
-    
-
-    
-
     private void SpawnHamsterAtCenter()
     {
         // 화면 중앙 위치를 기준으로 레이캐스트 수행

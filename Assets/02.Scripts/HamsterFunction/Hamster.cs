@@ -16,9 +16,10 @@ public class Hamster : MonoBehaviour
     private float _detectionRange = 0.5f;
     private float _moveSpeed = 0.2f;
     [SerializeField] private HamsterState _currentState;
+    [SerializeField] private GameObject _healingEffect;
     private Animator _animator;
-    [SerializeField] List<GameObject> _seeds = new List<GameObject>();
-    [SerializeField] private GameObject _currentSeed;
+    List<GameObject> _seeds = new List<GameObject>();
+    private GameObject _currentSeed;
 
     private int _fullness = 100;
     private int _cleanliness = 100;
@@ -298,7 +299,9 @@ public class Hamster : MonoBehaviour
     {
         if (collision.gameObject.tag == "Potion")
         {
-            
+            Debug.Log("Hamster가 Potion에 닿았습니다.");
+            collision.gameObject.SetActive(false);
+            Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
         }
     }
     //#region DEBUG
