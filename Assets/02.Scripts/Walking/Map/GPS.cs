@@ -73,13 +73,20 @@ public class GPS : MonoBehaviour, IGPS
         //위치 정보 수신 시작 체크
         _receiveGPS = true;
 
-        //위치 데이터 수신 시작 이후 resendTime 경과마다 위치 정보를 갱신하고 출력
+        //위치 데이터 수신 시작 이후 resendTime 경과마다 위치 정보를 갱신하고 출력 => 1m당 갱신하도록 수정
         while (_receiveGPS)
         {
             li = Input.location.lastData;
-            _latitude = li.latitude;
-            _longitude = li.longitude;
-            onLocationChanged?.Invoke(_latitude, _longitude);
+            if (DistanceCalculator.GetDistance(_latitude, _longitude, li.latitude, li.longitude) > 1)
+            {
+                _latitude = li.latitude;
+                _longitude = li.longitude;
+                onLocationChanged?.Invoke(_latitude, _longitude);
+            }
+            else
+            {
+                continue;
+            }
             yield return new WaitForSeconds(_resendTime);
         }
     }
