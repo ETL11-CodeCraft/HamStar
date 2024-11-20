@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Product_02_SpecialFood
   m_EditorClassIdentifier: 
   id: 1
-  productImage: {fileID: 8706619048834826526, guid: 215687feeab0b7445b4a1cd86c82c2e1,
-    type: 3}
+  productImage: {fileID: 21300000, guid: a1a268c6bd8c12444a723ea0420479b7, type: 3}
   productName: "\uB3D9\uACB0 \uAC74\uC870 \uD2B8\uB9BF(10\uAC1C)"
   description: "\uBC14\uC0AD\uD558\uACE0 \uAC74\uAC15\uD55C \uB2E8\uBC31\uC9C8 \uAC04\uC2DD,
     \uD584\uC2A4\uD130\uAC00 \uBA39\uAE30 \uC88B\uC740 \uD06C\uAE30\uC785\uB2C8\uB2E4.\r\n
@@ -23,4 +22,4 @@ MonoBehaviour:
   type: 0
   price: 200
   quantity: 9999
-  prefab: {fileID: 0}
+  prefab: {fileID: 1517434587375277834, guid: 96a2c2072001c3345beba3a229e15dfa, type: 3}

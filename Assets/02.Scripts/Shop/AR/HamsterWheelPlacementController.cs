@@ -18,6 +18,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
     [SerializeField] GameObject _rotationPrefab;
     [SerializeField] LayerMask _targetLayer;
     [SerializeField] PlacementButtonsUI _buttonsUI;
+    [SerializeField] GameObject _infoPanel;
 
     public UnityAction CancelAction;
     public UnityAction<Product> ApplyAction;
@@ -85,6 +86,8 @@ public class HamsterWheelPlacementController : MonoBehaviour
             _isPlacementMode = false;
             _isRotationMode = false;
         };
+
+        _infoPanel.SetActive(false);
     }
 
     private void Update()
@@ -93,6 +96,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
         _rotationPrefab.SetActive(_isPlacementMode && _isRotationMode);
         _buttonsUI.PanelVisible = _isPlacementMode;
         _buttonsUI.ApplyInteractable = _isPlacePossible;
+        _infoPanel.SetActive(_isPlacementMode);
 
         if (_isPlacementMode && _currentHamsterWheel == null)
         {
@@ -157,6 +161,9 @@ public class HamsterWheelPlacementController : MonoBehaviour
         //Debug.Log($"OnTap => {context.time} {context.startTime} {context.duration}");
 
         Vector2 tapPosition = context.ReadValue<Vector2>();
+
+        if (_infoPanel.activeSelf)
+            _infoPanel.SetActive(false);
 
         if (_currentHamsterWheel == null)
         {

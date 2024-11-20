@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Product_01_BasicFood
   m_EditorClassIdentifier: 
   id: 0
-  productImage: {fileID: 21300000, guid: 3c92fe7f81a18c04baf8b2777217ba8b, type: 3}
+  productImage: {fileID: 21300000, guid: 462567f5b871cae48badfaf93b215ba6, type: 3}
   productName: "\uD584\uCC0C\uBC25 \uC0AC\uB8CC(10\uAC1C)"
   description: "\uAD6D\uB0B4\uC0B0 \uC6D0\uBB3C\uB85C \uB9CC\uB4E0 \uC2E0\uC120\uD55C
     \uC0AC\uB8CC\uC785\uB2C8\uB2E4.\n\uD584\uC2A4\uD130\uC758 \uD3EC\uB9CC\uAC10\uC744
@@ -21,4 +21,4 @@ MonoBehaviour:
   type: 0
   price: 100
   quantity: 9999
-  prefab: {fileID: 0}
+  prefab: {fileID: 1517434587375277834, guid: 4826b4035a6b44644b7194a3c0f668d9, type: 3}
