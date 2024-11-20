@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b162dee315d103849932db644181d2b9
+timeCreated: 1527155800
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 119791
+  packageName: Simple Healing Effect
+  packageVersion: 1.0
+  assetPath: Assets/Simple Healing Effect/Animations/Ps Halo.controller
+  uploadId: 392289

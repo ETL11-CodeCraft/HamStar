@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 970478ecf11c03e469556224b4a3c0cc
+timeCreated: 1527753833
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 119791
+  packageName: Simple Healing Effect
+  packageVersion: 1.0
+  assetPath: Assets/Simple Healing Effect/readme.txt
+  uploadId: 392289
