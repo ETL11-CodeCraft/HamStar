@@ -11,49 +11,52 @@ public class StepCount : MonoBehaviour, IStepCount
 {
     public int stepCount => _stepCount;
 
-    public int[] thisWeekStepCount => _thisWeekStepCount;
+    //public int[] thisWeekStepCount => _thisWeekStepCount;
 
-    public int coinChestCount => _chestCount;
+    public int coinChestCount => _coinChestCount;
 
-    public int firstStepCount => _firstStepCount;
+    public int pastChestCount => _pastChestCount;
 
-    private int _firstStepCount;
+    //public int firstStepCount => _firstStepCount;
+
+    //private int _firstStepCount;
     private int _stepCount;
-    private int[] _thisWeekStepCount = new int[7];
-    private int _chestCount;
+    //private int[] _thisWeekStepCount = new int[7];
+    private int _coinChestCount;
+    private int _pastChestCount;
 
     private void Awake()
     {
-#if UNITY_ANDROID
         AndroidRuntimePermissions.RequestPermission("android.permission.ACTIVITY_RECOGNITION");
-#elif UNITY_EDITOR
-
-#endif
     }
 
     void Start()
     {
-#if UNITY_ANDROID
         InputSystem.EnableDevice(AndroidStepCounter.current);
         AndroidStepCounter.current.MakeCurrent();
+        AndroidStepCounter.current.stepCounter.Setup();
+        _coinChestCount = AndroidStepCounter.current.stepCounter.ReadValue() / 1000 - _pastChestCount;
         //SaveManager.LoadWalkData();
-#elif UNITY_EDITOR
 
-#endif
     }
 
-
-    void ChestOpen()    //현재 가지고 있는 coinChestCount만큼 모두 오픈
+    public int GetChestCount()
     {
-        if(coinChestCount > 0)
+        _coinChestCount = AndroidStepCounter.current.stepCounter.ReadValue();
+        Debug.Log($"ChestCount = {_coinChestCount}");
+        Debug.Log($"StepCount = {AndroidStepCounter.current.stepCounter.ReadValue()}");
+        return _coinChestCount - _pastChestCount;
+    }
+
+    public void ResetChestCount()   //안된다면 보물상자 하나 열릴 때마다 하나씩 더하기
+    {
+        if (_coinChestCount > _pastChestCount)
         {
-            for(int i = 0;  i < coinChestCount; i++)
-            {
-                int randomCoin = Random.Range(80, 120); //정규함수 그래프로 변경할까.(80 ~ 120)이 95%인 50 ~ 200 함수
-                //coinText.text = randomCoin.ToString();
-                GameManager.coin += randomCoin;
-            }
+            _pastChestCount += _coinChestCount;
+        }
+        else
+        {
+            _pastChestCount = 0;
         }
     }
-
 }
