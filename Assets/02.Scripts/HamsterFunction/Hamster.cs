@@ -1,10 +1,7 @@
-//using NUnit.Framework;
 using UnityEngine;
-//using UnityEngine.UI;
-//using UnityEngine.Scripting.APIUpdating;
 using System.Collections.Generic;
-//using System.Collections;
-//using System.IO;
+using UnityEngine.UI;
+using System.Collections;
 
 public class Hamster : MonoBehaviour
 {
@@ -50,125 +47,114 @@ public class Hamster : MonoBehaviour
             _fullness = Mathf.Clamp(value, 0, 100);
             _fullnessSlider.value = _fullness;
 
-    //public int fullness
-    //{
-    //    get
-    //    {
-    //        return Mathf.Clamp(_fullness, 0, 100);
-    //    }
-    //    set
-    //    {
-    //        _fullness = Mathf.Clamp(value, 0, 100);
-    //        _fullnessSlider.value = _fullness;
+            if (_fullness >= 75)
+            {
+                _fullnessColor.color = Color.blue;
+            }
+            else if (_fullness >= 50)
+            {
+                _fullnessColor.color = Color.green;
+            }
+            else if (_fullness >= 25)
+            {
+                _fullnessColor.color = Color.yellow;
+            }
+            else
+            {
+                _fullnessColor.color = Color.red;
+            }
+        }
+    }
 
-    //        if (_fullness >= 75)
-    //        {
-    //            _fullnessColor.color = Color.blue;
-    //        }
-    //        else if (_fullness >= 50)
-    //        {
-    //            _fullnessColor.color = Color.green;
-    //        }
-    //        else if (_fullness >= 25)
-    //        {
-    //            _fullnessColor.color = Color.yellow;
-    //        }
-    //        else
-    //        {
-    //            _fullnessColor.color = Color.red;
-    //        }
-    //    }
-    //}
+    public int cleanliness
+    {
+        get
+        {
+            return Mathf.Clamp(_cleanliness, 0, 100);
+        }
+        set
+        {
+            _cleanliness = Mathf.Clamp(value, 0, 100);
+            _cleanlinessSlider.value = _cleanliness;
 
-    //public int cleanliness
-    //{
-    //    get
-    //    {
-    //        return Mathf.Clamp(_cleanliness, 0, 100);
-    //    }
-    //    set
-    //    {
-    //        _cleanliness = Mathf.Clamp(value, 0, 100);
-    //        _cleanlinessSlider.value = _cleanliness;
+            if (_cleanliness >= 75)
+            {
+                _cleanlinessColor.color = Color.blue;
+            }
+            else if (_cleanliness >= 50)
+            {
+                _cleanlinessColor.color = Color.green;
+            }
+            else if (_cleanliness >= 25)
+            {
+                _cleanlinessColor.color = Color.yellow;
+            }
+            else
+            {
+                _cleanlinessColor.color = Color.red;
+            }
+        }
+    }
 
-    //        if (_cleanliness >= 75)
-    //        {
-    //            _cleanlinessColor.color = Color.blue;
-    //        }
-    //        else if (_cleanliness >= 50)
-    //        {
-    //            _cleanlinessColor.color = Color.green;
-    //        }
-    //        else if (_cleanliness >= 25)
-    //        {
-    //            _cleanlinessColor.color = Color.yellow;
-    //        }
-    //        else
-    //        {
-    //            _cleanlinessColor.color = Color.red;
-    //        }
-    //    }
-    //}
+    public int closeness
+    {
+        get
+        {
+            return Mathf.Clamp(_closeness, 0, 100);
+        }
+        set
+        {
+            _closeness = Mathf.Clamp(value, 0, 100);
+            _closenessSlider.value = _closeness;
 
-    //public int closeness
-    //{
-    //    get
-    //    {
-    //        return Mathf.Clamp(_closeness, 0, 100);
-    //    }
-    //    set
-    //    {
-    //        _closeness = Mathf.Clamp(value, 0, 100);
-    //        _closenessSlider.value = _closeness;
+            if (_closeness >= 75)
+            {
+                _closenessColor.color = Color.blue;
+            }
+            else if (_closeness >= 50)
+            {
+                _closenessColor.color = Color.green;
+            }
+            else if (_closeness >= 25)
+            {
+                _closenessColor.color = Color.yellow;
+            }
+            else
+            {
+                _closenessColor.color = Color.red;
+            }
+        }
+    }
 
-    //        if (_closeness >= 75)
-    //        {
-    //            _closenessColor.color = Color.blue;
-    //        }
-    //        else if (_closeness >= 50)
-    //        {
-    //            _closenessColor.color = Color.green;
-    //        }
-    //        else if (_closeness >= 25)
-    //        {
-    //            _closenessColor.color = Color.yellow;
-    //        }
-    //        else
-    //        {
-    //            _closenessColor.color = Color.red;
-    //        }
-    //    }
-    //}
+    public int stress
+    {
+        get
+        {
+            return Mathf.Clamp(_stress, 0, 100);
+        }
+        set
+        {
+            _stress = Mathf.Clamp(value, 0, 100);
+            _stressSlider.value = _stress;
 
-    //public int stress
-    //{
-    //    get
-    //    {
-    //        return Mathf.Clamp(_stress, 0, 100);
-    //    }
-    //    set
-    //    {
-    //        _stress = Mathf.Clamp(value, 0, 100);
-    //        _stressSlider.value = _stress;
-
-    //        if (_stress >= 75)
-    //        {
-    //            _stressColor.color = Color.red;
-    //        }
-    //        else if (_stress >= 50)
-    //        {
-    //            _stressColor.color = Color.yellow;
-    //        }
-    //        else if (_stress >= 25)
-    //        {
-    //            _stressColor.color = Color.green;
-    //        }
-    //        else
-    //        {
-    //            _stressColor.color = Color.blue;
-    //        }
-    //    }
-    //}
+            if (_stress >= 75)
+            {
+                _stressColor.color = Color.red;
+            }
+            else if (_stress >= 50)
+            {
+                _stressColor.color = Color.yellow;
+            }
+            else if (_stress >= 25)
+            {
+                _stressColor.color = Color.green;
+            }
+            else
+            {
+                _stressColor.color = Color.blue;
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -338,7 +324,7 @@ public class Hamster : MonoBehaviour
             stress += deltaStress;
             _dataLoader.Save(_hamsterStatData);
 
-    //        yield return new WaitForSeconds(_stressInterval);
-    //    }
-    //}
+            yield return new WaitForSeconds(_stressInterval);
+        }
+    }
 }
