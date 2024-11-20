@@ -1,0 +1,2 @@
+C:\Users\M34\Documents\GitHub\Unity_Script\HamStar\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Users\M34\Documents\GitHub\Unity_Script\HamStar\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

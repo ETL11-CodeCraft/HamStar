@@ -6,6 +6,9 @@ TagManager:
   tags:
   - feed
   - Potion
+  - Hamster
+  - HamsterWheel
+  - Poop
   layers:
   - Default
   - TransparentFX

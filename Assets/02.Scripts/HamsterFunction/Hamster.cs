@@ -26,16 +26,29 @@ public class Hamster : MonoBehaviour
     private int _closeness = 100;
     private int _stress = 0;
 
-    //[SerializeField] private Slider _fullnessSlider;
-    //[SerializeField] private Slider _cleanlinessSlider;
-    //[SerializeField] private Slider _closenessSlider;
-    //[SerializeField] private Slider _stressSlider;
-    //[SerializeField] private Image _fullnessColor;
-    //[SerializeField] private Image _cleanlinessColor;
-    //[SerializeField] private Image _closenessColor;
-    //[SerializeField] private Image _stressColor;
-    //private float _stressInterval = 5f;
-    //private Coroutine _increseStressCoroutine;
+    [SerializeField] private Slider _fullnessSlider;
+    [SerializeField] private Slider _cleanlinessSlider;
+    [SerializeField] private Slider _closenessSlider;
+    [SerializeField] private Slider _stressSlider;
+    [SerializeField] private Image _fullnessColor;
+    [SerializeField] private Image _cleanlinessColor;
+    [SerializeField] private Image _closenessColor;
+    [SerializeField] private Image _stressColor;
+    private float _stressInterval = 5f;
+    private Coroutine _increseStressCoroutine;
+    private DataLoader _dataLoader;
+    private HamsterStatData _hamsterStatData;
+
+    public int fullness
+    {
+        get
+        {
+            return Mathf.Clamp(_fullness, 0, 100);
+        }
+        set
+        {
+            _fullness = Mathf.Clamp(value, 0, 100);
+            _fullnessSlider.value = _fullness;
 
     //public int fullness
     //{
@@ -157,6 +170,12 @@ public class Hamster : MonoBehaviour
     //    }
     //}
 
+    private void Awake()
+    {
+        _dataLoader = new DataLoader();
+        _hamsterStatData = _dataLoader.Load<HamsterStatData>();
+    }
+
     void Start()
     {
         _animator = GetComponent<Animator>();
@@ -167,12 +186,10 @@ public class Hamster : MonoBehaviour
         //_closenessSlider.maxValue = 100;
         //_stressSlider.maxValue = 100;
 
-        SaveManager.LoadHamsterData();
-
-        //fullness = SaveManager.hamsterStatData.fullness;
-        //cleanliness = SaveManager.hamsterStatData.cleanliness;
-        //closeness = SaveManager.hamsterStatData.closeness;
-        //stress = SaveManager.hamsterStatData.stress;
+        fullness = _hamsterStatData.fullness;
+        cleanliness = _hamsterStatData.cleanliness;
+        closeness = _hamsterStatData.closeness;
+        stress = _hamsterStatData.stress;
 
         //_increseStressCoroutine = StartCoroutine(IncreseStress());
     }
@@ -201,7 +218,7 @@ public class Hamster : MonoBehaviour
                 _currentState = HamsterState.Move;
             }
         }
-        else   //currentSeed°¡ nullÀÌ¸é 
+        else   //currentSeedï¿½ï¿½ nullï¿½Ì¸ï¿½ 
         {
             _currentState = HamsterState.Idle;
             AssignNextSeed();
@@ -210,9 +227,9 @@ public class Hamster : MonoBehaviour
     public void AddSeed(GameObject seed)
     {
         Debug.Log("Add Seed");
-        _seeds.Add(seed);  //¸®½ºÆ®¿¡  seed Ãß°¡ 
+        _seeds.Add(seed);  //ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½  seed ï¿½ß°ï¿½ 
 
-        //Ã¹ ¹øÂ° ¾¾¾Ñ Å¸°ÙÆÃ
+        //Ã¹ ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½
         if (_currentSeed == null)
         {
             _currentSeed = seed;
@@ -222,13 +239,13 @@ public class Hamster : MonoBehaviour
     {
         if (_seeds.Count > 0)
         {
-            Debug.Log("´ÙÀ½ ¾¾¾ÑÀ» ÇÒ´çÇÕ´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½ï¿½Õ´Ï´ï¿½.");
             _currentSeed = _seeds[0];
             _currentState = HamsterState.Move;
         }
         else
         {
-            Debug.Log("³²Àº ¾¾¾ÑÀÌ ¾ø½À´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             _currentSeed = null;
             _currentState = HamsterState.Idle;
         }
@@ -298,27 +315,28 @@ public class Hamster : MonoBehaviour
     {
         if (collision.gameObject.tag == "Potion")
         {
-            Debug.Log("Hamster°¡ Potion¿¡ ´ê¾Ò½À´Ï´Ù.");
+            Debug.Log("Hamsterï¿½ï¿½ Potionï¿½ï¿½ ï¿½ï¿½Ò½ï¿½ï¿½Ï´ï¿½.");
             collision.gameObject.SetActive(false);
             Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
         }
     }
-    //#region DEBUG
-    //public void DEBUG_fullnessUp()
-    //{
-    //    fullness += 10;
-    //}
-    //public void DEBUG_fullnessDown()
-    //{
-    //    fullness -= 10;
-    //}
-    //#endregion
-    //IEnumerator IncreseStress()
-    //{
-    //    while (true)
-    //    {
-    //        var deltaStress = (4 - fullness / 25) + (4 - cleanliness / 25) + (4 - closeness / 25);
-    //        stress += deltaStress;
+    #region DEBUG
+    public void DEBUG_fullnessUp()
+    {
+        fullness += 10;
+    }
+    public void DEBUG_fullnessDown()
+    {
+        fullness -= 10;
+    }
+    #endregion
+    IEnumerator IncreseStress()
+    {
+        while (true)
+        {
+            var deltaStress = (4 - fullness / 25) + (4 - cleanliness / 25) + (4 - closeness / 25);
+            stress += deltaStress;
+            _dataLoader.Save(_hamsterStatData);
 
     //        yield return new WaitForSeconds(_stressInterval);
     //    }
