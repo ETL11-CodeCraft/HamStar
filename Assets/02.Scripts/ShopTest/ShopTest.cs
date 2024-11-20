@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class ShopTest : MonoBehaviour
@@ -6,7 +7,12 @@ public class ShopTest : MonoBehaviour
     [SerializeField] TextMeshProUGUI _coinText;
     [SerializeField] TextMeshProUGUI _foodText;
     [SerializeField] TextMeshProUGUI _medicineText;
-    [SerializeField] private ProductData _productData;
+    [SerializeField] ProductData _productData;
+
+    [SerializeField] Hamster _hamsterPrefab;
+    private Hamster _hamster;
+    private HamsterWheel _wheel;
+
     private DataLoader _dataLoader;
     private InventoryData _inventoryData;
     private PlacementData _placementData;
@@ -18,13 +24,15 @@ public class ShopTest : MonoBehaviour
 
     private void Start()
     {
-        _inventoryData = _dataLoader.Load<InventoryData>();
-        RefreshText();
-
-        LoadPlacementData();
+        RefreshInventoryData();
+        RefreshPlacementData();
     }
 
-    public void RefreshText()
+    private void Update()
+    {
+    }
+
+    public void RefreshInventoryData()
     {
         _inventoryData = _dataLoader.Load<InventoryData>();
         GameManager.coin = _inventoryData.coin;
@@ -44,15 +52,10 @@ public class ShopTest : MonoBehaviour
         GameManager.coin += 10;
         _inventoryData.coin = GameManager.coin;
         _dataLoader.Save(_inventoryData);
-        RefreshText();
+        RefreshInventoryData();
     }
 
-    public void Save()
-    {
-        _dataLoader.Save(_inventoryData);
-    }
-
-    private void LoadPlacementData()
+    private void RefreshPlacementData()
     {
         // 쳇바퀴 배치 정보 로드
         _placementData = _dataLoader.Load<PlacementData>();
@@ -60,12 +63,31 @@ public class ShopTest : MonoBehaviour
         _placementData.placements.ForEach(p =>
         {
             Product product = GetProduct(p.productId);
-            Instantiate(product.prefab, p.position, p.rotation);
+            _wheel = Instantiate(product.prefab, p.position, p.rotation).GetComponent<HamsterWheel>();
         });
     }
 
     private Product GetProduct(int id)
     {
         return _productData.list.Find((v) => v.id == id);
+    }
+
+    public void CreateHamster ()
+    {
+        if (_hamster != null) Destroy(_hamster);
+        _hamster = Instantiate(_hamsterPrefab, _wheel.transform.position + Vector3.right, Quaternion.identity);
+        _hamster.gameObject.SetActive(true);
+        StartCoroutine(C_Test());
+    }
+
+    IEnumerator C_Test()
+    {
+        while (Vector3.Distance(_hamsterPrefab.transform.position, _wheel.transform.position) < 0.1f)
+        {
+            _hamsterPrefab.transform.Translate(_wheel.transform.position * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return null;
     }
 }
