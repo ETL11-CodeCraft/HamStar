@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 045f0c10c45e156478f252c70821b07c
+timeCreated: 1527585433
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 119791
+  packageName: Simple Healing Effect
+  packageVersion: 1.0
+  assetPath: Assets/Simple Healing Effect/SampleScene/sample_scene.unity
+  uploadId: 392289

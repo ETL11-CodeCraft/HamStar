@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1b2c348b1c5d62845bcecf341a0b0304
+timeCreated: 1527587491
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 119791
+  packageName: Simple Healing Effect
+  packageVersion: 1.0
+  assetPath: Assets/Simple Healing Effect/SampleScene/PlaneMaterial.mat
+  uploadId: 392289
