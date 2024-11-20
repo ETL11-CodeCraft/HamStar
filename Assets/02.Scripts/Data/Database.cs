@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class TravelData
 {
     public string travelStartTime;  //여행을 시작할 시간
@@ -60,4 +61,26 @@ public class HamsterStatData
         closeness = 100;
         stress = 0;
     }
+}
+
+[Serializable]
+public struct Placement
+{
+    public int productId;
+    public Vector3 position;
+    public Quaternion rotation;
+
+    public Placement(int id,  Vector3 position, Quaternion rotation)
+    {
+        this.productId = id;
+        this.position = position;
+        this.rotation = rotation;
+    }
+}
+
+public class PlacementData
+{
+    public List<Placement> placements = new List<Placement>();
+
+    public PlacementData() { }
 }

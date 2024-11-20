@@ -93,6 +93,11 @@ public class ShopController : MonoBehaviour
             };
             slot.RefreshSlot();
 
+            if (product.quantity <= 0) // 상품 재고가 없으면 구매 불가
+            {
+                slot.enabled = false;
+            }
+
             obj.transform.SetParent(_scrollView.transform);
             //obj.transform.localPosition = new Vector3(-199 + (i % _columns) * 401,
             //    207 - (Mathf.Round(i / _columns) * 431), 0); // 상품 2열로 배치
@@ -128,8 +133,14 @@ public class ShopController : MonoBehaviour
         CloseShop();
 
         // 쳇바퀴 배치하기
+        _placementController.Product = product;
         _placementController.HamsterWheelPrefab = product.prefab;
         _placementController.IsPlacementMode = true;
+        _placementController.CancelAction = () => { 
+            OpenShop();
+            OpenItemPopup();
+        };
+        _placementController.ApplyAction = Buy;
     }
 
     private void AddInventoryData(int productId)

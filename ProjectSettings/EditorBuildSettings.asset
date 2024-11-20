@@ -5,6 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 1
+    path: Assets/01.Scenes/SouvenirScene.unity
+    guid: ca1a44000776084489ca5992e241f4ce
   - enabled: 0
     path: Assets/01.Scenes/SampleScene.unity
     guid: 4755b35b590504809a7525fd2109c2e2
