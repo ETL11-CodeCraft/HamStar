@@ -204,7 +204,7 @@ public class FeedingManager : MonoBehaviour
                 {
                     // 첫 번째 히트된 트랙터블(AR 평면)에 대해 오브젝트 위치 갱신
                     Pose hitPose = _hits[0].pose;
-                    _spawnObject.transform.position = hitPose.position + new Vector3(0, 0.1f, 0);
+                    _spawnObject.transform.position = hitPose.position + new Vector3(0, 0.15f, 0);
                     _spawnObject.GetComponent<Rigidbody>().isKinematic = false;  //물리효과 적용
                 }
             }

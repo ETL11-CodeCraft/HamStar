@@ -224,7 +224,6 @@ public class Hamster : MonoBehaviour
         {
             Debug.Log("다음 씨앗을 할당합니다.");
             _currentSeed = _seeds[0];
-            //_seeds.RemoveAt(0);
             _currentState = HamsterState.Move;
         }
         else
