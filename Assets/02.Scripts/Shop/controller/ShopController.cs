@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopController : MonoBehaviour
 {
@@ -97,7 +98,7 @@ public class ShopController : MonoBehaviour
 
             if (product.quantity <= 0) // 상품 재고가 없으면 구매 불가
             {
-                slot.enabled = false;
+                slot.SetSoldOut();
             }
 
             var rect = obj.GetComponent<RectTransform>();
@@ -137,7 +138,7 @@ public class ShopController : MonoBehaviour
     {
         CloseItemPopup();
         CloseShop();
-
+        _placementController.InfoVisible = true;
         // 쳇바퀴 배치하기
         _placementController.Product = product;
         _placementController.HamsterWheelPrefab = product.prefab;

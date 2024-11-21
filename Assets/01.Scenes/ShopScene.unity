@@ -5672,7 +5672,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _buttonsUI: {fileID: 1078433415}
-  _infoPanel: {fileID: 27059852}
+  _infoUI: {fileID: 27059852}
 --- !u!1 &2017365121
 GameObject:
   m_ObjectHideFlags: 0

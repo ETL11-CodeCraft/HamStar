@@ -12,6 +12,8 @@ public class ShopTest : MonoBehaviour
     private InventoryData _inventoryData;
     private PlacementData _placementData;
 
+    private HamsterWheel _wheel;
+
     private void Awake()
     {
         _dataLoader = new DataLoader();
@@ -50,6 +52,12 @@ public class ShopTest : MonoBehaviour
     {
         // 쳇바퀴 배치 정보 로드
         _placementData = _dataLoader.Load<PlacementData>();
+
+        _placementData.placements.ForEach(p =>
+        {
+            Product product = GetProduct(p.productId);
+            _wheel = Instantiate(product.prefab, p.position, p.rotation).GetComponent<HamsterWheel>();
+        });
     }
 
     private Product GetProduct(int id)

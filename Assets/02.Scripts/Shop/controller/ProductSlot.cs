@@ -35,4 +35,10 @@ public class ProductSlot : MonoBehaviour
         _button = GetComponent<Button>();
         _button.onClick.AddListener(ClickEventHandler);
     }
+
+    public void SetSoldOut()
+    {
+        GetComponent<Button>().interactable = false;
+        _image.color = new Color(0.6f, 0.6f, 0.6f, 0.6f);
+    }
 }
