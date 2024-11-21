@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ public class ShopController : MonoBehaviour
 
     private DataLoader _dataLoader;
     private InventoryData _inventoryData;
+    private List<ProductSlot> _slots = new List<ProductSlot>(4);
 
     private void Awake()
     {
@@ -65,6 +67,9 @@ public class ShopController : MonoBehaviour
 
     private void RefreshShop()
     {
+        _slots.ForEach(v => { Destroy(v.gameObject); });
+        _slots.Clear();
+
         for (int i = 0; i < _shopData.productIds.Count; i++)
         {
             Product product = GetProduct(i);
@@ -96,6 +101,8 @@ public class ShopController : MonoBehaviour
             }
 
             obj.transform.SetParent(_scrollView.transform);
+
+            _slots.Add(slot);
         }
     }
 
