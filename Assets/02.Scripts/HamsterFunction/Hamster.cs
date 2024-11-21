@@ -222,6 +222,8 @@ public class Hamster : MonoBehaviour
             _currentState = HamsterState.Idle;
             AssignNextSeed();
         }
+
+        
     }
     public void AddSeed(GameObject seed)
     {
@@ -312,7 +314,19 @@ public class Hamster : MonoBehaviour
         if (collision.gameObject.tag == "Potion")
         {
             collision.gameObject.SetActive(false);
-            Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
+            GameObject healingEffect = Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
+
+
+            //이펙트 생성 후 제거
+            ParticleSystem particleSystem = _healingEffect.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                Destroy(healingEffect, particleSystem.main.duration + particleSystem.main.startLifetime.constantMax);
+            }
+            else
+            {
+                Destroy(healingEffect, 3f);
+            }
         }
     }
     #region DEBUG

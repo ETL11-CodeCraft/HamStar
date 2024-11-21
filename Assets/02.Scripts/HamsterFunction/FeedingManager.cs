@@ -21,29 +21,19 @@ public class FeedingManager : MonoBehaviour
     [SerializeField] GameObject _sunflowerSeedPrefab;  //해바라기씨 오브젝트 
     [SerializeField] GameObject _sunflowerGoldSeedPrefab;  //해바라기씨 (특식) 오브젝트 
     [SerializeField] GameObject _hamsterPrefab;  //햄스터 프리팹
-    [SerializeField] GameObject _potionPrefab;  //햄스터 프리팹
     [SerializeField] LayerMask _draggable;
 
     //Button
     [SerializeField] Button _feedBtn; //먹이 버튼 
     [SerializeField] Button _seedBtn; //씨앗 버튼
     [SerializeField] Button _goldSeedBtn; //골드씨앗 버튼
-    [SerializeField] Button _potionBtn; //물약 버튼
     [SerializeField] Button _loveBtn; //애정주기 버튼
 
     [SerializeField] GameObject _feedPanel; //먹이 설명 패널
-    [SerializeField] GameObject _potionPanel; //물약 설명 패널 
-
 
     //EventTrigger
     [SerializeField] EventTrigger _seedBtnEventTrigger;
     [SerializeField] EventTrigger _goldSeedBtnTrigger;
-    [SerializeField] EventTrigger _potionBtnTrigger;
-
-
-    //Image
-    private RectTransform _rectTransform;
-    [SerializeField] Image _potionImg;
 
     bool _isActiveFeed = false;
     bool _isDraging = false;
@@ -59,8 +49,6 @@ public class FeedingManager : MonoBehaviour
     private void Awake()
     {
         _feedPanel.SetActive(false);    // Feed Instruction panel 
-        _potionPanel.SetActive(false);  // Potion Instruction panel
-        _potionImg.gameObject.SetActive(false);  //Potion drag image
 
         //일반 먹이 PointerDown 이벤트트리거
         EventTrigger.Entry onPointerDownEntry_seed = new EventTrigger.Entry();
@@ -100,7 +88,6 @@ public class FeedingManager : MonoBehaviour
         });
         _seedBtnEventTrigger.triggers.Add(onPointerDownEntry_seed);
 
-
         //특식 먹이 PointerDown 이벤트 트리거
         EventTrigger.Entry onPointerDownEntry_goldseed = new EventTrigger.Entry();
         onPointerDownEntry_goldseed.eventID = EventTriggerType.PointerDown;
@@ -139,65 +126,6 @@ public class FeedingManager : MonoBehaviour
         });
         _goldSeedBtnTrigger.triggers.Add(onPointerDownEntry_goldseed);
 
-
-        // Potion PointerDown 이벤트 트리거 
-        _rectTransform = _potionImg.GetComponent<RectTransform>();
-
-        EventTrigger.Entry onPointerDownEntry_Potion = new EventTrigger.Entry();
-        onPointerDownEntry_Potion.eventID = EventTriggerType.PointerDown;
-        onPointerDownEntry_Potion.callback.AddListener(eventData =>
-        {
-            Vector2 TouchPosition = ((PointerEventData)eventData).position;
-
-            _potionImg.gameObject.SetActive(true);
-            _rectTransform.position = TouchPosition;
-
-            _potionPanel.SetActive(true);
-        });
-        _potionBtnTrigger.triggers.Add(onPointerDownEntry_Potion);
-
-        //Potion Drag 이벤트 트리거 
-        EventTrigger.Entry onPointerDragEntry_potion = new EventTrigger.Entry();
-        onPointerDragEntry_potion.eventID = EventTriggerType.Drag;
-        onPointerDragEntry_potion.callback.AddListener(eventData =>
-        {
-            Debug.Log("OnDrag");
-
-            // 터치 포지션을 가져온다
-            Vector2 touchPosition = ((PointerEventData)eventData).position;
-            _rectTransform.position = touchPosition;
-        });
-
-        _potionBtnTrigger.triggers.Add(onPointerDragEntry_potion);
-
-        //Potion - PointerUp 이벤트 트리거
-        EventTrigger.Entry OnPointerUpEntry_potion = new EventTrigger.Entry();
-        OnPointerUpEntry_potion.eventID = EventTriggerType.PointerUp;
-        OnPointerUpEntry_potion.callback.AddListener(eventData =>
-        {
-            _potionImg.gameObject.SetActive(false);
-
-            Vector2 TouchPosition = ((PointerEventData)eventData).position;
-            Ray ray = _xrCamera.ScreenPointToRay(TouchPosition);
-
-            if (_arRaycastManager.Raycast(ray, _hits, TrackableType.Planes))
-            {
-                Pose hitPose = _hits[0].pose;
-
-                Vector3 spawnPosition = hitPose.position + new Vector3(0, 0.1f, 0);
-                _spawnObject = Instantiate(_potionPrefab, spawnPosition, Quaternion.Euler(-58f, -131f, -34f));
-                _spawnObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
-                _spawnObject.GetComponent<Rigidbody>().isKinematic = false;
-            }
-            else
-            {
-                Debug.Log("No AR Plane found for seed placement");
-            }
-
-            _potionPanel.SetActive(false);
-        });
-        _potionBtnTrigger.triggers.Add(OnPointerUpEntry_potion);
-
         //Drag 이벤트 트리거 
         EventTrigger.Entry onPointerDragEntry = new EventTrigger.Entry();
         onPointerDragEntry.eventID = EventTriggerType.Drag;
@@ -224,7 +152,6 @@ public class FeedingManager : MonoBehaviour
         });
         _seedBtnEventTrigger.triggers.Add(onPointerDragEntry);
         _goldSeedBtnTrigger.triggers.Add(onPointerDragEntry);
-
 
         //먹이 PointerUp 이벤트 트리거
         EventTrigger.Entry OnPointerUpEntry = new EventTrigger.Entry();
@@ -277,10 +204,7 @@ public class FeedingManager : MonoBehaviour
         _goldSeedBtn.gameObject.SetActive(_isActiveFeed);
         _feedPanel.SetActive(_isActiveFeed);
     }
-    private void OnShowPotionPanel()
-    {
-        _potionPanel.SetActive(_isActiveFeed);
-    }
+
 
     private void SpawnHamsterAtCenter()
     {
