@@ -31,6 +31,10 @@ public class FeedingManager : MonoBehaviour
     [SerializeField] Button _potionBtn; //물약 버튼
     [SerializeField] Button _loveBtn; //애정주기 버튼
 
+    [SerializeField] GameObject _feedPanel; //먹이 설명 패널
+    [SerializeField] GameObject _potionPanel; //물약 설명 패널 
+
+
     //EventTrigger
     [SerializeField] EventTrigger _seedBtnEventTrigger;
     [SerializeField] EventTrigger _goldSeedBtnTrigger;
@@ -54,7 +58,10 @@ public class FeedingManager : MonoBehaviour
 
     private void Awake()
     {
-        _potionImg.gameObject.SetActive(false);
+        _feedPanel.SetActive(false);    // Feed Instruction panel 
+        _potionPanel.SetActive(false);  // Potion Instruction panel
+        _potionImg.gameObject.SetActive(false);  //Potion drag image
+
         //일반 먹이 PointerDown 이벤트트리거
         EventTrigger.Entry onPointerDownEntry_seed = new EventTrigger.Entry();
         onPointerDownEntry_seed.eventID = EventTriggerType.PointerDown;
@@ -71,7 +78,8 @@ public class FeedingManager : MonoBehaviour
             {
                 Pose hitPose = _hits[0].pose;
 
-                _spawnObject = Instantiate(_sunflowerSeedPrefab, hitPose.position, Quaternion.identity);
+                Vector3 spawnPosition = hitPose.position + new Vector3(0, 0.1f, 0); // Y축으로 0.1m 띄우기
+                _spawnObject = Instantiate(_sunflowerSeedPrefab, spawnPosition, Quaternion.Euler(40f, -26f, 12f));
                 _spawnObject.GetComponent<Rigidbody>().isKinematic = true;  //초기에는 움직이지 않도록
             }
             else
@@ -109,7 +117,8 @@ public class FeedingManager : MonoBehaviour
             {
                 Pose hitPose = _hits[0].pose;
 
-                _spawnObject = Instantiate(_sunflowerGoldSeedPrefab, hitPose.position, Quaternion.identity);
+                Vector3 spawnPosition = hitPose.position + new Vector3(0, 0.1f, 0); // Y축으로 0.1m 띄우기
+                _spawnObject = Instantiate(_sunflowerGoldSeedPrefab, spawnPosition, Quaternion.Euler(40f,-26f,12f));
                 _spawnObject.GetComponent<Rigidbody>().isKinematic = true;  //초기에는 움직이지 않도록
             }
             else
@@ -142,6 +151,8 @@ public class FeedingManager : MonoBehaviour
 
             _potionImg.gameObject.SetActive(true);
             _rectTransform.position = TouchPosition;
+
+            _potionPanel.SetActive(true);
         });
         _potionBtnTrigger.triggers.Add(onPointerDownEntry_Potion);
 
@@ -175,6 +186,7 @@ public class FeedingManager : MonoBehaviour
 
                 Vector3 spawnPosition = hitPose.position + new Vector3(0, 0.1f, 0);
                 _spawnObject = Instantiate(_potionPrefab, spawnPosition, Quaternion.Euler(-58f, -131f, -34f));
+                _spawnObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
                 _spawnObject.GetComponent<Rigidbody>().isKinematic = false;
             }
             else
@@ -182,7 +194,7 @@ public class FeedingManager : MonoBehaviour
                 Debug.Log("No AR Plane found for seed placement");
             }
 
-
+            _potionPanel.SetActive(false);
         });
         _potionBtnTrigger.triggers.Add(OnPointerUpEntry_potion);
 
@@ -205,7 +217,8 @@ public class FeedingManager : MonoBehaviour
                     // 첫 번째 히트된 트랙터블(AR 평면)에 대해 오브젝트 위치 갱신
                     Pose hitPose = _hits[0].pose;
                     _spawnObject.transform.position = hitPose.position + new Vector3(0, 0.15f, 0);
-                    _spawnObject.GetComponent<Rigidbody>().isKinematic = false;  //물리효과 적용
+                    _spawnObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
+                    //_spawnObject.GetComponent<Rigidbody>().isKinematic = false;  //물리효과 적용
                 }
             }
         });
@@ -213,7 +226,7 @@ public class FeedingManager : MonoBehaviour
         _goldSeedBtnTrigger.triggers.Add(onPointerDragEntry);
 
 
-        //PointerUp 이벤트 트리거
+        //먹이 PointerUp 이벤트 트리거
         EventTrigger.Entry OnPointerUpEntry = new EventTrigger.Entry();
         OnPointerUpEntry.eventID = EventTriggerType.PointerUp;
         OnPointerUpEntry.callback.AddListener(eventData =>
@@ -221,8 +234,11 @@ public class FeedingManager : MonoBehaviour
             if (_isDraging && _spawnObject != null)
             {
                 _isDraging = false;
+                Rigidbody rb = _spawnObject.GetComponent<Rigidbody>();
+                rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                rb.isKinematic = false;  //물리효과 적용
 
-                _spawnObject.GetComponent<Rigidbody>().isKinematic = false;  //물리효과 적용
+                rb.angularVelocity = Vector3.zero;
 
                 _spawnObject = null;  //씨앗 참조 초기화
                 _isPressSeedBtn = false;
@@ -244,6 +260,7 @@ public class FeedingManager : MonoBehaviour
         {
             Debug.Log("_feedBtn is null");
         }
+
     }   
     private void Update()
     {
@@ -258,6 +275,11 @@ public class FeedingManager : MonoBehaviour
         _isActiveFeed = !_isActiveFeed;
         _seedBtn.gameObject.SetActive(_isActiveFeed);
         _goldSeedBtn.gameObject.SetActive(_isActiveFeed);
+        _feedPanel.SetActive(_isActiveFeed);
+    }
+    private void OnShowPotionPanel()
+    {
+        _potionPanel.SetActive(_isActiveFeed);
     }
 
     private void SpawnHamsterAtCenter()
