@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class Hamster : MonoBehaviour
 {
@@ -23,6 +24,12 @@ public class Hamster : MonoBehaviour
     private float _idleElapse = 0;
     private const float IDLE_DURATION = 3f;
     private Vector3 _destination = Vector3.one;
+    [Header("Poop")]
+    [SerializeField] private GameObject _poopPrefab;
+    [SerializeField] private InputActionReference _tapAction;
+    private List<GameObject> _poopList = new List<GameObject>(4);
+    public int poopCnt = 0;
+    private int _maxPoopCnt = 4;
 
     private int _fullness = 100;
     private int _cleanliness = 100;
@@ -41,7 +48,7 @@ public class Hamster : MonoBehaviour
     private Image _cleanlinessColor;
     private Image _closenessColor;
     private Image _stressColor;
-    private float _stressInterval = 5f;
+    private float _statRefreshInterval = 300;     //30분
     private Coroutine _increseStressCoroutine;
 
     private DataLoader _dataLoader;
@@ -199,7 +206,10 @@ public class Hamster : MonoBehaviour
         closeness = _hamsterStatData.closeness;
         stress = _hamsterStatData.stress;
 
-        _increseStressCoroutine = StartCoroutine(IncreseStress());
+        _tapAction.action.performed += OnTap;
+
+        _increseStressCoroutine = StartCoroutine(HamsterStatUpdate());
+        StartCoroutine(DebugGeneratePoop());
 
         #region Behavior Tree
         //Behavior Tree
@@ -363,6 +373,14 @@ public class Hamster : MonoBehaviour
                 .CloseComposite()
             .CloseComposite();
         #endregion
+
+        //poop init
+        for(int i=0;i<_maxPoopCnt;i++)
+        {
+            var poop = Instantiate(_poopPrefab);
+            poop.SetActive(false);
+            _poopList.Add(poop);
+        }
     }
 
     void Update()
@@ -392,6 +410,19 @@ public class Hamster : MonoBehaviour
         }
     }
 
+    private void AddPoop()
+    {
+        foreach(var poop in  _poopList)
+        {
+            if(poop.gameObject.activeSelf == false)
+            {
+                poop.transform.position = transform.position;
+                poop.SetActive(true);
+                poopCnt++;
+                return;
+            }
+        }
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -403,15 +434,45 @@ public class Hamster : MonoBehaviour
         }
     }
 
-    IEnumerator IncreseStress()
+    private void OnTap(InputAction.CallbackContext context)
+    {
+        Debug.Log("TAP");
+        Vector2 tapPosition = Mouse.current.position.ReadValue();
+        Ray ray = Camera.main.ScreenPointToRay(tapPosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+        {
+            if (hit.collider.CompareTag("Poop"))
+            {
+                poopCnt--;
+                hit.collider.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    IEnumerator HamsterStatUpdate()
     {
         while (true)
         {
+            //임시 감소 수치
+            fullness -= 2;
+            cleanliness -= poopCnt * 1;
+            closeness -= 2;
+
             var deltaStress = (4 - fullness / 25) + (4 - cleanliness / 25) + (4 - closeness / 25);
             stress += deltaStress;
             _dataLoader.Save(_hamsterStatData);
 
-            yield return new WaitForSeconds(_stressInterval);
+            yield return new WaitForSeconds(_statRefreshInterval);
+        }
+    }
+
+    IEnumerator DebugGeneratePoop()
+    {
+        while(true)
+        {
+            AddPoop();
+
+            yield return new WaitForSeconds(5f);
         }
     }
 }
