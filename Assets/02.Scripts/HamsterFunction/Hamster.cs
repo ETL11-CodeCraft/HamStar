@@ -5,18 +5,24 @@ using System.Collections;
 
 public class Hamster : MonoBehaviour
 {
-    public enum HamsterState
-    {
-        Idle, Move, Eat
-    }
+    Node BehaviorTree;
 
     private float _detectionRange = 0.5f;
     private float _moveSpeed = 0.2f;
-    [SerializeField] private HamsterState _currentState;
     [SerializeField] private GameObject _healingEffect;
     private Animator _animator;
+    private BehaviorTree _behaviorTree;
+
+    [Header("Eat")]
     List<GameObject> _seeds = new List<GameObject>();
     private GameObject _currentSeed;
+    private float _eatElapse = 0;
+    private const float SEED_EATING_DURATION = 1f;
+    [Header("MoveOrIdle")]
+    private int _actFlag = -1;              // -1 : 이전 행동이 완료됨   0 : IDLE    1 : MOVE
+    private float _idleElapse = 0;
+    private const float IDLE_DURATION = 3f;
+    private Vector3 _destination = Vector3.one;
 
     private int _fullness = 100;
     private int _cleanliness = 100;
@@ -37,6 +43,7 @@ public class Hamster : MonoBehaviour
     private Image _stressColor;
     private float _stressInterval = 5f;
     private Coroutine _increseStressCoroutine;
+
     private DataLoader _dataLoader;
     private HamsterStatData _hamsterStatData;
 
@@ -169,7 +176,6 @@ public class Hamster : MonoBehaviour
     void Start()
     {
         _animator = GetComponent<Animator>();
-        _currentState = HamsterState.Idle;
 
         //추후 수정예정
         var hamsterPanel = GameObject.Find("HamsterPanel");
@@ -194,44 +200,180 @@ public class Hamster : MonoBehaviour
         stress = _hamsterStatData.stress;
 
         _increseStressCoroutine = StartCoroutine(IncreseStress());
+
+        #region Behavior Tree
+        //Behavior Tree
+        _behaviorTree = new BehaviorTree();
+        _behaviorTree
+            .SetRoot(new SelectorNode())
+                .Sequence()
+                    .Node(() =>
+                    {
+                        AssignNextSeed();
+
+                        //만약 근처에 씨앗이 있다면
+                        if (_currentSeed)
+                        {
+                            float distance = Vector3.Distance(gameObject.transform.position, _currentSeed.transform.position);
+
+                            if (distance <= _detectionRange)
+                            {
+                                return NodeState.Success;
+                            }
+                        }
+
+                        return NodeState.Failure;
+                    })              //Is Seed On Place (탐지 가능한 범위 내에 씨앗이 있는지)
+                    .Selector()
+                        .Sequence()
+                            .Node(() =>
+                            {
+                                if (_currentSeed)
+                                {
+                                    if (Vector3.Distance(transform.position, _currentSeed.transform.position) <= 0.1f)
+                                    {
+                                        return NodeState.Success;
+                                    }
+                                }
+                                return NodeState.Failure;
+                            })      //Is Seed Near Hamster (먹을 수 있는 범위 내에 씨앗이 있는지)
+                            .Node(() =>
+                            {
+                                if (_currentSeed)
+                                {
+                                    _animator.SetBool("IsIdle", false);
+                                    _animator.SetBool("isMove", false);
+                                    _animator.SetBool("isEat", true);
+
+                                    _eatElapse += Time.deltaTime;
+                                    if (_eatElapse >= SEED_EATING_DURATION)
+                                    {
+                                        _seeds.Remove(_currentSeed);
+                                        Destroy(_currentSeed);
+
+                                        _currentSeed = null;
+                                        _eatElapse = 0;
+
+                                        return NodeState.Success;
+                                    }
+                                    else
+                                    {
+                                        return NodeState.Running;
+                                    }
+                                }
+
+                                return NodeState.Failure;
+                            })      //Eat (씨앗 먹기)
+                        .CloseComposite()
+                        .Node(() =>
+                        {
+                            if (_currentSeed)
+                            {
+                                Vector3 direction = (_currentSeed.transform.position - gameObject.transform.position).normalized;
+                                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                                gameObject.transform.position += direction * _moveSpeed * Time.deltaTime;
+
+                                _animator.SetBool("isIdle", false);
+                                _animator.SetBool("isEat", false);
+                                _animator.SetBool("isMove", true);
+
+                                return NodeState.Success;
+                            }
+
+                            return NodeState.Failure;
+                        })          //Move To Seed (씨앗 방향으로 이동하기)
+                    .CloseComposite()
+                .CloseComposite()
+                .Selector()
+                    .Node(() =>
+                    {
+                        //actFlag 가 0이면 IDLE, 1이면 MOVE
+                        if (_actFlag == -1)
+                        {
+                            _actFlag = Random.Range(0, 2);
+                            _destination = new Vector3(Random.Range(-100f, 100f), transform.position.y, Random.Range(-100f, 100f));
+                        }
+
+                        return NodeState.Failure;
+                    })              //Set Random Force Failure (actFlag를 설정하는 실패 노드)
+                    .Sequence()
+                        .Node(() =>
+                        {
+                            if (_actFlag == 0)
+                            {
+                                return NodeState.Success;
+                            }
+
+                            return NodeState.Failure;
+                        })          //Is Random Value Idle (Idle 상태로 진입할지 확인하는 노드)
+                        .Node(() =>
+                        {
+                            _animator.SetBool("isIdle", true);
+                            _animator.SetBool("isMove", false);
+                            _animator.SetBool("isEat", false);
+
+                            _idleElapse += Time.deltaTime;
+                            if (_idleElapse > IDLE_DURATION)
+                            {
+                                _idleElapse = 0f;
+                                _actFlag = -1;
+
+                                return NodeState.Success;
+                            }
+
+                            return NodeState.Running;
+                        })          //Idle (가만히 있기)
+                    .CloseComposite()
+                    .Sequence()
+                        .Node(() =>
+                        {
+                            if (_actFlag == 1)
+                            {
+                                return NodeState.Success;
+                            }
+
+                            return NodeState.Failure;
+                        })          //Is Random Value Move (Move 상태로 진입할지 확인하는 노드)
+                        .Node(() =>
+                        {
+                            _animator.SetBool("isIdle", false);
+                            _animator.SetBool("isEat", false);
+                            _animator.SetBool("isMove", true);
+
+                            Vector3 direction = (_destination - gameObject.transform.position).normalized;
+                            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                            gameObject.transform.position += direction * _moveSpeed * Time.deltaTime;
+
+                            if ((_destination - gameObject.transform.position).magnitude < 0.1f)
+                            {
+                                _actFlag = -1;
+                                return NodeState.Success;
+                            }
+                            if(!Physics.Raycast(transform.position + (transform.forward * 0.1f), Vector3.down,5f))
+                            {
+                                _actFlag = -1;
+                                return NodeState.Success;
+                            }
+
+                            return NodeState.Running;
+                        })          //Move (랜덤한 위치로 이동하기)
+                    .CloseComposite()
+                .CloseComposite()
+            .CloseComposite();
+        #endregion
     }
 
     void Update()
     {
-        switch (_currentState)
-        {
-            case HamsterState.Idle:
-                Idle();
-                break;
-            case HamsterState.Move:
-                Move();
-                break;
-            case HamsterState.Eat:
-                Eat();
-                break;
-        }
-
-        if (_currentSeed != null)
-        {
-            float distance = Vector3.Distance(gameObject.transform.position, _currentSeed.transform.position);
-
-            if (distance <= _detectionRange && _currentState != HamsterState.Eat)
-            {
-                _currentState = HamsterState.Move;
-            }
-        }
-        else   //currentSeed�� null�̸� 
-        {
-            _currentState = HamsterState.Idle;
-            AssignNextSeed();
-        }
+        _behaviorTree.Evaluate();
     }
     public void AddSeed(GameObject seed)
     {
         Debug.Log("Add Seed");
-        _seeds.Add(seed);  //����Ʈ��  seed �߰� 
+        _seeds.Add(seed);
 
-        //ù ��° ���� Ÿ����
         if (_currentSeed == null)
         {
             _currentSeed = seed;
@@ -241,77 +383,15 @@ public class Hamster : MonoBehaviour
     {
         if (_seeds.Count > 0)
         {
-            Debug.Log("���� ������ �Ҵ��մϴ�.");
+            //여기서 오류 발생
             _currentSeed = _seeds[0];
-            _currentState = HamsterState.Move;
         }
         else
         {
-            Debug.Log("���� ������ �����ϴ�.");
-            _currentSeed = null;
-            _currentState = HamsterState.Idle;
-        }
-    }
-
-    void Idle()
-    {
-        Debug.Log("Hamster Idle");
-        _animator.SetBool("isMove", false);
-        _animator.SetBool("isEat", false);
-        _animator.SetBool("isIdle", true);
-    }
-
-    void Move()
-    {
-        if (_currentSeed != null)
-        {
-            Vector3 direction = (_currentSeed.transform.position - gameObject.transform.position).normalized;
-            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-            gameObject.transform.position += direction * _moveSpeed * Time.deltaTime;
-            Debug.Log("Hamster Move");
-            _animator.SetBool("isIdle", false);
-            _animator.SetBool("isMove", true);
-
-            if (Vector3.Distance(transform.position, _currentSeed.transform.position) <= 0.1f)
-            {
-                _currentState = HamsterState.Eat;
-            }
-        }
-        else
-        {
-            _currentState = HamsterState.Idle;
-            AssignNextSeed();
-            return;
-        }
-
-    }
-
-    void Eat()
-    {
-        Debug.Log("Hamster Eat");
-        _animator.SetBool("isMove", false);
-        _animator.SetBool("isEat", true);
-
-        if (_currentSeed != null)
-        {
-            Destroy(_currentSeed);
-            _seeds.RemoveAt(0);
-            Debug.Log("SeedCount:"+_seeds.Count);
             _currentSeed = null;
         }
-
-        Invoke("StopEat", 1f);
     }
 
-    void StopEat()
-    {
-        Debug.Log("Hamster stoped eating");
-        _animator.SetBool("isEat", false);
-        _currentState = HamsterState.Idle;
-
-        AssignNextSeed();
-    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -322,16 +402,7 @@ public class Hamster : MonoBehaviour
             Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
         }
     }
-    #region DEBUG
-    public void DEBUG_fullnessUp()
-    {
-        fullness += 10;
-    }
-    public void DEBUG_fullnessDown()
-    {
-        fullness -= 10;
-    }
-    #endregion
+
     IEnumerator IncreseStress()
     {
         while (true)
