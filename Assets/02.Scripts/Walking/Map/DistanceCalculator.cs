@@ -5,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class DistanceCalculator
 {
-    private const float EarthRadius = 6371009f;    //지구의 평균 반지름(단위 m)
+    private const float EarthRadius = 6378137f;    //지구의 평균 반지름(단위 m)
 
     public static float GetDistance(float latitude1, float longitude1, float latitude2, float longitude2)
     {
@@ -16,15 +16,25 @@ public class DistanceCalculator
         float RadianLatitude2 = DegreeToRadian(latitude2);
 
         //Haversine formula
-        float a = Mathf.Pow(Mathf.Sin(dLatitude / 2), 2) + Mathf.Cos(RadianLatitude1) * Mathf.Cos(RadianLatitude2) * Mathf.Pow(Mathf.Sin(dLongitude / 2), 2);
+        float a = Mathf.Pow(Mathf.Sin(dLatitude / 2f), 2) + Mathf.Cos(RadianLatitude1) * Mathf.Cos(RadianLatitude2) * Mathf.Pow(Mathf.Sin(dLongitude / 2f), 2);
         float c = 2 * Mathf.Atan2(Mathf.Sqrt(a), Mathf.Sqrt(1 - a));
         float distance = EarthRadius * c;
+
+        Debug.Log($"({latitude1},{longitude1}),({latitude2},{longitude2}) Distance : { distance}");
+        Debug.Log($"MeterPerPixel : {MeterPerPixelwithZoom(17, latitude1)}");
 
         return distance;
     }
 
     private static float DegreeToRadian(float degree)
     {
-        return degree * (Mathf.PI / 180);
+        return degree * (Mathf.PI / 180f);
+    }
+
+    private static float MeterPerPixelwithZoom(int zoom, float latitude)
+    {
+        float meterPerPixel = 156543.03392f * Mathf.Cos(DegreeToRadian(latitude)) / Mathf.Pow(2, zoom);
+
+        return meterPerPixel;
     }
 }

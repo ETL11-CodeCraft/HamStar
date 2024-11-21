@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
@@ -22,22 +24,20 @@ public class ChestCount : MonoBehaviour
     private DataLoader _dataLoader;
     private WalkData _walkData;
     private int _readWalkCount;
-    private const int chestStepUnit = 10;   //단위 걸음당 보물상자 하나
+    private const int chestStepUnit = 1000;   //단위 걸음당 보물상자 하나
 
     private void Awake()
     {
         _dataLoader = new DataLoader();
         _walkData = _dataLoader.Load<WalkData>();
-        //Debug.Log($"{_walkData.pastChestCount} Load Save walkData.pastChestCount");   //확인 완료
         _pastChestCount = _walkData.pastChestCount;
-        Debug.Log($"{_pastChestCount} Load Save pastChestCount"); //확인 완료
         _chestOpenButton.onClick.AddListener(ChestOpen);
         _chestCloseButton.onClick.AddListener(TouchChestOpenBackGround);
 
 #if UNITY_EDITOR
 
 #elif UNITY_ANDROID
-        AndroidRuntimePermissions.RequestPermission("android.permission.ACTIVITY_RECOGNITION");
+        StartCoroutine(PermissionActivity("android.permission.ACTIVITY_RECOGNITION"));
 #endif
     }
 
@@ -51,7 +51,6 @@ public class ChestCount : MonoBehaviour
 #elif UNITY_ANDROID
         InputSystem.EnableDevice(AndroidStepCounter.current);
         AndroidStepCounter.current.MakeCurrent();
-        //AndroidStepCounter.current.stepCounter.Setup();
 #endif
     }
 
@@ -75,9 +74,8 @@ public class ChestCount : MonoBehaviour
             {
                 stepCountTestText.text = "stepCount : " + _readWalkCount.ToString();
                 _currentChestCount = (_readWalkCount / chestStepUnit) - _pastChestCount; 
-                Debug.Log($"current {_currentChestCount} read {_readWalkCount / chestStepUnit} past {_pastChestCount}");
 
-                chestCountText.text = _currentChestCount.ToString();
+                chestCountText.text = Mathf.Min(9, _currentChestCount).ToString();
                 pastChestCountTestText.text = "pastChestCount : " + _pastChestCount.ToString();
 
                 if (_readWalkCount / chestStepUnit < _pastChestCount)  
@@ -96,13 +94,28 @@ public class ChestCount : MonoBehaviour
 #endif
     }
 
-    private void ChestOpen()    //현재 가지고 있는 coinChestCount만큼 모두 오픈
+    private IEnumerator PermissionActivity(string permission)
     {
-        Debug.Log($"ChestOpen : {_currentChestCount}개");
+        // 권한이 허용되지 않았다면
+        if (!Permission.HasUserAuthorizedPermission(permission))
+        {
+            // 최신 Unity API를 사용해 권한을 요청
+            Permission.RequestUserPermission(permission);
 
+            // 권한 허용될 때까지 기다림
+            while (!Permission.HasUserAuthorizedPermission(permission))
+            {
+                yield return null;
+            }
+        }
+    }
+
+
+    private void ChestOpen()    //현재 가지고 있는 coinChestCount만큼 모두 오픈(최대 9개)
+    {
         if (_currentChestCount > 0)
         {
-            for (int i = 0; i < _currentChestCount; i++)
+            for (int i = 0; i < Mathf.Min(9, _currentChestCount); i++)
             {
                 int randomCoin = UnityEngine.Random.Range(80, 120); //정규함수 그래프로 변경할까.(80 ~ 120)이 95%인 50 ~ 200 함수
                 GameManager.coin += randomCoin;
