@@ -27,7 +27,6 @@ public class FeedingManager : MonoBehaviour
     [SerializeField] Button _feedBtn; //먹이 버튼 
     [SerializeField] Button _seedBtn; //씨앗 버튼
     [SerializeField] Button _goldSeedBtn; //골드씨앗 버튼
-    [SerializeField] Button _loveBtn; //애정주기 버튼
 
     [SerializeField] GameObject _feedPanel; //먹이 설명 패널
 
