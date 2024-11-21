@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -48,7 +48,7 @@ public class ShopController : MonoBehaviour
         _itemPanel.SetActive(false);
     }
 
-    public Product GetProduct(int id)
+    private Product GetProduct(int id)
     {
         return _productData.list.Find(v => v.id == id);
     }
@@ -95,7 +95,7 @@ public class ShopController : MonoBehaviour
             };
             slot.RefreshSlot();
 
-            if (product.quantity <= 0) // »óÇ° Àç°í°¡ ¾øÀ¸¸é ±¸¸Å ºÒ°¡
+            if (product.quantity <= 0) // ìƒí’ˆ ìž¬ê³ ê°€ ì—†ìœ¼ë©´ êµ¬ë§¤ ë¶ˆê°€
             {
                 slot.enabled = false;
             }
@@ -110,19 +110,26 @@ public class ShopController : MonoBehaviour
 
     private void Buy(Product product)
     {
-        Debug.Log($"±¸¸Å=> coin: {GameManager.coin}, price: {product.price}, type: {product.type}");
+        Debug.Log($"êµ¬ë§¤=> coin: {GameManager.coin}, price: {product.price}, type: {product.type}");
         GameManager.coin -= product.price;
         RefeshCoin();
+
         if (product.type == ItemType.PlayGround)
         {
             product.quantity -= 1;
         }
-        else
+        else if (product.type == ItemType.Food)
         {
-            AddInventoryData(product.id);
+            AddInventoryData(product.id, 10);
         }
+        else if (product.type == ItemType.Medicine)
+        {
+            AddInventoryData(product.id, 1);
+        }
+
         _inventoryData.coin = GameManager.coin;
         _dataLoader.Save(_inventoryData);
+
         CloseItemPopup();
     }
 
@@ -131,7 +138,7 @@ public class ShopController : MonoBehaviour
         CloseItemPopup();
         CloseShop();
 
-        // ÃÂ¹ÙÄû ¹èÄ¡ÇÏ±â
+        // ì³‡ë°”í€´ ë°°ì¹˜í•˜ê¸°
         _placementController.Product = product;
         _placementController.HamsterWheelPrefab = product.prefab;
         _placementController.IsPlacementMode = true;
@@ -142,10 +149,11 @@ public class ShopController : MonoBehaviour
         _placementController.ApplyAction = Buy;
     }
 
-    private void AddInventoryData(int productId)
+    private void AddInventoryData(int productId, int added = 1)
     {
         var list = _inventoryData.quantityForProductId;
-        for (int i=0; i<list.Count; i++)
+
+        for (int i = 0; i < list.Count; i++)
         {
             if (list[i].productId == productId)
             {
@@ -154,7 +162,7 @@ public class ShopController : MonoBehaviour
 
                 inventoryItem availableItem = new inventoryItem();
                 availableItem.productId = productId;
-                availableItem.quantity = quantity + 1;
+                availableItem.quantity = quantity + added;
 
                 _inventoryData.quantityForProductId.Insert(i, availableItem);
 
@@ -166,7 +174,7 @@ public class ShopController : MonoBehaviour
 
         inventoryItem item = new inventoryItem();
         item.productId = productId;
-        item.quantity = 1;
+        item.quantity = added;
         _inventoryData.quantityForProductId.Add(item);
 
         _dataLoader.Save(_inventoryData);
