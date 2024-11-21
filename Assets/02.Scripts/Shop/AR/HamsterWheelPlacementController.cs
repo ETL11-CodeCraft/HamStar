@@ -34,6 +34,8 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private MaterialPropertyBlock _propBlock;
     private bool _isPlacePossible = false;
 
+    private IGPS _gps;
+
     public bool IsPlacementMode {
         get { return _isPlacementMode; }
         set { _isPlacementMode = value; }
@@ -54,6 +56,18 @@ public class HamsterWheelPlacementController : MonoBehaviour
         set
         {
             _infoUI.gameObject.SetActive(value);
+
+            if (value == true)
+            {
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    _gps = gameObject.AddComponent<GPS>();
+                }
+                else
+                {
+                    _gps = gameObject.AddComponent<MockGPS>();
+                }
+            }
         }
     }
 
@@ -219,7 +233,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private void SavePlacementData()
     {
         // 쳇바퀴 배치 정보 저장
-        Placement placement = new Placement(_product.id, _currentHamsterWheel.transform.position, _currentHamsterWheel.transform.rotation);
+        Placement placement = new Placement(_product.id, _currentHamsterWheel.transform.position, _currentHamsterWheel.transform.rotation, _gps.latitude, _gps.longitude);
         DataLoader dataLoader = new DataLoader();
         PlacementData placementData = dataLoader.Load<PlacementData>();
         placementData.placements.Add(placement);
