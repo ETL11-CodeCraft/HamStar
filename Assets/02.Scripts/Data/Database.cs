@@ -18,10 +18,7 @@ public class TravelData
 
 public class WalkData
 {
-    public string pastWalkCount;   //어제까지의 걸음 수
-    public string[] thisWeekWalkCount;  //금주의 일간 걸음 수
-    public string chestCount;   //보물상자의 수
-    public string currentPlayDate;  //최근 플레이 날짜
+    public string pastChestCount;   //오픈되지 않을 보물상자의 수
 
     public WalkData() { }
 }

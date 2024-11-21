@@ -83,10 +83,6 @@ public class GPS : MonoBehaviour, IGPS
                 _longitude = li.longitude;
                 onLocationChanged?.Invoke(_latitude, _longitude);
             }
-            else
-            {
-                continue;
-            }
             yield return new WaitForSeconds(_resendTime);
         }
     }
