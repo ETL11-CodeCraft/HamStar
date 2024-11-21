@@ -1,7 +1,5 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class ShopController : MonoBehaviour
 {
@@ -17,7 +15,6 @@ public class ShopController : MonoBehaviour
 
     [SerializeField] HamsterWheelPlacementController _placementController;
 
-    private int _columns = 2; // 상풍 목록 레이아웃: 열
     private DataLoader _dataLoader;
     private InventoryData _inventoryData;
 
@@ -99,13 +96,6 @@ public class ShopController : MonoBehaviour
             }
 
             obj.transform.SetParent(_scrollView.transform);
-            //obj.transform.localPosition = new Vector3(-199 + (i % _columns) * 401,
-            //    207 - (Mathf.Round(i / _columns) * 431), 0); // 상품 2열로 배치
-            //Debug.Log($"localPosition: [{i}] {-199 + (i % _columns) * 401}, {207 - Mathf.Round(i / _columns) * 431}");
-
-            obj.transform.localPosition = new Vector3(202 + (i % _columns) * 401,
-                -224 - (Mathf.Round(i / _columns) * 431), 0); // 상품 2열로 배치
-            Debug.Log($"localPosition: [{i}] {202 + (i % _columns) * 401}, {-224 - Mathf.Round(i / _columns) * 431}");
         }
     }
 
