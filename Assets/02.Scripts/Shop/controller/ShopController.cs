@@ -100,7 +100,9 @@ public class ShopController : MonoBehaviour
                 slot.enabled = false;
             }
 
-            obj.transform.SetParent(_scrollView.transform);
+            var rect = obj.GetComponent<RectTransform>();
+            rect.SetParent(_scrollView.transform);
+            rect.localScale = Vector3.one;
 
             _slots.Add(slot);
         }
