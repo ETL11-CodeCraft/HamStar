@@ -27,7 +27,7 @@ public class ProductSlot : MonoBehaviour
     {
         _image.sprite = _productImage;
         _nameText.text = _name;
-        _priceText.text = _price.ToString() + "C";
+        _priceText.text = _price.ToString("N0") + "C";
     }
 
     private void Start()

@@ -62,7 +62,7 @@ public class ShopController : MonoBehaviour
 
     private void RefeshCoin()
     {
-        _coinText.text = GameManager.coin + "C";
+        _coinText.text = GameManager.coin.ToString("N0") + "C";
     }
 
     private void RefreshShop()
