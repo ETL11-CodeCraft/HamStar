@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// 지구를 구의 형태로 가정하고, 위도와 경도에 따른 거리 계산
+/// </summary>
 public class DistanceCalculator
 {
     private const float EarthRadius = 6371009f;    //지구의 평균 반지름(단위 m)

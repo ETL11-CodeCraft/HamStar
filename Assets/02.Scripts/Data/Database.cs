@@ -18,9 +18,12 @@ public class TravelData
 
 public class WalkData
 {
-    public string pastChestCount;   //오픈되지 않을 보물상자의 수
+    public int pastChestCount;   //오픈되지 않을 보물상자의 수
 
-    public WalkData() { }
+    public WalkData() 
+    {
+        pastChestCount = -1;
+    }
 }
 
 public class SouvenirData
