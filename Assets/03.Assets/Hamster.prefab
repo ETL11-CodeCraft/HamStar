@@ -381,6 +381,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healingEffect: {fileID: 1855475288486458, guid: 01303a4e5fa8c1f43896730c997cb6ce,
     type: 3}
+  _travelPrefab: {fileID: 8831289666094317482, guid: 7247484d06566714eb12a53b568490f0,
+    type: 3}
   _poopPrefab: {fileID: 1463405870289544092, guid: 61b3ee0348331f340be4872362effe3e,
     type: 3}
   _tapAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018,
