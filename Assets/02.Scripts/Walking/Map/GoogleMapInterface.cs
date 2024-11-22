@@ -16,7 +16,7 @@ public class GoogleMapInterface : MonoBehaviour
     {
         try
         {
-            _textFile = Resources.Load<TextAsset>("MapApiKey.txt");    //텍스트 에셋에 메모장 파일 불러오기
+            _textFile = Resources.Load<TextAsset>("MapApiKey");    //텍스트 에셋에 메모장 파일 불러오기
             Debug.Log($"{_textFile.text} MapApiKey");
 
             API_KEY = _textFile.text;
