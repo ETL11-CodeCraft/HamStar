@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4756536183480083731}
   - component: {fileID: 7932481963113257254}
   - component: {fileID: 7509976364311481439}
+  - component: {fileID: 5584993468511329238}
   - component: {fileID: -2584191304608135141}
   - component: {fileID: -1692064620470815223}
   m_Layer: 6
@@ -88,6 +89,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5584993468511329238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7968322438453780669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7718bdc61d7cfd84abe84a2afed74942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arPlaneLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!54 &-2584191304608135141
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -114,7 +130,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 2
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!64 &-1692064620470815223
 MeshCollider:
   m_ObjectHideFlags: 0
