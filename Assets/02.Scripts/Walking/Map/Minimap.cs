@@ -37,6 +37,7 @@ public class Minimap : MonoBehaviour
             _unit = new UnitOfMinimap();
 #endif
         _gps.onLocationChanged += RefreshMap;
+        _gps.onMapMoved += MoveMap;
     }
 
     private void RefreshMap(float latitude, float longitude)
