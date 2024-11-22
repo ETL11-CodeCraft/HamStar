@@ -9,7 +9,6 @@ public class Hamster : MonoBehaviour
 {
     Node BehaviorTree;
 
-    private float _detectionRange = 0.5f;
     private float _moveSpeed = 0.2f;
     [SerializeField] private GameObject _healingEffect;
     private Animator _animator;
@@ -441,6 +440,8 @@ public class Hamster : MonoBehaviour
             poop.SetActive(false);
             _poopList.Add(poop);
         }
+
+        
     }
 
     void Update()
@@ -461,7 +462,6 @@ public class Hamster : MonoBehaviour
     {
         if (_seeds.Count > 0)
         {
-            //여기서 오류 발생
             _currentSeed = _seeds[0];
         }
         else
@@ -488,9 +488,20 @@ public class Hamster : MonoBehaviour
     {
         if (collision.gameObject.tag == "Potion")
         {
-            Debug.Log("Hamster�� Potion�� ��ҽ��ϴ�.");
             collision.gameObject.SetActive(false);
-            Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
+            GameObject healingEffect = Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
+
+
+            //이펙트 생성 후 제거
+            ParticleSystem particleSystem = _healingEffect.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                Destroy(healingEffect, particleSystem.main.duration + particleSystem.main.startLifetime.constantMax);
+            }
+            else
+            {
+                Destroy(healingEffect, 3f);
+            }
         }
     }
 
