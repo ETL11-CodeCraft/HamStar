@@ -63,6 +63,7 @@ public class Travel : MonoBehaviour
         _startTime = DateTime.ParseExact(_travelData.travelStartTime, "yyyy-MM-dd HH:mm:ss", null);
         if (_isTraveling == false && _startTime < DateTime.Now)
         {
+            //TODO :: 흑화 상태라면 여행을 출발하지 않음
             _isTraveling = true;
             //출발
             //TODO :: 햄스터 안보이도록 설정

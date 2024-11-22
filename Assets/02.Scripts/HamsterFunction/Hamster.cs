@@ -42,6 +42,7 @@ public class Hamster : MonoBehaviour
     [SerializeField] private GameObject _cleanlinessPrefab;
     [SerializeField] private GameObject _closenessPrefab;
     [SerializeField] private GameObject _stressPrefab;
+    [SerializeField] private GameObject _darkenPrefab;
     private Slider _fullnessSlider;
     private Slider _cleanlinessSlider;
     private Slider _closenessSlider;
@@ -50,6 +51,7 @@ public class Hamster : MonoBehaviour
     private Image _cleanlinessColor;
     private Image _closenessColor;
     private Image _stressColor;
+    private GameObject _darkenMark;
     private float _statRefreshInterval = 300;     //30분
     private Coroutine _increseStressCoroutine;
 
@@ -182,6 +184,22 @@ public class Hamster : MonoBehaviour
         set
         {
             _isDarken = value;
+
+            if (_isDarken == false)
+            {
+                stress -= 100;
+                if(_darkenMark)
+                {
+                    _darkenMark.SetActive(false);
+                }
+            }
+            else
+            {
+                if(_darkenMark)
+                {
+                    _darkenMark.SetActive(true);
+                }
+            }
         }
     }
 
@@ -202,6 +220,7 @@ public class Hamster : MonoBehaviour
         _cleanlinessSlider = Instantiate(_cleanlinessPrefab, hamsterPanel.transform).GetComponent<Slider>();
         _closenessSlider = Instantiate(_closenessPrefab, hamsterPanel.transform).GetComponent<Slider>();
         _stressSlider = Instantiate(_stressPrefab, hamsterPanel.transform).GetComponent<Slider>();
+        _darkenMark = Instantiate(_darkenPrefab, hamsterPanel.transform);
         _fullnessColor = _fullnessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         _cleanlinessColor = _cleanlinessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         _closenessColor = _closenessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
@@ -218,7 +237,23 @@ public class Hamster : MonoBehaviour
         fullness = _hamsterStatData.fullness - ((int)deltaTime.TotalMinutes / 30 * 2);
         cleanliness = _hamsterStatData.cleanliness - ((int)deltaTime.TotalMinutes / 30 * 2);
         closeness = _hamsterStatData.closeness - ((int)deltaTime.TotalMinutes / 30 * 2);
-        stress = _hamsterStatData.stress;
+        var deltaStress = (4 - (int)deltaTime.TotalMinutes / 30 * 2) * 3;
+        stress += _hamsterStatData.stress + deltaStress;
+
+        if (stress >= 100)
+        {
+            if(_darkenMark)
+            {
+                _darkenMark.SetActive(true);
+            }
+        }
+        else
+        {
+            if(_darkenMark)
+            {
+                _darkenMark.SetActive(false);
+            }
+        }
 
         _tapAction.action.performed += OnTap;
 

@@ -340,6 +340,8 @@ MonoBehaviour:
     type: 3}
   _stressPrefab: {fileID: 5815183921577070713, guid: 4ff9427116eda2d46bef0b05e8d51868,
     type: 3}
+  _darkenPrefab: {fileID: 1681532275055001439, guid: 3a0debfc8c789e444b51b83103d80457,
+    type: 3}
 --- !u!1 &3600248549717965409
 GameObject:
   m_ObjectHideFlags: 0
