@@ -30,8 +30,6 @@ public class DistanceCalculator
         double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
         double distance = EarthRadius * c;
 
-        Debug.Log($"({latitude1},{longitude1}),({latitude2},{longitude2}) Distance : { distance}");
-
         return distance;
     }
 

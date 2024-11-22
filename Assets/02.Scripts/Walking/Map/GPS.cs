@@ -88,7 +88,7 @@ public class GPS : MonoBehaviour, IGPS
             _longitude = li.longitude;
 
             //맵을 불러온 위치에서 위도나 경도가 200m 이상 멀어지면 맵을 새로 불러온다.
-            if (DistanceCalculator.GetDistance(_latitudeMap, _longitudeMap, li.latitude, _longitudeMap) > 200 || DistanceCalculator.GetDistance(_latitudeMap, _longitudeMap, _latitudeMap, li.longitude) > 200)
+            if (DistanceCalculator.GetDistance(_latitudeMap, _longitudeMap, li.latitude, _longitudeMap) > 200f || DistanceCalculator.GetDistance(_latitudeMap, _longitudeMap, _latitudeMap, li.longitude) > 200f)
             {
                 _latitudeMap = li.latitude;
                 _longitudeMap = li.longitude;
