@@ -9,15 +9,21 @@ public class GPS : MonoBehaviour, IGPS
 
     public float longitude => _longitude;
 
+    public float latitudeMap => _latitudeMap;
+
+    public float longitudeMap => _longitudeMap;
 
     private float _maxWaitTime = 10.0f;   //GPS 타임아웃 에러 타이머
     private float _resendTime = 1.0f; //GPS 갱신주기
     private float _latitude = 0;
     private float _longitude = 0;
+    private float _latitudeMap = 0;
+    private float _longitudeMap = 0;
     private float _waitTime = 0;
     private bool _receiveGPS = false;
 
     public event Action<float, float> onLocationChanged;
+    public event Action<float, float, float, float> onMapMoved;
 
     void Start()
     {
@@ -73,13 +79,17 @@ public class GPS : MonoBehaviour, IGPS
         //위치 정보 수신 시작 체크
         _receiveGPS = true;
 
-        //위치 데이터 수신 시작 이후 resendTime 경과마다 위치 정보를 갱신하고 출력
+        //위치 데이터 수신 시작 이후 resendTime 경과마다 위치 정보를 갱신하고 출력 => 1m당 갱신하도록 수정
         while (_receiveGPS)
         {
             li = Input.location.lastData;
-            _latitude = li.latitude;
-            _longitude = li.longitude;
-            onLocationChanged?.Invoke(_latitude, _longitude);
+            if (DistanceCalculator.GetDistance(_latitude, _longitude, li.latitude, li.longitude) > 1)
+            {
+                _latitude = li.latitude;
+                _longitude = li.longitude;
+                onLocationChanged?.Invoke(_latitude, _longitude);
+            }
+
             yield return new WaitForSeconds(_resendTime);
         }
     }

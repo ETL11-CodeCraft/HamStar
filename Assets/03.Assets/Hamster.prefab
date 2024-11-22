@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 3458231807567911254}
   m_Layer: 0
   m_Name: Hamster
-  m_TagString: Untagged
+  m_TagString: Hamster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

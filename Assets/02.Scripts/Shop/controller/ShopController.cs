@@ -1,7 +1,7 @@
-using System.Collections;
+ï»¿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
+using UnityEngine.UI;
 
 public class ShopController : MonoBehaviour
 {
@@ -17,9 +17,9 @@ public class ShopController : MonoBehaviour
 
     [SerializeField] HamsterWheelPlacementController _placementController;
 
-    private int _columns = 2; // »óÇ³ ¸ñ·Ï ·¹ÀÌ¾Æ¿ô: ¿­
     private DataLoader _dataLoader;
     private InventoryData _inventoryData;
+    private List<ProductSlot> _slots = new List<ProductSlot>(4);
 
     private void Awake()
     {
@@ -49,7 +49,7 @@ public class ShopController : MonoBehaviour
         _itemPanel.SetActive(false);
     }
 
-    public Product GetProduct(int id)
+    private Product GetProduct(int id)
     {
         return _productData.list.Find(v => v.id == id);
     }
@@ -63,11 +63,14 @@ public class ShopController : MonoBehaviour
 
     private void RefeshCoin()
     {
-        _coinText.text = GameManager.coin + "C";
+        _coinText.text = GameManager.coin.ToString("N0") + "C";
     }
 
     private void RefreshShop()
     {
+        _slots.ForEach(v => { Destroy(v.gameObject); });
+        _slots.Clear();
+
         for (int i = 0; i < _shopData.productIds.Count; i++)
         {
             Product product = GetProduct(i);
@@ -93,37 +96,41 @@ public class ShopController : MonoBehaviour
             };
             slot.RefreshSlot();
 
-            if (product.quantity <= 0) // »óÇ° Àç°í°¡ ¾øÀ¸¸é ±¸¸Å ºÒ°¡
+            if (product.quantity <= 0) // ìƒí’ˆ ìž¬ê³ ê°€ ì—†ìœ¼ë©´ êµ¬ë§¤ ë¶ˆê°€
             {
-                slot.enabled = false;
+                slot.SetSoldOut();
             }
 
-            obj.transform.SetParent(_scrollView.transform);
-            //obj.transform.localPosition = new Vector3(-199 + (i % _columns) * 401,
-            //    207 - (Mathf.Round(i / _columns) * 431), 0); // »óÇ° 2¿­·Î ¹èÄ¡
-            //Debug.Log($"localPosition: [{i}] {-199 + (i % _columns) * 401}, {207 - Mathf.Round(i / _columns) * 431}");
+            var rect = obj.GetComponent<RectTransform>();
+            rect.SetParent(_scrollView.transform);
+            rect.localScale = Vector3.one;
 
-            obj.transform.localPosition = new Vector3(202 + (i % _columns) * 401,
-                -224 - (Mathf.Round(i / _columns) * 431), 0); // »óÇ° 2¿­·Î ¹èÄ¡
-            Debug.Log($"localPosition: [{i}] {202 + (i % _columns) * 401}, {-224 - Mathf.Round(i / _columns) * 431}");
+            _slots.Add(slot);
         }
     }
 
     private void Buy(Product product)
     {
-        Debug.Log($"±¸¸Å=> coin: {GameManager.coin}, price: {product.price}, type: {product.type}");
+        Debug.Log($"êµ¬ë§¤=> coin: {GameManager.coin}, price: {product.price}, type: {product.type}");
         GameManager.coin -= product.price;
         RefeshCoin();
+
         if (product.type == ItemType.PlayGround)
         {
             product.quantity -= 1;
         }
-        else
+        else if (product.type == ItemType.Food)
         {
-            AddInventoryData(product.id);
+            AddInventoryData(product.id, 10);
         }
+        else if (product.type == ItemType.Medicine)
+        {
+            AddInventoryData(product.id, 1);
+        }
+
         _inventoryData.coin = GameManager.coin;
         _dataLoader.Save(_inventoryData);
+
         CloseItemPopup();
     }
 
@@ -131,8 +138,8 @@ public class ShopController : MonoBehaviour
     {
         CloseItemPopup();
         CloseShop();
-
-        // ÃÂ¹ÙÄû ¹èÄ¡ÇÏ±â
+        _placementController.InfoVisible = true;
+        // ì³‡ë°”í€´ ë°°ì¹˜í•˜ê¸°
         _placementController.Product = product;
         _placementController.HamsterWheelPrefab = product.prefab;
         _placementController.IsPlacementMode = true;
@@ -143,10 +150,11 @@ public class ShopController : MonoBehaviour
         _placementController.ApplyAction = Buy;
     }
 
-    private void AddInventoryData(int productId)
+    private void AddInventoryData(int productId, int added = 1)
     {
         var list = _inventoryData.quantityForProductId;
-        for (int i=0; i<list.Count; i++)
+
+        for (int i = 0; i < list.Count; i++)
         {
             if (list[i].productId == productId)
             {
@@ -155,7 +163,7 @@ public class ShopController : MonoBehaviour
 
                 inventoryItem availableItem = new inventoryItem();
                 availableItem.productId = productId;
-                availableItem.quantity = quantity + 1;
+                availableItem.quantity = quantity + added;
 
                 _inventoryData.quantityForProductId.Insert(i, availableItem);
 
@@ -167,7 +175,7 @@ public class ShopController : MonoBehaviour
 
         inventoryItem item = new inventoryItem();
         item.productId = productId;
-        item.quantity = 1;
+        item.quantity = added;
         _inventoryData.quantityForProductId.Add(item);
 
         _dataLoader.Save(_inventoryData);

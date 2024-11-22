@@ -27,12 +27,18 @@ public class ProductSlot : MonoBehaviour
     {
         _image.sprite = _productImage;
         _nameText.text = _name;
-        _priceText.text = _price.ToString() + "C";
+        _priceText.text = _price.ToString("N0") + "C";
     }
 
     private void Start()
     {
         _button = GetComponent<Button>();
         _button.onClick.AddListener(ClickEventHandler);
+    }
+
+    public void SetSoldOut()
+    {
+        GetComponent<Button>().interactable = false;
+        _image.color = new Color(0.6f, 0.6f, 0.6f, 0.6f);
     }
 }

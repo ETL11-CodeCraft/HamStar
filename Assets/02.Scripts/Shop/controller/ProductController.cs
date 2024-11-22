@@ -30,7 +30,7 @@ public class ProductController : MonoBehaviour
         _productDescriptionText.text = _product.description;
         _productImage.sprite = _product.productImage;
         
-        _buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = _product.price + "C";
+        _buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = _product.price.ToString("N0") + "C";
 
         _buyButton.onClick.RemoveAllListeners();
         _buyButton.onClick.AddListener(() =>

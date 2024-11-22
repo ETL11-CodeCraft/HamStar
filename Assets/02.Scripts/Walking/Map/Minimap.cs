@@ -33,18 +33,56 @@ public class Minimap : MonoBehaviour
 #if UNITY_EDITOR
         _unit = new MockUnitOfMinimap();    //event invoke를 할 일이 없으므로 loadMap을 start구문에서 처리한다.
         _googleMapInterface.LoadMap(_gps.latitude, _gps.longitude, _zoom, _size, (texture) => _map.texture = texture);
-        _text.text = $"latitude {_gps.latitude}, longitude {_gps.longitude}";
 #elif UNITY_ANDROID
             _unit = new UnitOfMinimap();
 #endif
         _gps.onLocationChanged += RefreshMap;
+        _gps.onMapMoved += MoveMap;
     }
 
     private void RefreshMap(float latitude, float longitude)
     {
         //_gps.latitude;
         _googleMapInterface.LoadMap(latitude, longitude, _zoom, _size, (texture) => _map.texture = texture);
-        _text.text = $"latitude {latitude}, longitude {longitude}";
         Debug.Log("REFRESHMAP");
+    }
+
+    /// <summary>
+    /// 현재 불러온 맵 이미지를 위도, 경도에 맞춰 이동시켜 현재의 위치와 맵 이미지를 맞추는 함수
+    /// </summary>
+    /// <param name="latitudeMap"></param>맵을 불러온 위도
+    /// <param name="longitudeMap"></param>맵을 불러온 경도
+    /// <param name="latitude"></param>
+    /// <param name="longitude"></param>
+    private void MoveMap(float latitudeMap, float longitudeMap, float latitude, float longitude)
+    {
+        if (DistanceCalculator.GetDistance(latitude, longitudeMap, latitudeMap, longitudeMap) < 200f || DistanceCalculator.GetDistance(latitudeMap, longitude, latitudeMap, longitudeMap) < 200f)
+        {
+            //위도는 y축으로 이동. 위도가 +면 이미지는 - 방향으로 이동
+            if (latitude - latitudeMap > 0)
+            {
+                _map.transform.position = new Vector3(0, -DistanceCalculator.GetDistance(latitude, longitudeMap, latitudeMap, longitudeMap) / (DistanceCalculator.MeterPerPixelwithZoom(_zoom, latitude) / 3f), 0);
+            }
+            else
+            {
+                _map.transform.position = new Vector3(0, DistanceCalculator.GetDistance(latitude, longitudeMap, latitudeMap, longitudeMap) / (DistanceCalculator.MeterPerPixelwithZoom(_zoom, latitude) / 3f), 0);
+            }
+
+            //경도는 x축으로 이동. 경도가 +면 이미지는 - 방향으로 이동
+            if (longitude - longitudeMap > 0)
+            {
+                _map.transform.position = new Vector3(-DistanceCalculator.GetDistance(latitudeMap, longitude, latitudeMap, longitudeMap) / (DistanceCalculator.MeterPerPixelwithZoom(_zoom, latitude) / 3f), 0, 0);
+            }
+            else
+            {
+                _map.transform.position = new Vector3(DistanceCalculator.GetDistance(latitudeMap, longitude, latitudeMap, longitudeMap) / (DistanceCalculator.MeterPerPixelwithZoom(_zoom, latitude) / 3f), 0, 0);
+            }
+        }
+        else
+        {
+            //거리가 200m이상 멀어져서 맵을 새로 불러온다면 이미지의 위치는 Vector3.zero로 초기화
+            //_map.transform.position = Vector3.zero;
+        }
+        Debug.Log("MoveMAP");
     }
 }

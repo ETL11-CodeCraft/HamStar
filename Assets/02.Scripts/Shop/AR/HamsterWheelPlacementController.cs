@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -18,6 +17,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
     [SerializeField] GameObject _rotationPrefab;
     [SerializeField] LayerMask _targetLayer;
     [SerializeField] PlacementButtonsUI _buttonsUI;
+    [SerializeField] GameObject _infoUI;
 
     public UnityAction CancelAction;
     public UnityAction<Product> ApplyAction;
@@ -34,6 +34,8 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private MaterialPropertyBlock _propBlock;
     private bool _isPlacePossible = false;
 
+    private IGPS _gps;
+
     public bool IsPlacementMode {
         get { return _isPlacementMode; }
         set { _isPlacementMode = value; }
@@ -49,9 +51,30 @@ public class HamsterWheelPlacementController : MonoBehaviour
         set { _product = value; } 
     }
 
+    public bool InfoVisible
+    {
+        set
+        {
+            _infoUI.gameObject.SetActive(value);
+
+            if (value == true)
+            {
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    _gps = gameObject.AddComponent<GPS>();
+                }
+                else
+                {
+                    _gps = gameObject.AddComponent<MockGPS>();
+                }
+            }
+        }
+    }
+
     private void Awake()
     {
         _propBlock = new MaterialPropertyBlock();
+        InfoVisible = false;
     }
 
     private void Start()
@@ -156,6 +179,8 @@ public class HamsterWheelPlacementController : MonoBehaviour
         if (!_isPlacementMode) return;
         //Debug.Log($"OnTap => {context.time} {context.startTime} {context.duration}");
 
+        InfoVisible = false;
+
         Vector2 tapPosition = context.ReadValue<Vector2>();
 
         if (_currentHamsterWheel == null)
@@ -208,7 +233,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private void SavePlacementData()
     {
         // 쳇바퀴 배치 정보 저장
-        Placement placement = new Placement(_product.id, _currentHamsterWheel.transform.position, _currentHamsterWheel.transform.rotation);
+        Placement placement = new Placement(_product.id, _currentHamsterWheel.transform.position, _currentHamsterWheel.transform.rotation, _gps.latitude, _gps.longitude);
         DataLoader dataLoader = new DataLoader();
         PlacementData placementData = dataLoader.Load<PlacementData>();
         placementData.placements.Add(placement);
