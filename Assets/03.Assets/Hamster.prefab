@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 3458231807567911254}
   m_Layer: 0
   m_Name: Hamster
-  m_TagString: Untagged
+  m_TagString: Hamster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -328,6 +328,14 @@ MonoBehaviour:
   _currentState: 0
   _healingEffect: {fileID: 1855475288486458, guid: 01303a4e5fa8c1f43896730c997cb6ce,
     type: 3}
+  _fullnessSlider: {fileID: 0}
+  _cleanlinessSlider: {fileID: 0}
+  _closenessSlider: {fileID: 0}
+  _stressSlider: {fileID: 0}
+  _fullnessColor: {fileID: 0}
+  _cleanlinessColor: {fileID: 0}
+  _closenessColor: {fileID: 0}
+  _stressColor: {fileID: 0}
 --- !u!1 &3600248549717965409
 GameObject:
   m_ObjectHideFlags: 0

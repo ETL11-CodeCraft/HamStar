@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Product_03_Medicine
   m_EditorClassIdentifier: 
   id: 2
-  productImage: {fileID: 8674190453677158122, guid: 215687feeab0b7445b4a1cd86c82c2e1,
-    type: 3}
+  productImage: {fileID: 21300000, guid: e6007981bd4c9494a9d8a83fcd5778c7, type: 3}
   productName: "\uCE58\uB8CC \uBB3C\uC57D"
   description: "\uD751\uD654 \uC0C1\uD0DC\uC758 \uD584\uC2A4\uD130\uB97C \uCE58\uB8CC\uD560
     \uC218 \uC788\uC2B5\uB2C8\uB2E4.\n\uC0AC\uC6A9 \uD6C4 \uC2A4\uD2B8\uB808\uC2A4

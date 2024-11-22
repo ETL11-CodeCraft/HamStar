@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Product_04_HamsterWheel
   m_EditorClassIdentifier: 
   id: 3
-  productImage: {fileID: -8037489388941252367, guid: 215687feeab0b7445b4a1cd86c82c2e1,
-    type: 3}
+  productImage: {fileID: 21300000, guid: b39afa898fdfad34483d5c48911a94e7, type: 3}
   productName: "\uCCC7\uBC14\uD034"
   description: "\uD584\uC2A4\uD130\uAC00 \uC6B4\uB3D9\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.\n\uC2A4\uD2B8\uB808\uC2A4
     \uC99D\uAC00 \uC18D\uB3C4\uAC00 \uAC10\uC18C\uD569\uB2C8\uB2E4."
