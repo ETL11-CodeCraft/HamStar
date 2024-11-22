@@ -47,13 +47,7 @@ public class Minimap : MonoBehaviour
         Debug.Log("REFRESHMAP");
     }
 
-    /// <summary>
-    /// 현재 불러온 맵 이미지를 위도, 경도에 맞춰 이동시켜 현재의 위치와 맵 이미지를 맞추는 함수
-    /// </summary>
-    /// <param name="latitudeMap"></param>맵을 불러온 위도
-    /// <param name="longitudeMap"></param>맵을 불러온 경도
-    /// <param name="latitude"></param>
-    /// <param name="longitude"></param>
+    // 현재 불러온 맵 이미지를 위도, 경도에 맞춰 이동시켜 현재의 위치와 맵 이미지를 맞추는 함수
     private void MoveMap(float latitudeMap, float longitudeMap, float latitude, float longitude)
     {
         if (DistanceCalculator.GetDistance(latitude, longitudeMap, latitudeMap, longitudeMap) < 200f || DistanceCalculator.GetDistance(latitudeMap, longitude, latitudeMap, longitudeMap) < 200f)
