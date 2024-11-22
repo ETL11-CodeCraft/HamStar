@@ -7,8 +7,7 @@ using System;
 
 public class Hamster : MonoBehaviour
 {
-    Node BehaviorTree;
-
+    private float _detectionRange = 0.5f;
     private float _moveSpeed = 0.2f;
     [SerializeField] private GameObject _healingEffect;
     private Animator _animator;
