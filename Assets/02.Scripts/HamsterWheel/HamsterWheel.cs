@@ -46,18 +46,6 @@ public class HamsterWheel : MonoBehaviour
         {
             TriggerEnterAction?.Invoke();
         }
-
-        if (other.gameObject.CompareTag("Hamster"))
-        {
-            Debug.Log("햄스터 충돌 감지");
-            other.transform.position = _ridingTransform.position;
-            other.transform.Rotate(_ridingTransform.forward, 0f); //FIXME: 햄스터가 타는 방향에 따라 회전
-
-            _ridingTransform.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().gameObject.SetActive(true);
-
-            _hamsterAnimator = other.GetComponent<Animator>();
-            _hamsterAnimator.Play("Run"); //FIXME: 햄스터 상태 변경
-        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -78,5 +66,13 @@ public class HamsterWheel : MonoBehaviour
                 continue;
         }
         return false;
+    }
+
+    public void ActivateWheel(Hamster hamster)
+    {
+        hamster.transform.position = _ridingTransform.position;
+        hamster.transform.Rotate(_ridingTransform.forward, 0f); //FIXME: 햄스터가 타는 방향에 따라 회전
+
+        _ridingTransform.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().gameObject.SetActive(true);
     }
 }

@@ -12,6 +12,7 @@ public class Hamster : MonoBehaviour
     [SerializeField] private GameObject _healingEffect;
     private Animator _animator;
     private BehaviorTree _behaviorTree;
+    private GameManager _gameManager;
 
     [Header("Eat")]
     List<GameObject> _seeds = new List<GameObject>();
@@ -23,6 +24,9 @@ public class Hamster : MonoBehaviour
     private float _idleElapse = 0;
     private const float IDLE_DURATION = 3f;
     private Vector3 _destination = Vector3.one;
+    private int _destFlag = -1;             // -1 : 이전 행동이 완료됨  0 : 목적지가 랜덤좌표   1 : 목적지가 쳇바퀴
+    private float _rideElapse = 0;
+    private const float RIDE_DURATION = 3f;
     [Header("Poop")]
     [SerializeField] private GameObject _poopPrefab;
     [SerializeField] private InputActionReference _tapAction;
@@ -50,7 +54,7 @@ public class Hamster : MonoBehaviour
     private Image _closenessColor;
     private Image _stressColor;
     private GameObject _darkenMark;
-    private float _statRefreshInterval = 300;     //30분
+    private float _statRefreshInterval = 300;     //5분
     private Coroutine _increseStressCoroutine;
 
     private DataLoader _dataLoader;
@@ -213,6 +217,7 @@ public class Hamster : MonoBehaviour
 
         //추후 수정예정
         var hamsterPanel = GameObject.Find("HamsterPanel");
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         _fullnessSlider = Instantiate(_fullnessPrefab, hamsterPanel.transform).GetComponent<Slider>();
         _cleanlinessSlider = Instantiate(_cleanlinessPrefab, hamsterPanel.transform).GetComponent<Slider>();
@@ -360,7 +365,6 @@ public class Hamster : MonoBehaviour
                         if (_actFlag == -1)
                         {
                             _actFlag = UnityEngine.Random.Range(0, 2);
-                            _destination = new Vector3(UnityEngine.Random.Range(-100f, 100f), transform.position.y, UnityEngine.Random.Range(-100f, 100f));
                         }
 
                         return NodeState.Failure;
@@ -403,30 +407,86 @@ public class Hamster : MonoBehaviour
 
                             return NodeState.Failure;
                         })          //Is Random Value Move (Move 상태로 진입할지 확인하는 노드)
-                        .Node(() =>
-                        {
-                            _animator.SetBool("isIdle", false);
-                            _animator.SetBool("isEat", false);
-                            _animator.SetBool("isMove", true);
-
-                            Vector3 direction = (_destination - gameObject.transform.position).normalized;
-                            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-                            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-                            gameObject.transform.position += direction * _moveSpeed * Time.deltaTime;
-
-                            if ((_destination - gameObject.transform.position).magnitude < 0.1f)
+                        .Selector()
+                            .Node(() =>
                             {
-                                _actFlag = -1;
-                                return NodeState.Success;
-                            }
-                            if(!Physics.Raycast(transform.position + (transform.forward * 0.1f), Vector3.down,5f))
-                            {
-                                _actFlag = -1;
-                                return NodeState.Success;
-                            }
+                                //destFlag 가 0이면 Random, 1이면 쳇바퀴
+                                if (_destFlag == -1)
+                                {
+                                    if(_gameManager.Wheel)
+                                    {
+                                        _destFlag = UnityEngine.Random.Range(0, 2);
+                                    }
+                                    else
+                                    {
+                                        _destFlag = 0;
+                                    }
 
-                            return NodeState.Running;
-                        })          //Move (랜덤한 위치로 이동하기)
+                                    if (_destFlag == 0)
+                                    {
+                                        _destination = new Vector3(UnityEngine.Random.Range(-100f, 100f), transform.position.y, UnityEngine.Random.Range(-100f, 100f));
+                                    }
+                                    else if (_destFlag == 1)
+                                    {
+                                        //쳇바퀴 위치로 이동
+                                        _destination = _gameManager.Wheel.transform.position;
+                                    }
+                                }
+
+                                return NodeState.Failure;
+                            })          //Set Destination Force Failure (목적지를 설정하는 실패 노드)
+                            .Node(() =>
+                            {
+                                _animator.SetBool("isIdle", false);
+                                _animator.SetBool("isEat", false);
+                                _animator.SetBool("isMove", true);
+
+                                Vector3 direction = (_destination - gameObject.transform.position).normalized;
+                                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                                gameObject.transform.position += direction * _moveSpeed * Time.deltaTime;
+
+                                //목적지에 도착
+                                if ((_destination - gameObject.transform.position).magnitude < 0.1f)
+                                {
+                                    if (_destFlag == 1)
+                                    {
+                                        return NodeState.Failure;
+                                    }
+                                    _actFlag = -1;
+                                    _destFlag = -1;
+                                    return NodeState.Success;
+                                }
+                                //가는 길에 낭떠러지를 만남
+                                if(!Physics.Raycast(transform.position + (transform.forward * 0.1f), Vector3.down,5f))
+                                {
+                                    _actFlag = -1;
+                                    _destFlag = -1;
+                                    return NodeState.Success;
+                                }
+
+                                return NodeState.Running;
+                            })          //Move (랜덤한 위치로 이동하기)
+                            .Node(() =>
+                            {
+                                //쳇바퀴에 도착
+                                if (_rideElapse == 0)
+                                {
+                                    _gameManager.Wheel.ActivateWheel(this);
+                                }
+                                _rideElapse += Time.deltaTime;
+
+                                if (_rideElapse > RIDE_DURATION)
+                                {
+                                    _actFlag = -1;
+                                    _destFlag = -1;
+                                    _rideElapse = 0;
+                                    return NodeState.Success;
+                                }
+
+                                return NodeState.Running;
+                            })          //Ride Wheel (쳇바퀴를 타는 노드)
+                        .CloseComposite()
                     .CloseComposite()
                 .CloseComposite()
             .CloseComposite();
