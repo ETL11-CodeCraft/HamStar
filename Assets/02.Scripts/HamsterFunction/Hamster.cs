@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.InputSystem;
+using System;
 
 public class Hamster : MonoBehaviour
 {
@@ -201,9 +202,12 @@ public class Hamster : MonoBehaviour
         _closenessSlider.maxValue = 100;
         _stressSlider.maxValue = 100;
 
-        fullness = _hamsterStatData.fullness;
-        cleanliness = _hamsterStatData.cleanliness;
-        closeness = _hamsterStatData.closeness;
+        var recentTime = DateTime.ParseExact(_hamsterStatData.recentChangedDate, "yyyy-MM-dd HH:mm:ss", null);
+        var deltaTime = DateTime.Now - recentTime;
+
+        fullness = _hamsterStatData.fullness - ((int)deltaTime.TotalMinutes / 30 * 2);
+        cleanliness = _hamsterStatData.cleanliness - ((int)deltaTime.TotalMinutes / 30 * 2);
+        closeness = _hamsterStatData.closeness - ((int)deltaTime.TotalMinutes / 30 * 2);
         stress = _hamsterStatData.stress;
 
         _tapAction.action.performed += OnTap;
@@ -301,8 +305,8 @@ public class Hamster : MonoBehaviour
                         //actFlag 가 0이면 IDLE, 1이면 MOVE
                         if (_actFlag == -1)
                         {
-                            _actFlag = Random.Range(0, 2);
-                            _destination = new Vector3(Random.Range(-100f, 100f), transform.position.y, Random.Range(-100f, 100f));
+                            _actFlag = UnityEngine.Random.Range(0, 2);
+                            _destination = new Vector3(UnityEngine.Random.Range(-100f, 100f), transform.position.y, UnityEngine.Random.Range(-100f, 100f));
                         }
 
                         return NodeState.Failure;
@@ -460,6 +464,13 @@ public class Hamster : MonoBehaviour
 
             var deltaStress = (4 - fullness / 25) + (4 - cleanliness / 25) + (4 - closeness / 25);
             stress += deltaStress;
+
+            _hamsterStatData.fullness = fullness;
+            _hamsterStatData.cleanliness = cleanliness;
+            _hamsterStatData.closeness = closeness;
+            _hamsterStatData.stress = stress;
+            _hamsterStatData.recentChangedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
             _dataLoader.Save(_hamsterStatData);
 
             yield return new WaitForSeconds(_statRefreshInterval);

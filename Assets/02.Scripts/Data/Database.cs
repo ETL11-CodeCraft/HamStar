@@ -53,6 +53,7 @@ public class HamsterStatData
     public int cleanliness;
     public int closeness;
     public int stress;
+    public string recentChangedDate;
 
     public HamsterStatData()
     {
@@ -60,6 +61,7 @@ public class HamsterStatData
         cleanliness = 100;
         closeness = 100;
         stress = 0;
+        recentChangedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
     }
 }
 
