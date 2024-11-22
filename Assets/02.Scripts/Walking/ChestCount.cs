@@ -12,8 +12,6 @@ using UnityEngine.UI;
 public class ChestCount : MonoBehaviour
 {
     [SerializeField] public TextMeshProUGUI chestCountText;
-    [SerializeField] public TextMeshProUGUI stepCountTestText;
-    [SerializeField] public TextMeshProUGUI pastChestCountTestText;
     private int _currentChestCount = 0;
     private int _pastChestCount = -1;
     [SerializeField] Image _coinImage;
@@ -32,7 +30,7 @@ public class ChestCount : MonoBehaviour
         _walkData = _dataLoader.Load<WalkData>();
         _pastChestCount = _walkData.pastChestCount;
         _chestOpenButton.onClick.AddListener(ChestOpen);
-        _chestCloseButton.onClick.AddListener(TouchChestOpenBackGround);
+        _chestCloseButton.onClick.AddListener(ChestClose);
 
 #if UNITY_EDITOR
 
@@ -58,11 +56,13 @@ public class ChestCount : MonoBehaviour
     {
 #if UNITY_EDITOR
         chestCountText.text = _currentChestCount.ToString();
-        pastChestCountTestText.text = "pastChestCount : " + _pastChestCount.ToString();
 #elif UNITY_ANDROID              
         _readWalkCount = AndroidStepCounter.current.stepCounter.ReadValue();
+
+        //AndroidStepCounter.current.stepCounter.ReadValue()의 값을 불러오지 못했을 때, 0이 되는 부분의 예외처리
         if(_readWalkCount != 0)
         {
+            //저장된 데이터가 없으면(처음 플레이시), 1000걸음당 코인상자의 수를 0으로 초기화하기 위해 안드로이드에 저장되어있는 걸음 수를 통해 _currentChestCount == 0이 되는 _pastChestCount를 저장한다.
             if(_pastChestCount == -1)
             {
                 _pastChestCount = (_readWalkCount / chestStepUnit);
@@ -72,24 +72,20 @@ public class ChestCount : MonoBehaviour
             }
             else
             {
-                stepCountTestText.text = "stepCount : " + _readWalkCount.ToString();
                 _currentChestCount = (_readWalkCount / chestStepUnit) - _pastChestCount; 
 
                 chestCountText.text = Mathf.Min(9, _currentChestCount).ToString();
-                pastChestCountTestText.text = "pastChestCount : " + _pastChestCount.ToString();
 
+                //안드로이드 기기의 전원을 다시 시작할 시, AndroidStepCounter.current.stepCounter.ReadValue()이 0이 되는 점을 고려하여, _pastChestCount = 0으로 초기화한다.
                 if (_readWalkCount / chestStepUnit < _pastChestCount)  
                 {
                     _pastChestCount = 0;
-                    Debug.Log($"_currentChestCount < 0 {_currentChestCount}");
                 }
             }
         }
         else
         {
-            stepCountTestText.text = "stepCount : 0";
             chestCountText.text = "0";
-            pastChestCountTestText.text = "pastChestCount : 0";
         }
 #endif
     }
@@ -110,27 +106,29 @@ public class ChestCount : MonoBehaviour
         }
     }
 
-
-    private void ChestOpen()    //현재 가지고 있는 coinChestCount만큼 모두 오픈(최대 9개)
+    //모인 코인 상자의 수만큼 오픈할 함수(버튼) (최대 9개)
+    private void ChestOpen()
     {
         if (_currentChestCount > 0)
         {
             for (int i = 0; i < Mathf.Min(9, _currentChestCount); i++)
             {
-                int randomCoin = UnityEngine.Random.Range(80, 120); //정규함수 그래프로 변경할까.(80 ~ 120)이 95%인 50 ~ 200 함수
+                int randomCoin = UnityEngine.Random.Range(80, 120);
                 GameManager.coin += randomCoin;
                 Image image = Instantiate(_coinImage, _coinContent);
                 image.GetComponentInChildren<TextMeshProUGUI>().text = randomCoin.ToString();
             }
             _pastChestCount += _currentChestCount;
             _chestOpenBackGround.SetActive(true);
+
+            //열린 코인 상자가 다시 열리지 않도록 _pastChestCount에 저장
             _walkData.pastChestCount = _pastChestCount;
             _dataLoader.Save<WalkData>(_walkData);
-            _walkData = _dataLoader.Load<WalkData>();
         }
     }
 
-    public void TouchChestOpenBackGround()
+    //오픈한 코인 ui를 닫는 함수(버튼)
+    public void ChestClose()
     {
         ResetChestOpen();
         _chestOpenBackGround.SetActive(false);
@@ -155,5 +153,3 @@ public class ChestCount : MonoBehaviour
         }
     }
 }
-//save data의 pastChestCount == null이면 pastChestCount의 초기값을 저장한다.
-//currentChestCount가 음수라면 pastChestCount = 0으로 초기화한다.
