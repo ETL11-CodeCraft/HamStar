@@ -39,7 +39,7 @@ public class GoogleMapInterface : MonoBehaviour
             "&size=" + size.x.ToString() + "x" + size.y.ToString() +
             "&key=" + API_KEY;
 
-        Debug.Log($"[{nameof(GoogleMapInterface)}] : Request map texture ... {url}");
+        Debug.Log($"Map latitude {latitude} longitude {longitude}");
 
         url = UnityWebRequest.UnEscapeURL(url); 
         UnityWebRequest req = UnityWebRequestTexture.GetTexture(url); 

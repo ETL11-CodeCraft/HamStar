@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -5,8 +6,8 @@ using UnityEngine;
 /// </summary>
 public class DistanceCalculator
 {
-    private const float EarthRadius = 6378137f;    //지구의 평균 반지름(단위 m)
-    private const float GoogleMapConst = 156543.03392f;    //구글 맵 이미지에서 거리를 픽셀로 바꿀 때 사용할 상수
+    private const double EarthRadius = 6378137f;    //지구의 평균 반지름(단위 m)
+    private const double GoogleMapConst = 156543.03392f;    //구글 맵 이미지에서 거리를 픽셀로 바꿀 때 사용할 상수
 
     /// <summary>
     /// 두 좌표(위도, 경도)의 둘레 길이를 구하는 함수
@@ -16,21 +17,20 @@ public class DistanceCalculator
     /// <param name="latitude2"></param>
     /// <param name="longitude2"></param>
     /// <returns></returns>
-    public static float GetDistance(float latitude1, float longitude1, float latitude2, float longitude2)
+    public static double GetDistance(float latitude1, float longitude1, float latitude2, float longitude2)
     {
-        float dLatitude = DegreeToRadian(latitude2 - latitude1);
-        float dLongitude = DegreeToRadian(longitude2 - longitude1);
+        double dLatitude = DegreeToRadian(latitude2 - latitude1);
+        double dLongitude = DegreeToRadian(longitude2 - longitude1);
 
-        float RadianLatitude1 = DegreeToRadian(latitude1);
-        float RadianLatitude2 = DegreeToRadian(latitude2);
+        double RadianLatitude1 = DegreeToRadian(latitude1);
+        double RadianLatitude2 = DegreeToRadian(latitude2);
 
         //Haversine formula
-        float a = Mathf.Pow(Mathf.Sin(dLatitude / 2f), 2) + Mathf.Cos(RadianLatitude1) * Mathf.Cos(RadianLatitude2) * Mathf.Pow(Mathf.Sin(dLongitude / 2f), 2);
-        float c = 2 * Mathf.Atan2(Mathf.Sqrt(a), Mathf.Sqrt(1 - a));
-        float distance = EarthRadius * c;
+        double a = Math.Pow(Math.Sin(dLatitude / 2), 2) + Math.Cos(RadianLatitude1) * Math.Cos(RadianLatitude2) * Math.Pow(Math.Sin(dLongitude / 2), 2);
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+        double distance = EarthRadius * c;
 
         Debug.Log($"({latitude1},{longitude1}),({latitude2},{longitude2}) Distance : { distance}");
-        Debug.Log($"MeterPerPixel : {MeterPerPixelwithZoom(17, latitude1)}");
 
         return distance;
     }
@@ -51,9 +51,9 @@ public class DistanceCalculator
     /// <param name="zoom"></param>
     /// <param name="latitude"></param>
     /// <returns></returns>
-    public static float MeterPerPixelwithZoom(float zoom, float latitude)
+    public static double MeterPerPixelwithZoom(float zoom, float latitude)
     {
-        float meterPerPixel = GoogleMapConst * Mathf.Cos(DegreeToRadian(latitude)) / Mathf.Pow(2, zoom);
+        double meterPerPixel = GoogleMapConst * Math.Cos(DegreeToRadian(latitude)) / Math.Pow(2, zoom);
 
         return meterPerPixel;
     }
