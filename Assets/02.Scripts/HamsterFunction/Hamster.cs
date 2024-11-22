@@ -10,12 +10,11 @@ public class Hamster : MonoBehaviour
         Idle, Move, Eat
     }
 
-    private float _detectionRange = 0.5f;
     private float _moveSpeed = 0.2f;
     [SerializeField] private HamsterState _currentState;
     [SerializeField] private GameObject _healingEffect;
     private Animator _animator;
-    List<GameObject> _seeds = new List<GameObject>();
+    [SerializeField] List<GameObject> _seeds = new List<GameObject>();
     private GameObject _currentSeed;
 
     private int _fullness = 100;
@@ -213,25 +212,24 @@ public class Hamster : MonoBehaviour
 
         if (_currentSeed != null)
         {
-            float distance = Vector3.Distance(gameObject.transform.position, _currentSeed.transform.position);
-
-            if (distance <= _detectionRange && _currentState != HamsterState.Eat)
+            if (_currentState != HamsterState.Eat)
             {
                 _currentState = HamsterState.Move;
             }
         }
-        else   //currentSeed�� null�̸� 
+        else   
         {
             _currentState = HamsterState.Idle;
             AssignNextSeed();
         }
+
+        
     }
     public void AddSeed(GameObject seed)
     {
         Debug.Log("Add Seed");
-        _seeds.Add(seed);  //����Ʈ��  seed �߰� 
+        _seeds.Add(seed);  
 
-        //ù ��° ���� Ÿ����
         if (_currentSeed == null)
         {
             _currentSeed = seed;
@@ -241,13 +239,11 @@ public class Hamster : MonoBehaviour
     {
         if (_seeds.Count > 0)
         {
-            Debug.Log("���� ������ �Ҵ��մϴ�.");
             _currentSeed = _seeds[0];
             _currentState = HamsterState.Move;
         }
         else
         {
-            Debug.Log("���� ������ �����ϴ�.");
             _currentSeed = null;
             _currentState = HamsterState.Idle;
         }
@@ -317,9 +313,20 @@ public class Hamster : MonoBehaviour
     {
         if (collision.gameObject.tag == "Potion")
         {
-            Debug.Log("Hamster�� Potion�� ��ҽ��ϴ�.");
             collision.gameObject.SetActive(false);
-            Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
+            GameObject healingEffect = Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
+
+
+            //이펙트 생성 후 제거
+            ParticleSystem particleSystem = _healingEffect.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                Destroy(healingEffect, particleSystem.main.duration + particleSystem.main.startLifetime.constantMax);
+            }
+            else
+            {
+                Destroy(healingEffect, 3f);
+            }
         }
     }
     #region DEBUG

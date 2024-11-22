@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1337561439930679046}
   - component: {fileID: 1337303928915544006}
   - component: {fileID: 2000989330670121048}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: AROcclusionPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!33 &1400490616692066792
