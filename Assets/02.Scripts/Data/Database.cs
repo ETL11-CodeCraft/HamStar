@@ -69,12 +69,16 @@ public struct Placement
     public int productId;
     public Vector3 position;
     public Quaternion rotation;
+    public float latitude;
+    public float longitude;
 
-    public Placement(int id,  Vector3 position, Quaternion rotation)
+    public Placement(int id,  Vector3 position, Quaternion rotation, float latitude, float longitude)
     {
         this.productId = id;
         this.position = position;
         this.rotation = rotation;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
 
