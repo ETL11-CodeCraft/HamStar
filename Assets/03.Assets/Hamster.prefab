@@ -379,10 +379,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f79ff04ffcb55646a914afa831c643f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentState: 0
   _healingEffect: {fileID: 1855475288486458, guid: 01303a4e5fa8c1f43896730c997cb6ce,
     type: 3}
-  _seeds: []
+  _poopPrefab: {fileID: 1463405870289544092, guid: 61b3ee0348331f340be4872362effe3e,
+    type: 3}
+  _tapAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  poopCnt: 0
   _fullnessPrefab: {fileID: 4826436235547457323, guid: aeeba42809b244d44b1bc14c43c7af50,
     type: 3}
   _cleanlinessPrefab: {fileID: 5115588028633569878, guid: 9a473ee588b5bac40af94fb7144179d6,
@@ -390,6 +393,8 @@ MonoBehaviour:
   _closenessPrefab: {fileID: 6608482040966869962, guid: 89c773e086c16e04dbdcd7def5e28f71,
     type: 3}
   _stressPrefab: {fileID: 5815183921577070713, guid: 4ff9427116eda2d46bef0b05e8d51868,
+    type: 3}
+  _darkenPrefab: {fileID: 1681532275055001439, guid: 3a0debfc8c789e444b51b83103d80457,
     type: 3}
 --- !u!1 &3600248549717965409
 GameObject:
