@@ -83,7 +83,15 @@ public class GPS : MonoBehaviour, IGPS
                 _longitude = li.longitude;
                 onLocationChanged?.Invoke(_latitude, _longitude);
             }
-            yield return new WaitForSeconds(_resendTime);
+            //위치 데이터 수신 시작 이후 resendTime 경과마다 위치 정보를 갱신하고 출력
+            while (_receiveGPS)
+            {
+                li = Input.location.lastData;
+                _latitude = li.latitude;
+                _longitude = li.longitude;
+                onLocationChanged?.Invoke(_latitude, _longitude);
+                yield return new WaitForSeconds(_resendTime);
+            }
         }
     }
 }
