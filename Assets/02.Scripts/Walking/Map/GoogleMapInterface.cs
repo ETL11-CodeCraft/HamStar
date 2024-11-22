@@ -2,17 +2,32 @@ using UnityEngine.Networking;
 using UnityEngine;
 using System.Collections;
 using System;
+using System.IO;
 
 public class GoogleMapInterface : MonoBehaviour
 {
     private const string BASE_URL = "https://maps.googleapis.com/maps/api/staticmap?";
-    private const string API_KEY = "";
+    private string API_KEY = "";
     private Texture2D _cachedTexture;
+    private TextAsset _textFile;
 
 
     public void LoadMap(float latitude, float longitude, float zoom, Vector2 size, Action<Texture2D> onComplete)
     {
-        StartCoroutine(C_LoadMap(latitude, longitude, zoom, size, onComplete));
+        try
+        {
+            _textFile = Resources.Load<TextAsset>("MapApiKey.txt");    //텍스트 에셋에 메모장 파일 불러오기
+            Debug.Log($"{_textFile.text} MapApiKey");
+
+            API_KEY = _textFile.text;
+
+            StartCoroutine(C_LoadMap(latitude, longitude, zoom, size, onComplete));
+        }
+        catch (IOException e)
+        {
+            Debug.LogError($"파일을 읽는 도중 오류 발생: {e.Message}");
+        }
+
     }
 
     IEnumerator C_LoadMap(float latitude, float longitude, float zoom, Vector2 size, Action<Texture2D> onComplete)
