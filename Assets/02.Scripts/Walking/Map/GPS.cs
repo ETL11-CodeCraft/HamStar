@@ -73,7 +73,6 @@ public class GPS : MonoBehaviour, IGPS
         //위치 정보 수신 시작 체크
         _receiveGPS = true;
 
-
         //위치 데이터 수신 시작 이후 resendTime 경과마다 1m 이상 이동하면 위치 정보를 갱신하고 출력
         while (_receiveGPS)
         {
