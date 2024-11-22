@@ -36,6 +36,7 @@ public class Hamster : MonoBehaviour
     private int _cleanliness = 100;
     private int _closeness = 100;
     private int _stress = 0;
+    private bool _isDarken = false;
 
     [SerializeField] private GameObject _fullnessPrefab;
     [SerializeField] private GameObject _cleanlinessPrefab;
@@ -175,6 +176,15 @@ public class Hamster : MonoBehaviour
         }
     }
 
+    public bool isDarken
+    {
+        get { return _isDarken; }
+        set
+        {
+            _isDarken = value;
+        }
+    }
+
     private void Awake()
     {
         _dataLoader = new DataLoader();
@@ -220,6 +230,17 @@ public class Hamster : MonoBehaviour
         _behaviorTree = new BehaviorTree();
         _behaviorTree
             .SetRoot(new SelectorNode())
+                .Node(() =>
+                {
+                    if(stress >= 100)
+                    {
+                        isDarken = true;
+                        return NodeState.Success;
+                    }
+
+                    isDarken = false;
+                    return NodeState.Failure;
+                })                  //IsDarken (흑화 상태에 들어가면 이후 행동을 진행하지 않음)
                 .Sequence()
                     .Node(() =>
                     {
