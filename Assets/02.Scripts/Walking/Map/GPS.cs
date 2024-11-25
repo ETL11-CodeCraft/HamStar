@@ -79,17 +79,23 @@ public class GPS : MonoBehaviour, IGPS
         //위치 정보 수신 시작 체크
         _receiveGPS = true;
 
-        //위치 데이터 수신 시작 이후 resendTime 경과마다 위치 정보를 갱신하고 출력 => 1m당 갱신하도록 수정
+        //위치 데이터 수신 시작 이후 resendTime 경과하고 위도나 경도가 200m 이상 멀어지면 새로운 맵 생성. 아니라면 위치에 따른 맵 이미지 이동
         while (_receiveGPS)
         {
             li = Input.location.lastData;
-            if (DistanceCalculator.GetDistance(_latitude, _longitude, li.latitude, li.longitude) > 1)
+
+            _latitude = li.latitude;
+            _longitude = li.longitude;
+
+            //맵을 불러온 위치에서 위도나 경도가 200m 이상 멀어지면 맵을 새로 불러온다.
+            if (DistanceCalculator.GetDistance(_latitudeMap, _longitudeMap, li.latitude, _longitudeMap) > 200f || DistanceCalculator.GetDistance(_latitudeMap, _longitudeMap, _latitudeMap, li.longitude) > 200f)
             {
-                _latitude = li.latitude;
-                _longitude = li.longitude;
+                _latitudeMap = li.latitude;
+                _longitudeMap = li.longitude;
                 onLocationChanged?.Invoke(_latitude, _longitude);
             }
-
+            
+            onMapMoved?.Invoke(_latitudeMap, _longitudeMap, _latitude, _longitude);
             yield return new WaitForSeconds(_resendTime);
         }
     }
