@@ -41,7 +41,7 @@ public struct inventoryItem
 }
 public class InventoryData
 {
-    public int coin;
+    public int coin = 300;
     public List<inventoryItem> quantityForProductId = new List<inventoryItem>();
 
     public InventoryData() { }
