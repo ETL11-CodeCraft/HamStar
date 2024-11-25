@@ -7,7 +7,7 @@ using UnityEngine;
 public class DistanceCalculator
 {
     private const double EarthRadius = 6378137f;    //지구의 평균 반지름(단위 m)
-    private const double GoogleMapConst = 156543.03392f;    //구글 맵 이미지에서 거리를 픽셀로 바꿀 때 사용할 상수
+    private const double GoogleMapConst = 156543.03392f;    //구글 맵 이미지에서 zoom 17에서 거리를 픽셀로 바꿀 때 사용할 상수
 
     /// <summary>
     /// 두 좌표(위도, 경도)의 둘레 길이를 구하는 함수
