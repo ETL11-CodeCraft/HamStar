@@ -5,6 +5,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button), typeof(Image))]
 public class Souvenir : MonoBehaviour
 {
+    [SerializeField] private Sprite _lockedImage;
+    private Sprite _unlockedImage;
     public string SouvenirName { get; private set; }
     public Sprite SouvenirSprite { get; private set; }
     public string SouvenirDescription { get; private set; }
@@ -20,8 +22,8 @@ public class Souvenir : MonoBehaviour
         {
             if(value == true)
             {
+                GetComponent<Image>().sprite = _unlockedImage;
                 _souvenirButton.onClick.AddListener(() => { onClickAction?.Invoke(this); });
-                _souvenirImage.color = Color.white;
             }
         }
     }
@@ -35,13 +37,13 @@ public class Souvenir : MonoBehaviour
     {
         _souvenirButton = GetComponent<Button>();
         _souvenirImage = GetComponent<Image>();
-        _souvenirImage.color = Color.black;
+        GetComponent<Image>().sprite = _lockedImage;
     }
     public void SetSouvenir(string name, Sprite sprite, string desc, int id)
     {
         SouvenirName = name;
         SouvenirSprite = sprite;
-        GetComponent<Image>().sprite = SouvenirSprite;
+        _unlockedImage = SouvenirSprite;
         SouvenirDescription = desc;
         SouvenirID = id;
     }

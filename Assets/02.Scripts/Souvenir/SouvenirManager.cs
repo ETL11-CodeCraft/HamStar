@@ -28,7 +28,7 @@ public class SouvenirManager : MonoBehaviour
     private float _minimumSwipeMagnitude = 10f;
     private Vector2 _swipeDir;
     private float _canvasOrigin;
-    private int _canvasIdx = 1;
+    private int _canvasIdx = 0;
     public Action travelRefreshAction;
 
 
@@ -47,7 +47,7 @@ public class SouvenirManager : MonoBehaviour
 
         _screenWidth = Screen.width;
         _panelOrigin = transform.position.x;
-        _canvasOrigin = _canvasTransform.position.x + _screenWidth; //현재 시작지점이 기념품이라 임시로 설정
+        _canvasOrigin = _canvasTransform.position.x;
 
         for(int i=0;i<_souvenirList.Count;i++)
         {
@@ -90,7 +90,7 @@ public class SouvenirManager : MonoBehaviour
         if(_swipeDir.x > 0)
         {
             Debug.LogWarning("SWIPE RIGHT");
-            if (_canvasIdx <= 0) return;
+            if (_canvasIdx <= -1) return;
 
             _canvasIdx--;
             _canvasTransform.DOMoveX(_canvasOrigin - _canvasIdx * _screenWidth, 0.5f);

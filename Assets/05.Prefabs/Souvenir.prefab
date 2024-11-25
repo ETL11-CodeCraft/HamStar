@@ -133,3 +133,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4121af2652ace234f8fcb582a4e35cbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lockedImage: {fileID: 21300000, guid: baaa6f5d09ad9d44da23db96a41f610d, type: 3}
