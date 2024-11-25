@@ -128,7 +128,7 @@ public class SouvenirManager : MonoBehaviour
 
     public void CollectSouvenir()
     {
-        _souvenirPopup.SetActive(false);
+        _souvenirPopup.SetActive(true);
 
         if(_uncollectedItems.Count <= 0)
         {
