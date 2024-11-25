@@ -90,3 +90,13 @@ public class PlacementData
 
     public PlacementData() { }
 }
+
+public class StartDate
+{
+    public string startDate;
+
+    public StartDate()
+    {
+        startDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+    }
+}
