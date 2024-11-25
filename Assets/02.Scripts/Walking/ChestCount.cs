@@ -8,13 +8,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
 
-//º¸¹°»óÀÚ ¼ö ÀúÀå
+//ë³´ë¬¼ìƒì ìˆ˜ ì €ì¥
 public class ChestCount : MonoBehaviour
 {
     [SerializeField] public TextMeshProUGUI chestCountText;
     private int _currentChestCount = 0;
     private int _pastChestCount = -1;
-    private int _coin = 0;
     [SerializeField] Image _coinImage;
     [SerializeField] Transform _coinContent;
     [SerializeField] GameObject _chestOpenBackGround;
@@ -24,7 +23,7 @@ public class ChestCount : MonoBehaviour
     private WalkData _walkData;
     private InventoryData _inventoryData;
     private int _readWalkCount;
-    private const int chestStepUnit = 1000;   //´ÜÀ§ °ÉÀ½´ç º¸¹°»óÀÚ ÇÏ³ª
+    private const int chestStepUnit = 1000;   //ë‹¨ìœ„ ê±¸ìŒë‹¹ ë³´ë¬¼ìƒì í•˜ë‚˜
 
     private void Awake()
     {
@@ -32,7 +31,6 @@ public class ChestCount : MonoBehaviour
         _walkData = _dataLoader.Load<WalkData>();
         _inventoryData = _dataLoader.Load<InventoryData>();
         _pastChestCount = _walkData.pastChestCount;
-        _coin = _inventoryData.coin;
         _chestOpenButton.onClick.AddListener(ChestOpen);
         _chestCloseButton.onClick.AddListener(ChestClose);
 
@@ -63,10 +61,10 @@ public class ChestCount : MonoBehaviour
 #elif UNITY_ANDROID              
         _readWalkCount = AndroidStepCounter.current.stepCounter.ReadValue();
 
-        //AndroidStepCounter.current.stepCounter.ReadValue()ÀÇ °ªÀ» ºÒ·¯¿ÀÁö ¸øÇßÀ» ¶§, 0ÀÌ µÇ´Â ºÎºĞÀÇ ¿¹¿ÜÃ³¸®
+        //AndroidStepCounter.current.stepCounter.ReadValue()ì˜ ê°’ì„ ë¶ˆëŸ¬ì˜¤ì§€ ëª»í–ˆì„ ë•Œ, 0ì´ ë˜ëŠ” ë¶€ë¶„ì˜ ì˜ˆì™¸ì²˜ë¦¬
         if(_readWalkCount != 0)
         {
-            //ÀúÀåµÈ µ¥ÀÌÅÍ°¡ ¾øÀ¸¸é(Ã³À½ ÇÃ·¹ÀÌ½Ã), 1000°ÉÀ½´ç ÄÚÀÎ»óÀÚÀÇ ¼ö¸¦ 0À¸·Î ÃÊ±âÈ­ÇÏ±â À§ÇØ ¾Èµå·ÎÀÌµå¿¡ ÀúÀåµÇ¾îÀÖ´Â °ÉÀ½ ¼ö¸¦ ÅëÇØ _currentChestCount == 0ÀÌ µÇ´Â _pastChestCount¸¦ ÀúÀåÇÑ´Ù.
+            //ì €ì¥ëœ ë°ì´í„°ê°€ ì—†ìœ¼ë©´(ì²˜ìŒ í”Œë ˆì´ì‹œ), 1000ê±¸ìŒë‹¹ ì½”ì¸ìƒìì˜ ìˆ˜ë¥¼ 0ìœ¼ë¡œ ì´ˆê¸°í™”í•˜ê¸° ìœ„í•´ ì•ˆë“œë¡œì´ë“œì— ì €ì¥ë˜ì–´ìˆëŠ” ê±¸ìŒ ìˆ˜ë¥¼ í†µí•´ _currentChestCount == 0ì´ ë˜ëŠ” _pastChestCountë¥¼ ì €ì¥í•œë‹¤.
             if(_pastChestCount == -1)
             {
                 _pastChestCount = (_readWalkCount / chestStepUnit);
@@ -80,7 +78,7 @@ public class ChestCount : MonoBehaviour
 
                 chestCountText.text = Mathf.Min(9, _currentChestCount).ToString();
 
-                //¾Èµå·ÎÀÌµå ±â±âÀÇ Àü¿øÀ» ´Ù½Ã ½ÃÀÛÇÒ ½Ã, AndroidStepCounter.current.stepCounter.ReadValue()ÀÌ 0ÀÌ µÇ´Â Á¡À» °í·ÁÇÏ¿©, _pastChestCount = 0À¸·Î ÃÊ±âÈ­ÇÑ´Ù.
+                //ì•ˆë“œë¡œì´ë“œ ê¸°ê¸°ì˜ ì „ì›ì„ ë‹¤ì‹œ ì‹œì‘í•  ì‹œ, AndroidStepCounter.current.stepCounter.ReadValue()ì´ 0ì´ ë˜ëŠ” ì ì„ ê³ ë ¤í•˜ì—¬, _pastChestCount = 0ìœ¼ë¡œ ì´ˆê¸°í™”í•œë‹¤.
                 if (_readWalkCount / chestStepUnit < _pastChestCount)  
                 {
                     _pastChestCount = 0;
@@ -96,13 +94,13 @@ public class ChestCount : MonoBehaviour
 
     private IEnumerator PermissionActivity(string permission)
     {
-        // ±ÇÇÑÀÌ Çã¿ëµÇÁö ¾Ê¾Ò´Ù¸é
+        // ê¶Œí•œì´ í—ˆìš©ë˜ì§€ ì•Šì•˜ë‹¤ë©´
         if (!Permission.HasUserAuthorizedPermission(permission))
         {
-            // ÃÖ½Å Unity API¸¦ »ç¿ëÇØ ±ÇÇÑÀ» ¿äÃ»
+            // ìµœì‹  Unity APIë¥¼ ì‚¬ìš©í•´ ê¶Œí•œì„ ìš”ì²­
             Permission.RequestUserPermission(permission);
 
-            // ±ÇÇÑ Çã¿ëµÉ ¶§±îÁö ±â´Ù¸²
+            // ê¶Œí•œ í—ˆìš©ë  ë•Œê¹Œì§€ ê¸°ë‹¤ë¦¼
             while (!Permission.HasUserAuthorizedPermission(permission))
             {
                 yield return null;
@@ -110,7 +108,7 @@ public class ChestCount : MonoBehaviour
         }
     }
 
-    //¸ğÀÎ ÄÚÀÎ »óÀÚÀÇ ¼ö¸¸Å­ ¿ÀÇÂÇÒ ÇÔ¼ö(¹öÆ°) (ÃÖ´ë 9°³)
+    //ëª¨ì¸ ì½”ì¸ ìƒìì˜ ìˆ˜ë§Œí¼ ì˜¤í”ˆí•  í•¨ìˆ˜(ë²„íŠ¼) (ìµœëŒ€ 9ê°œ)
     private void ChestOpen()
     {
         if (_currentChestCount > 0)
@@ -125,7 +123,7 @@ public class ChestCount : MonoBehaviour
             _pastChestCount += _currentChestCount;
             _chestOpenBackGround.SetActive(true);
 
-            //¿­¸° ÄÚÀÎ »óÀÚ°¡ ´Ù½Ã ¿­¸®Áö ¾Êµµ·Ï _pastChestCount¿¡ ÀúÀå
+            //ì—´ë¦° ì½”ì¸ ìƒìê°€ ë‹¤ì‹œ ì—´ë¦¬ì§€ ì•Šë„ë¡ _pastChestCountì— ì €ì¥
             _walkData.pastChestCount = _pastChestCount;
             _dataLoader.Save<WalkData>(_walkData);
             _inventoryData.coin = GameManager.coin;
@@ -133,7 +131,7 @@ public class ChestCount : MonoBehaviour
         }
     }
 
-    //¿ÀÇÂÇÑ ÄÚÀÎ ui¸¦ ´İ´Â ÇÔ¼ö(¹öÆ°)
+    //ì˜¤í”ˆí•œ ì½”ì¸ uië¥¼ ë‹«ëŠ” í•¨ìˆ˜(ë²„íŠ¼)
     public void ChestClose()
     {
         ResetChestOpen();
@@ -141,7 +139,7 @@ public class ChestCount : MonoBehaviour
     }
 
     /// <summary>
-    /// º¸¹° »óÀÚ¸¦ ¿ÀÇÂÇÏ°í³ª¸é, pastChestCount¸¦ Á¶Á¤ÇÏ°í, »óÀÚÀÇ °¹¼ö°¡ 0¿¡¼­ ½ÃÀÛÇÏµµ·Ï ÇÏ´Â ÇÔ¼ö
+    /// ë³´ë¬¼ ìƒìë¥¼ ì˜¤í”ˆí•˜ê³ ë‚˜ë©´, pastChestCountë¥¼ ì¡°ì •í•˜ê³ , ìƒìì˜ ê°¯ìˆ˜ê°€ 0ì—ì„œ ì‹œì‘í•˜ë„ë¡ í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
     void ResetChestOpen()
     {
