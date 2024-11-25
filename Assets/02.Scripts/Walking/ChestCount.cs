@@ -11,7 +11,8 @@ using UnityEngine.UI;
 //보물상자 수 저장
 public class ChestCount : MonoBehaviour
 {
-    [SerializeField] public TextMeshProUGUI chestCountText;
+    [SerializeField] TextMeshProUGUI _chestCountText;
+    [SerializeField] TextMeshProUGUI _getCoinText;
     private int _currentChestCount = 0;
     private int _pastChestCount = -1;
     [SerializeField] Image _coinImage;
@@ -24,6 +25,7 @@ public class ChestCount : MonoBehaviour
     private InventoryData _inventoryData;
     private int _readWalkCount;
     private const int chestStepUnit = 1000;   //단위 걸음당 보물상자 하나
+    private int _getCoin = 0;
 
     private void Awake()
     {
@@ -57,7 +59,7 @@ public class ChestCount : MonoBehaviour
     void Update()
     {
 #if UNITY_EDITOR
-        chestCountText.text = _currentChestCount.ToString();
+        _chestCountText.text = _currentChestCount.ToString();
 #elif UNITY_ANDROID              
         _readWalkCount = AndroidStepCounter.current.stepCounter.ReadValue();
 
@@ -111,11 +113,14 @@ public class ChestCount : MonoBehaviour
     //모인 코인 상자의 수만큼 오픈할 함수(버튼) (최대 9개)
     private void ChestOpen()
     {
+        _getCoin = 0;
+
         if (_currentChestCount > 0)
         {
             for (int i = 0; i < Mathf.Min(9, _currentChestCount); i++)
             {
                 int randomCoin = UnityEngine.Random.Range(80, 120);
+                _getCoin += randomCoin;
                 GameManager.coin += randomCoin;
                 Image image = Instantiate(_coinImage, _coinContent);
                 image.GetComponentInChildren<TextMeshProUGUI>().text = randomCoin.ToString();
@@ -136,6 +141,17 @@ public class ChestCount : MonoBehaviour
     {
         ResetChestOpen();
         _chestOpenBackGround.SetActive(false);
+        StartCoroutine(GetCoinAlarm());
+    }
+
+    IEnumerator GetCoinAlarm()
+    {
+        _getCoinText.text = $"{_getCoin:#,##0} 코인을\n얻었습니다.";
+        _getCoinText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+
+        _getCoinText.gameObject.SetActive(false);
     }
 
     /// <summary>
