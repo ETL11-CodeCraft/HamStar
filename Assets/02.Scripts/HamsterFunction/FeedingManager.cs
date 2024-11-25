@@ -198,6 +198,10 @@ public class FeedingManager : MonoBehaviour
 
     private void OnShowOtherButton()
     {
+        FindObjectOfType<LoveManager>()?.SetFeedBtnInteractable(_isActiveFeed);
+        FindObjectOfType<PotionManager>()?.SetFeedBtnInteractable(_isActiveFeed);
+
+
         _isActiveFeed = !_isActiveFeed;
         _seedBtn.gameObject.SetActive(_isActiveFeed);
         _goldSeedBtn.gameObject.SetActive(_isActiveFeed);
@@ -228,4 +232,12 @@ public class FeedingManager : MonoBehaviour
             Debug.Log("AR 평면이 감지되지 않았습니다. 햄스터를 생성할 수 없습니다.");
         }
     }
+
+    public void SetFeedBtnInteractable(bool isInteractable)
+    {
+        if (_feedBtn != null)
+        {
+            _feedBtn.interactable = isInteractable;
+        }
+    }    
 }
