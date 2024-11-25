@@ -14,6 +14,7 @@ public class ChestCount : MonoBehaviour
     [SerializeField] public TextMeshProUGUI chestCountText;
     private int _currentChestCount = 0;
     private int _pastChestCount = -1;
+    private int _coin = 0;
     [SerializeField] Image _coinImage;
     [SerializeField] Transform _coinContent;
     [SerializeField] GameObject _chestOpenBackGround;
@@ -21,6 +22,7 @@ public class ChestCount : MonoBehaviour
     [SerializeField] Button _chestCloseButton;
     private DataLoader _dataLoader;
     private WalkData _walkData;
+    private InventoryData _inventoryData;
     private int _readWalkCount;
     private const int chestStepUnit = 1000;   //단위 걸음당 보물상자 하나
 
@@ -28,7 +30,9 @@ public class ChestCount : MonoBehaviour
     {
         _dataLoader = new DataLoader();
         _walkData = _dataLoader.Load<WalkData>();
+        _inventoryData = _dataLoader.Load<InventoryData>();
         _pastChestCount = _walkData.pastChestCount;
+        _coin = _inventoryData.coin;
         _chestOpenButton.onClick.AddListener(ChestOpen);
         _chestCloseButton.onClick.AddListener(ChestClose);
 
@@ -124,6 +128,8 @@ public class ChestCount : MonoBehaviour
             //열린 코인 상자가 다시 열리지 않도록 _pastChestCount에 저장
             _walkData.pastChestCount = _pastChestCount;
             _dataLoader.Save<WalkData>(_walkData);
+            _inventoryData.coin = GameManager.coin;
+            _dataLoader.Save<InventoryData>(_inventoryData);
         }
     }
 
