@@ -1,7 +1,6 @@
 ﻿using DG.Tweening;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,6 +21,8 @@ public class SouvenirManager : MonoBehaviour
     private float _panelOrigin;
     private DataLoader _dataLoader;
     private SouvenirData _souvenirData;
+
+    [SerializeField] private GameObject _souvenirPopup;
 
     [SerializeField] private Transform _canvasTransform;
     private SwipeControls _swipeControls;
@@ -127,6 +128,8 @@ public class SouvenirManager : MonoBehaviour
 
     public void CollectSouvenir()
     {
+        _souvenirPopup.SetActive(true);
+
         if(_uncollectedItems.Count <= 0)
         {
             //이미 모든 기념품을 획득하였습니다.
@@ -144,5 +147,10 @@ public class SouvenirManager : MonoBehaviour
         {
             //축하합니다. 모든 기념품을 획득하였습니다.
         }
+    }
+
+    public void CloseSouvenirPopup()
+    {
+        _souvenirPopup.SetActive(false);
     }
 }
