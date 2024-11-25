@@ -105,4 +105,9 @@ public class SoundManager : MonoBehaviour
     {
         sfxSource.Stop();
     }
+
+    public void PlayButtonSound()
+    {
+        PlaySFX("ButtonClick");
+    }
 }

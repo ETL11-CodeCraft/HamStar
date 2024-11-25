@@ -16,6 +16,7 @@ public class ProductController : MonoBehaviour
 
     Product _product;
 
+    public Action CancelAction;
     public Action<Product> BuyAction;
     public Action<Product> PlacementAction;
 
@@ -32,9 +33,17 @@ public class ProductController : MonoBehaviour
         
         _buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = _product.price.ToString("N0") + "C";
 
+        _cancelButton.onClick.RemoveAllListeners();
+        _cancelButton.onClick.AddListener(() =>
+        {
+            CancelAction?.Invoke();;
+        });
+
         _buyButton.onClick.RemoveAllListeners();
         _buyButton.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlayButtonSound();
+
             if (GameManager.coin < _product.price)
             {
                 PopupUI ui = _shopFailPanel.GetComponent<PopupUI>();

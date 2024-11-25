@@ -84,11 +84,17 @@ public class ShopController : MonoBehaviour
             slot.Price = product.price;
             slot.ClickEventHandler += () =>
             {
+                SoundManager.instance.PlayButtonSound();
                 OpenItemPopup();
                 ProductController productController = _itemPanel.GetComponent<ProductController>();
                 if (productController != null)
                 {
                     productController.SetProduct(product);
+                    productController.CancelAction = () =>
+                    {
+                        SoundManager.instance.PlayButtonSound();
+                        CloseItemPopup();
+                    };
                     productController.BuyAction = Buy;
                     productController.PlacementAction = Placement;
                     productController.Refresh();
@@ -143,11 +149,16 @@ public class ShopController : MonoBehaviour
         _placementController.Product = product;
         _placementController.HamsterWheelPrefab = product.prefab;
         _placementController.IsPlacementMode = true;
-        _placementController.CancelAction = () => { 
+        _placementController.CancelAction = () => {
+            SoundManager.instance.PlayButtonSound();
             OpenShop();
             OpenItemPopup();
         };
-        _placementController.ApplyAction = Buy;
+        _placementController.ApplyAction = (product) =>
+        {
+            SoundManager.instance.PlayButtonSound();
+            Buy(product);
+        };
     }
 
     private void AddInventoryData(int productId, int added = 1)
