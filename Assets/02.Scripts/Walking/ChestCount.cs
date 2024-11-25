@@ -113,6 +113,8 @@ public class ChestCount : MonoBehaviour
     {
         if (_currentChestCount > 0)
         {
+            _chestOpenButton.enabled = false;
+            _chestOpenButton.gameObject.GetComponent<Image>().color = Color.gray;
             for (int i = 0; i < Mathf.Min(9, _currentChestCount); i++)
             {
                 int randomCoin = UnityEngine.Random.Range(80, 120);
@@ -134,14 +136,16 @@ public class ChestCount : MonoBehaviour
     //오픈한 코인 ui를 닫는 함수(버튼)
     public void ChestClose()
     {
-        ResetChestOpen();
+        ResetOpenChest();
+        _chestOpenButton.enabled = true;
+        _chestOpenButton.gameObject.GetComponent<Image>().color = Color.white;
         _chestOpenBackGround.SetActive(false);
     }
 
     /// <summary>
     /// 보물 상자를 오픈하고나면, pastChestCount를 조정하고, 상자의 갯수가 0에서 시작하도록 하는 함수
     /// </summary>
-    void ResetChestOpen()
+    void ResetOpenChest()
     {
         Transform[] childList = _coinContent.GetComponentsInChildren<Transform>();
 
