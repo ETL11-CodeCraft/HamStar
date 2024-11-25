@@ -1,39 +1,53 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using System.Collections.Generic;
+using System.Text;
+using System.Collections;
 
 public class LoveManager : MonoBehaviour
 {
     [SerializeField] InputActionReference _dragCurrentPosition;
     [SerializeField] Camera _xrCamera;
-    [SerializeField] Button _loveBtn; //�����ֱ� ��ư
-    [SerializeField] GameObject _lovePanel;  //�����ֱ� ���� ��ư
+    [SerializeField] Button _loveBtn; //애정주기 버튼
+    [SerializeField] GameObject _lovePanel;  //애정주기 설명 버튼
+    [SerializeField] GameObject _lovePanel2;  //애정주기 설명 버튼
+    [SerializeField] GameObject _lovePanel3;  //애정주기 설명 버튼
     //[SerializeField] LayerMask _HamsterLayer;  
-    private bool _isActiveLoveBtn = false;  // ��ư Ȱ��ȭ Ȯ��
+    private bool _isActiveLoveBtn = false;  // 버튼 활성화 확인
     private List<ARRaycastHit> _hits = new List<ARRaycastHit>();
     private bool _isDragging = false;
     private Vector2 _startDragPosition;
     private float _minDragDistance = 20f;
 
+    //슬라이더
+    [SerializeField] Slider _loveSlider; //슬라이더 추가
+    private float _loveIncreaseAmount = 1f; //증가할 애정도의 양 
+    private float _maxLoveValue = 100;
+
+    //Effect
+    [SerializeField] GameObject _heartEffect;
+
     void Start()
     {
+        _lovePanel2.SetActive(false);   
+        _lovePanel3.SetActive(false);   
+        _loveSlider.gameObject.SetActive(false);
+        _loveSlider.interactable = false;
         _lovePanel.SetActive(false);
 
         _loveBtn.onClick.AddListener(GiveLove);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void GiveLove()
     {
+        FindObjectOfType<FeedingManager>()?.SetFeedBtnInteractable(_isActiveLoveBtn);
+        FindObjectOfType<PotionManager>()?.SetFeedBtnInteractable(_isActiveLoveBtn);
+        _loveSlider.value = 0;
         _isActiveLoveBtn = !_isActiveLoveBtn;
+        _loveSlider.gameObject.SetActive(_isActiveLoveBtn);
         _lovePanel.SetActive(_isActiveLoveBtn);
         _dragCurrentPosition.action.started += OnDragStart;
         _dragCurrentPosition.action.performed += OnDraging;
@@ -43,13 +57,13 @@ public class LoveManager : MonoBehaviour
     private void OnDragStart(InputAction.CallbackContext context)
     {
         Debug.Log("Drag Start !!!");
-        Vector2 TouchPositoin = context.ReadValue<Vector2>();  //��ġ �������� �޾ƿ´�.
-        
+        Vector2 TouchPositoin = context.ReadValue<Vector2>();  //터치 포지션을 받아온다.
+
         Ray ray = _xrCamera.ScreenPointToRay(TouchPositoin);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if (hit.collider.gameObject.tag == "HamsterTouchRange")
+            if (hit.collider.gameObject.tag == "HamsterTouchRange")   //햄스터의 터치 범위(등)에 닿을 때만 
             {
                 _isDragging = true;
                 _startDragPosition = TouchPositoin;
@@ -63,17 +77,82 @@ public class LoveManager : MonoBehaviour
         if (_isDragging)
         {
             Vector2 currentTouchPosition = context.ReadValue<Vector2>();
-            Vector2 dragVector = currentTouchPosition - _startDragPosition;  //�巡�� ���� ���
+            Vector2 dragVector = currentTouchPosition - _startDragPosition;  //드래그 벡터 계산
 
-            if (dragVector.magnitude > 20f)
+            Ray ray = _xrCamera.ScreenPointToRay(currentTouchPosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                Debug.Log("���ٵ�� ���� !");
+                if (hit.collider.gameObject.tag == "HamsterTouchRange")
+                {
+                    if (dragVector.magnitude > 40f)
+                    {
+                        Debug.Log("쓰다듬기 성공 !");
+                        IncreaseLoveValue();
+
+                        GameObject loveEffect = Instantiate(_heartEffect, hit.transform.position, Quaternion.identity);
+
+                        //이펙트 생성 후 제거
+                        ParticleSystem particleSystem = _heartEffect.GetComponent<ParticleSystem>();
+                        if (particleSystem != null)
+                        {
+                            Destroy(loveEffect, particleSystem.main.duration + particleSystem.main.startLifetime.constantMax);
+                        }
+                        else
+                        {
+                            Destroy(loveEffect, 3f);
+                        }
+                    }
+                }
             }
+            
         }
     }
 
     private void OnDragEnd(InputAction.CallbackContext context)
     {
         Debug.Log("DragEnd");
+        _isDragging = false;
+    }
+
+    private void IncreaseLoveValue()
+    {
+        _loveSlider.value += _loveIncreaseAmount;
+
+        if (_loveSlider.value >= _maxLoveValue)
+        {
+            _loveSlider.value = _maxLoveValue;
+            Debug.Log("슬라이더 최대치 도달");
+            StartCoroutine(ShowPanel(_lovePanel2, 2f));
+
+            //애정도가 100이상일 경우 
+            //StartCoroutine(ShowPanel(_lovePanel3, 2f));
+            
+        }
+    }
+
+    IEnumerator ShowPanel(GameObject gameObject, float seconds)
+    {
+        if (gameObject == null)
+        {
+            Debug.Log("gameObj is null");
+            yield break;
+        }
+
+        gameObject.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+
+        if (gameObject != null)
+        {
+            gameObject.SetActive(false);
+            _loveSlider.value = 0;
+        }
+    }
+
+    public void SetFeedBtnInteractable(bool isInteractable)
+    {
+        if (_loveBtn != null)
+        {
+            _loveBtn.interactable = isInteractable;
+        }
     }
 }
