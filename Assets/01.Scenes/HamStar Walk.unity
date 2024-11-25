@@ -708,7 +708,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6e86b6d8366a9746b73999c8acf6c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chestCountText: {fileID: 432327251}
+  _chestCountText: {fileID: 432327251}
+  _getCoinText: {fileID: 813304310}
   _coinImage: {fileID: 3778738701264607887, guid: 0e04a3a7999dff0438d64163350a4251,
     type: 3}
   _coinContent: {fileID: 1242759428}

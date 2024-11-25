@@ -46,6 +46,7 @@ public class ChestCount : MonoBehaviour
     void Start()
     {
         _chestOpenBackGround.SetActive(false);
+        _getCoinText.gameObject.SetActive(false);
 
 #if UNITY_EDITOR
         _currentChestCount = 2;
@@ -117,6 +118,7 @@ public class ChestCount : MonoBehaviour
 
         if (_currentChestCount > 0)
         {
+            _chestOpenButton.enabled = false;
             for (int i = 0; i < Mathf.Min(9, _currentChestCount); i++)
             {
                 int randomCoin = UnityEngine.Random.Range(80, 120);
@@ -152,6 +154,7 @@ public class ChestCount : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         _getCoinText.gameObject.SetActive(false);
+        _chestOpenButton.enabled = true;
     }
 
     /// <summary>
