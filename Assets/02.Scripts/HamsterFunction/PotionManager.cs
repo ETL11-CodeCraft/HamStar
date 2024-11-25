@@ -84,4 +84,12 @@ public class PotionManager : MonoBehaviour
         });
         _potionBtnTrigger.triggers.Add(OnPointerUpEntry_potion);
     }
+
+    public void SetFeedBtnInteractable(bool isInteractable)
+    {
+        if (_potionBtn != null)
+        {
+            _potionBtn.interactable = isInteractable;
+        }
+    }
 }
