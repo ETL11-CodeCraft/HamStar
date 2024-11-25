@@ -13,6 +13,9 @@ public class Hamster : MonoBehaviour
     private Animator _animator;
     private BehaviorTree _behaviorTree;
 
+    [SerializeField] private Travel _travelPrefab;
+    private Travel _travelManager;
+
     [Header("Eat")]
     List<GameObject> _seeds = new List<GameObject>();
     private GameObject _currentSeed;
@@ -213,6 +216,9 @@ public class Hamster : MonoBehaviour
 
         //추후 수정예정
         var hamsterPanel = GameObject.Find("HamsterPanel");
+
+        _travelManager = Instantiate(_travelPrefab, hamsterPanel.transform);
+        _travelManager.hamster = this;
 
         _fullnessSlider = Instantiate(_fullnessPrefab, hamsterPanel.transform).GetComponent<Slider>();
         _cleanlinessSlider = Instantiate(_cleanlinessPrefab, hamsterPanel.transform).GetComponent<Slider>();

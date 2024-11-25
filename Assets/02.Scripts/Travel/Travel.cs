@@ -8,13 +8,14 @@ public class Travel : MonoBehaviour
 {
     [SerializeField] private GameObject _travelIcon;
     [SerializeField] private TextMeshProUGUI _remainTravelText;
-    [SerializeField] private SouvenirManager _souvenirManager;
+    private SouvenirManager _souvenirManager;
     DateTime _startTime;
     DateTime _endTime;
     bool _isTraveling = false;
     Coroutine _HideCoroutine;
     private DataLoader _dataLoader;
     private TravelData _travelData;
+    [HideInInspector] public Hamster hamster;
 
 
     private void Awake()
@@ -25,7 +26,8 @@ public class Travel : MonoBehaviour
 
     private void Start()
     {
-        if(_souvenirManager != null)
+        _souvenirManager = GameObject.Find("Souvenir").GetComponent<SouvenirManager>();
+        if (_souvenirManager != null)
         {
             _souvenirManager.travelRefreshAction += RefreshTravel;
         }
@@ -50,12 +52,16 @@ public class Travel : MonoBehaviour
             //재설정 된 시간 저장
             _dataLoader.Save(_travelData);
 
-            //TODO :: 기념품 획득
+            //기념품 획득
             if(_souvenirManager != null)
             {
                 _souvenirManager.CollectSouvenir();
             }
-            //TODO :: 햄스터 보이도록 설정
+            //햄스터 보이도록 설정
+            if(hamster)
+            {
+                hamster.gameObject.SetActive(true);
+            }
 
             Debug.Log("도착");
         }
@@ -63,10 +69,17 @@ public class Travel : MonoBehaviour
         _startTime = DateTime.ParseExact(_travelData.travelStartTime, "yyyy-MM-dd HH:mm:ss", null);
         if (_isTraveling == false && _startTime < DateTime.Now)
         {
-            //TODO :: 흑화 상태라면 여행을 출발하지 않음
-            _isTraveling = true;
-            //출발
-            //TODO :: 햄스터 안보이도록 설정
+            //흑화 상태라면 여행을 출발하지 않음
+            if (!hamster.isDarken)
+            {
+                _isTraveling = true;
+                //출발
+                //햄스터 안보이도록 설정
+                if (hamster)
+                {
+                    hamster.gameObject.SetActive(false);
+                }
+            }
         }
 
         if (_travelIcon != null)
@@ -80,7 +93,6 @@ public class Travel : MonoBehaviour
     /// </summary>
     public void OnClickTravelIcon()
     {
-        //TODO :: 시간이 표시 되는 중 여행이 끝나 아이콘이 사라지며 발생할 수 있는 오류 처리
         GameObject textObj = _remainTravelText.transform.parent.gameObject;
         //남은 시간 표시
         var remainTime = _endTime - DateTime.Now;
