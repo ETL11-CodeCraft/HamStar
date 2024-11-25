@@ -47,7 +47,7 @@ public class SouvenirManager : MonoBehaviour
         _swipeControls.Player.Swipe.performed += ProcessSwipeDelta;
 
         _screenWidth = Screen.width;
-        _panelOrigin = transform.position.x;
+        _panelOrigin = transform.position.x - _screenWidth;
         _canvasOrigin = _canvasTransform.position.x;
 
         for(int i=0;i<_souvenirList.Count;i++)
