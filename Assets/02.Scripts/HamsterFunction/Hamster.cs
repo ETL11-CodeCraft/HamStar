@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.InputSystem;
 using System;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 public class Hamster : MonoBehaviour
 {
@@ -41,6 +43,7 @@ public class Hamster : MonoBehaviour
     private int _closeness = 100;
     private int _stress = 0;
     private bool _isDarken = false;
+    public bool cantAct = false;
 
     [SerializeField] private GameObject _fullnessPrefab;
     [SerializeField] private GameObject _cleanlinessPrefab;
@@ -283,6 +286,13 @@ public class Hamster : MonoBehaviour
                     isDarken = false;
                     return NodeState.Failure;
                 })                  //IsDarken (흑화 상태에 들어가면 이후 행동을 진행하지 않음)
+                .Node(() =>
+                {
+                    if (cantAct)
+                        return NodeState.Success;
+
+                    return NodeState.Failure;
+                })                  //cantAct (행동을 진행하면 안되는 상황일때 빠져나가는 노드)
                 .Sequence()
                     .Node(() =>
                     {
@@ -487,6 +497,7 @@ public class Hamster : MonoBehaviour
                                     _actFlag = -1;
                                     _destFlag = -1;
                                     _rideElapse = 0;
+                                    GameManager.instance.Wheel.DeactiveWheel();
                                     return NodeState.Success;
                                 }
 
@@ -512,6 +523,17 @@ public class Hamster : MonoBehaviour
     void Update()
     {
         _behaviorTree.Evaluate();
+
+
+        if(transform.position.y < -20)
+        {
+            Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+            Ray ray = Camera.main.ScreenPointToRay(screenCenter);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+            {
+                transform.position = hit.transform.position;
+            }
+        }
     }
     public void AddSeed(GameObject seed)
     {

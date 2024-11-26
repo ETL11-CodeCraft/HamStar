@@ -36,6 +36,8 @@ public class LoveManager : MonoBehaviour
     private float _maxLoveValue = 100;
 
 
+    private Hamster _hamster;
+
     void Start()
     {
         //하트 파티클 생성 & stop
@@ -111,9 +113,15 @@ public class LoveManager : MonoBehaviour
                     if (dragVector.magnitude > 40f)
                     {
                         Debug.Log("쓰다듬기 성공 !");
-                        var hamster = hit.collider.transform.parent.GetComponent<Hamster>();
+                        var tryHamster = hit.collider.transform.parent.GetComponent<Hamster>();
 
-                        IncreaseLoveValue(hamster);
+                        if(tryHamster != null)
+                        { 
+                            _hamster = tryHamster;
+                            _hamster.cantAct = true;
+                        }
+
+                        IncreaseLoveValue(_hamster);
 
 
                         SetPariticlePosition(hit.collider.transform.position);
@@ -139,6 +147,12 @@ public class LoveManager : MonoBehaviour
         if (_heartInstance != null && _heartInstance.isPlaying)
         {
             _heartInstance.Stop();
+        }
+        
+        if(_hamster != null)
+        {
+            _hamster.cantAct = false;
+            _hamster = null;
         }
     }
 

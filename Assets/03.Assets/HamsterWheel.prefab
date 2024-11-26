@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: -6486235924297743634}
   - component: {fileID: 1740385537530644364}
   - component: {fileID: 8204229394205333649}
-  - component: {fileID: 6572083143932609325}
   m_Layer: 6
   m_Name: HamsterWheel
   m_TagString: HamsterWheel
@@ -93,33 +92,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!54 &6572083143932609325
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 19482977959833546}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 94
-  m_CollisionDetection: 0
 --- !u!1 &751700614844444658
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,7 +366,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5980559195281569391}
   - component: {fileID: 3271010851002007346}
-  - component: {fileID: 4028634848658778837}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -438,30 +409,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0806024, y: 0.12000006, z: 1}
   m_Center: {x: 0.029030163, y: -0.96, z: 0}
---- !u!54 &4028634848658778837
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7740556778460316012}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0

@@ -5,39 +5,13 @@ public class HamsterWheel : MonoBehaviour
 {
     [SerializeField] Transform _ridingTransform;
     private Animator _wheelAnimator;
-    private Animator _hamsterAnimator;
 
     public Action TriggerEnterAction;
     public Action TriggerExitAction;
 
-    public void RunWheel()
-    {
-        _wheelAnimator.SetFloat("Speed", 1f);
-    }
-
-    public void StopWheel()
-    {
-        _wheelAnimator.SetFloat("Speed", 0f);
-    }
-
     private void Awake()
     {
         _wheelAnimator = GetComponent<Animator>();
-    }
-
-    private void Update()
-    {
-        if (_hamsterAnimator != null)
-        {
-            if (_hamsterAnimator.GetBool("isMove")) //FIXME: 햄스터 상태에 따라서 쳇바퀴 회전
-            {
-                RunWheel();
-            }
-            else
-            {
-                StopWheel();
-            }
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -68,11 +42,22 @@ public class HamsterWheel : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// 햄스터가 쳇바퀴를 탈 때 호출
+    /// </summary>
     public void ActivateWheel(Hamster hamster)
     {
         hamster.transform.position = _ridingTransform.position;
-        hamster.transform.Rotate(_ridingTransform.forward, 0f); //FIXME: 햄스터가 타는 방향에 따라 회전
+        hamster.transform.Rotate(_ridingTransform.forward, 0f); // 햄스터가 타는 방향 고정
 
-        _ridingTransform.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().gameObject.SetActive(true);
+        _wheelAnimator.SetFloat("Speed", 1f);
+    }
+
+    /// <summary>
+    /// 햄스터가 쳇바퀴에서 내릴 때 호출
+    /// </summary>
+    public void DeactiveWheel()
+    {
+        _wheelAnimator.SetFloat("Speed", 0f);
     }
 }
