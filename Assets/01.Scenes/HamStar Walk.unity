@@ -1925,7 +1925,7 @@ GameObject:
   - component: {fileID: 432327252}
   - component: {fileID: 432327251}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text_ChestCount_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2636,7 +2636,7 @@ RectTransform:
   m_GameObject: {fileID: 514904258}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4, y: 1.4, z: 1}
+  m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 555290867}

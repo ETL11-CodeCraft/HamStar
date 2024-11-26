@@ -24,7 +24,7 @@ public class ChestCount : MonoBehaviour
     private WalkData _walkData;
     private InventoryData _inventoryData;
     private int _readWalkCount;
-    private const int _chestStepUnit = 1000;   //단위 걸음당 보물상자 하나
+    private const int _chestStepUnit = 1000;   //단위 걸음(1,000)당 보물상자 하나
     private int _getCoin = 0;
 
     private void Awake()
@@ -118,7 +118,9 @@ public class ChestCount : MonoBehaviour
 
         if (_currentChestCount > 0)
         {
+            SoundManager.instance.PlayButtonSound();
             _chestOpenButton.enabled = false;
+            _chestOpenButton.gameObject.GetComponent<Image>().color = Color.gray;
             for (int i = 0; i < Mathf.Min(9, _currentChestCount); i++)
             {
                 int randomCoin = UnityEngine.Random.Range(80, 120);
@@ -141,6 +143,7 @@ public class ChestCount : MonoBehaviour
     //오픈한 코인 ui를 닫는 함수(버튼)
     public void ChestClose()
     {
+        SoundManager.instance.PlayButtonSound();
         ResetChestOpen();
         _chestOpenBackGround.SetActive(false);
         StartCoroutine(GetCoinAlarm());
@@ -155,6 +158,7 @@ public class ChestCount : MonoBehaviour
 
         _getCoinText.gameObject.SetActive(false);
         _chestOpenButton.enabled = true;
+        _chestOpenButton.gameObject.GetComponent<Image>().color = Color.white;
     }
 
     /// <summary>
