@@ -24,7 +24,7 @@ public class ChestCount : MonoBehaviour
     private WalkData _walkData;
     private InventoryData _inventoryData;
     private int _readWalkCount;
-    private const int chestStepUnit = 1000;   //단위 걸음당 보물상자 하나
+    private const int _chestStepUnit = 1000;   //단위 걸음당 보물상자 하나
     private int _getCoin = 0;
 
     private void Awake()
@@ -70,19 +70,19 @@ public class ChestCount : MonoBehaviour
             //저장된 데이터가 없으면(처음 플레이시), 1000걸음당 코인상자의 수를 0으로 초기화하기 위해 안드로이드에 저장되어있는 걸음 수를 통해 _currentChestCount == 0이 되는 _pastChestCount를 저장한다.
             if(_pastChestCount == -1)
             {
-                _pastChestCount = (_readWalkCount / chestStepUnit);
+                _pastChestCount = (_readWalkCount / _chestStepUnit);
                 _walkData.pastChestCount = _pastChestCount;
                 _dataLoader.Save<WalkData>(_walkData);
                 _walkData = _dataLoader.Load<WalkData>();
             }
             else
             {
-                _currentChestCount = (_readWalkCount / chestStepUnit) - _pastChestCount; 
+                _currentChestCount = (_readWalkCount / _chestStepUnit) - _pastChestCount; 
 
-                chestCountText.text = Mathf.Min(9, _currentChestCount).ToString();
+                _chestCountText.text = Mathf.Min(9, _currentChestCount).ToString();
 
                 //안드로이드 기기의 전원을 다시 시작할 시, AndroidStepCounter.current.stepCounter.ReadValue()이 0이 되는 점을 고려하여, _pastChestCount = 0으로 초기화한다.
-                if (_readWalkCount / chestStepUnit < _pastChestCount)  
+                if (_readWalkCount / _chestStepUnit < _pastChestCount)  
                 {
                     _pastChestCount = 0;
                 }
@@ -90,7 +90,7 @@ public class ChestCount : MonoBehaviour
         }
         else
         {
-            chestCountText.text = "0";
+            _chestCountText.text = "0";
         }
 #endif
     }
