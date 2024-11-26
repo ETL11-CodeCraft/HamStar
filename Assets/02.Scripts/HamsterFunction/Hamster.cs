@@ -487,6 +487,7 @@ public class Hamster : MonoBehaviour
                                     _actFlag = -1;
                                     _destFlag = -1;
                                     _rideElapse = 0;
+                                    GameManager.instance.Wheel.DeactiveWheel();
                                     return NodeState.Success;
                                 }
 

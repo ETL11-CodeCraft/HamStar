@@ -62,4 +62,9 @@ public class HamsterWheel : MonoBehaviour
         hamster.transform.position = _ridingTransform.position;
         hamster.transform.Rotate(_ridingTransform.forward, 0f); // 햄스터가 타는 방향 고정
     }
+
+    public void DeactiveWheel()
+    {
+        //햄스터가 쳇바퀴에서 내리면 실행
+    }
 }
