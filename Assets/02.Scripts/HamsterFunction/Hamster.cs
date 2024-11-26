@@ -12,7 +12,6 @@ public class Hamster : MonoBehaviour
     [SerializeField] private GameObject _healingEffect;
     private Animator _animator;
     private BehaviorTree _behaviorTree;
-    private GameManager _gameManager;
 
     [SerializeField] private Travel _travelPrefab;
     private Travel _travelManager;
@@ -220,7 +219,6 @@ public class Hamster : MonoBehaviour
 
         //추후 수정예정
         var hamsterPanel = GameObject.Find("HamsterPanel");
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         _travelManager = Instantiate(_travelPrefab, hamsterPanel.transform);
         _travelManager.hamster = this;
@@ -421,7 +419,7 @@ public class Hamster : MonoBehaviour
                                 //destFlag 가 0이면 Random, 1이면 쳇바퀴
                                 if (_destFlag == -1)
                                 {
-                                    if(_gameManager.Wheel)
+                                    if(GameManager.instance.Wheel)
                                     {
                                         _destFlag = UnityEngine.Random.Range(0, 2);
                                     }
@@ -437,7 +435,7 @@ public class Hamster : MonoBehaviour
                                     else if (_destFlag == 1)
                                     {
                                         //쳇바퀴 위치로 이동
-                                        _destination = _gameManager.Wheel.transform.position;
+                                        _destination = GameManager.instance.Wheel.transform.position;
                                     }
                                 }
 
@@ -480,7 +478,7 @@ public class Hamster : MonoBehaviour
                                 //쳇바퀴에 도착
                                 if (_rideElapse == 0)
                                 {
-                                    _gameManager.Wheel.ActivateWheel(this);
+                                    GameManager.instance.Wheel.ActivateWheel(this);
                                 }
                                 _rideElapse += Time.deltaTime;
 

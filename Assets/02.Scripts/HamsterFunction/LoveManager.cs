@@ -21,6 +21,7 @@ public class LoveManager : MonoBehaviour
     private Vector2 _startDragPosition;
     private float _minDragDistance = 20f;
 
+    private Coroutine _fullClosenessCoroutine;
     private FeedingManager _feedingManager;
     private PotionManager _potionManager;
 
@@ -73,6 +74,8 @@ public class LoveManager : MonoBehaviour
         _dragCurrentPosition.action.performed += OnDraging;
         _dragCurrentPosition.action.canceled += OnDragEnd;
 
+        GameManager.instance.cantSwipe = !GameManager.instance.cantSwipe;
+
     }
     private void OnDragStart(InputAction.CallbackContext context)
     {
@@ -106,7 +109,9 @@ public class LoveManager : MonoBehaviour
                     if (dragVector.magnitude > 40f)
                     {
                         Debug.Log("쓰다듬기 성공 !");
-                        IncreaseLoveValue();
+                        var hamster = hit.collider.transform.parent.GetComponent<Hamster>();
+
+                        IncreaseLoveValue(hamster);
 
 
                         SetPariticlePosition(hit.collider.transform.position);
@@ -135,14 +140,32 @@ public class LoveManager : MonoBehaviour
         }
     }
 
-    private void IncreaseLoveValue()
+    private void IncreaseLoveValue(Hamster hamster)
     {
+        if(!hamster)
+        {
+            Debug.Log("햄스터 스크립트에 접근할 수 없음");
+            return;
+        }
+        if(hamster.closeness >= 100)
+        {
+            //애정도가 100이상일 경우 
+            if(_fullClosenessCoroutine != null)
+            {
+                StopCoroutine(_fullClosenessCoroutine);
+            }
+
+            _fullClosenessCoroutine = StartCoroutine(ShowPanel(_lovePanel3, 2f));
+            return;
+        }
+
         _loveSlider.value += _loveIncreaseAmount;
 
         if (_loveSlider.value >= _maxLoveValue)
         {
-            _loveSlider.value = _maxLoveValue;
+            _loveSlider.value = 0;
             Debug.Log("슬라이더 최대치 도달");
+            hamster.closeness += 30;
             StartCoroutine(ShowPanel(_lovePanel2_LovePlus30, 2f));
 
         }
@@ -164,6 +187,8 @@ public class LoveManager : MonoBehaviour
             gameObject.SetActive(false);
             _loveSlider.value = 0;
         }
+
+        _fullClosenessCoroutine = null;
     }
 
     public void SetFeedBtnInteractable(bool isInteractable)
