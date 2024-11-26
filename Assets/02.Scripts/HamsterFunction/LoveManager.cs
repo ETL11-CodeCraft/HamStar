@@ -55,7 +55,7 @@ public class LoveManager : MonoBehaviour
         _dragCurrentPosition.action.performed += OnDraging;
         _dragCurrentPosition.action.canceled += OnDragEnd;
 
-        GameManager.instance.isGivingLove = !GameManager.instance.isGivingLove;
+        GameManager.instance.cantSwipe = !GameManager.instance.cantSwipe;
 
     }
     private void OnDragStart(InputAction.CallbackContext context)

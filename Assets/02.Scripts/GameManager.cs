@@ -4,7 +4,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public int coin = 0;
-    public bool isGivingLove = false;
+    public bool cantSwipe = false;
 
     private DataLoader _dataLoader;
     private InventoryData _inventoryData;

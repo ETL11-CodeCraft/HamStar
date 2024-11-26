@@ -30,6 +30,7 @@ public class ShopController : MonoBehaviour
     public void OpenShop()
     {
         _shopCanvas.enabled = true;
+        GameManager.instance.cantSwipe = true;
         RefreshShop();
         RefeshCoin();
     }
@@ -37,6 +38,7 @@ public class ShopController : MonoBehaviour
     public void CloseShop()
     {
         _shopCanvas.enabled = false;
+        GameManager.instance.cantSwipe = false;
     }
 
     public void OpenItemPopup()
