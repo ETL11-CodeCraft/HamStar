@@ -47,7 +47,7 @@ public class SouvenirManager : MonoBehaviour
         _swipeControls.Player.Swipe.performed += ProcessSwipeDelta;
 
         _screenWidth = Screen.width;
-        _panelOrigin = transform.position.x;
+        _panelOrigin = transform.position.x - _screenWidth;
         _canvasOrigin = _canvasTransform.position.x;
 
         for(int i=0;i<_souvenirList.Count;i++)
@@ -83,6 +83,8 @@ public class SouvenirManager : MonoBehaviour
 
     public void ProcessTouchComplete(InputAction.CallbackContext context)
     {
+        if (GameManager.instance.cantSwipe) return;
+
         Debug.LogWarning($"Swipe Magnitude : {_swipeDir.magnitude}");
         if (Mathf.Abs(_swipeDir.magnitude) < _minimumSwipeMagnitude) return;
 

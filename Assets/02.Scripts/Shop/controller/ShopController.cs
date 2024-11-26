@@ -30,6 +30,7 @@ public class ShopController : MonoBehaviour
     public void OpenShop()
     {
         _shopCanvas.enabled = true;
+        GameManager.instance.cantSwipe = true;
         RefreshShop();
         RefeshCoin();
     }
@@ -37,6 +38,7 @@ public class ShopController : MonoBehaviour
     public void CloseShop()
     {
         _shopCanvas.enabled = false;
+        GameManager.instance.cantSwipe = false;
     }
 
     public void OpenItemPopup()
@@ -63,7 +65,7 @@ public class ShopController : MonoBehaviour
 
     private void RefeshCoin()
     {
-        _coinText.text = GameManager.coin.ToString("N0") + "C";
+        _coinText.text = GameManager.instance.coin.ToString("N0") + "C";
     }
 
     private void RefreshShop()
@@ -73,9 +75,9 @@ public class ShopController : MonoBehaviour
 
         for (int i = 0; i < _shopData.productIds.Count; i++)
         {
-            Product product = GetProduct(i);
+            Product product = GetProduct(_shopData.productIds[i]);
             
-            Debug.Log($"Product {product.id} {product.productName} {product.price} {product.quantity}");
+            Debug.Log($"Product {product.id} {product.productName} {product.price}");
 
             GameObject obj = Instantiate(_slotPrefab);
             ProductSlot slot = obj.GetComponent<ProductSlot>();
@@ -102,7 +104,9 @@ public class ShopController : MonoBehaviour
             };
             slot.RefreshSlot();
 
-            if (product.quantity <= 0) // 상품 재고가 없으면 구매 불가
+            // 이미 보유하고 있으면 구매 불가 처리
+            InventoryItem found = _inventoryData.quantityForProductId.Find(v => v.productId == product.id);
+            if (product.type == ItemType.PlayGround && found.productId != 0)
             {
                 slot.SetSoldOut();
             }
@@ -117,24 +121,20 @@ public class ShopController : MonoBehaviour
 
     private void Buy(Product product)
     {
-        Debug.Log($"구매=> coin: {GameManager.coin}, price: {product.price}, type: {product.type}");
-        GameManager.coin -= product.price;
+        Debug.Log($"구매=> coin: {GameManager.instance.coin}, price: {product.price}, type: {product.type}");
+        GameManager.instance.coin -= product.price;
         RefeshCoin();
 
-        if (product.type == ItemType.PlayGround)
-        {
-            product.quantity -= 1;
-        }
-        else if (product.type == ItemType.Food)
+        if (product.type == ItemType.Food)
         {
             AddInventoryData(product.id, 10);
         }
-        else if (product.type == ItemType.Medicine)
+        else
         {
             AddInventoryData(product.id, 1);
         }
 
-        _inventoryData.coin = GameManager.coin;
+        _inventoryData.coin = GameManager.instance.coin;
         _dataLoader.Save(_inventoryData);
 
         CloseItemPopup();
@@ -172,7 +172,7 @@ public class ShopController : MonoBehaviour
                 var quantity = list[i].quantity;
                 _inventoryData.quantityForProductId.Remove(list[i]);
 
-                inventoryItem availableItem = new inventoryItem();
+                InventoryItem availableItem = new InventoryItem();
                 availableItem.productId = productId;
                 availableItem.quantity = quantity + added;
 
@@ -184,7 +184,7 @@ public class ShopController : MonoBehaviour
             }
         }
 
-        inventoryItem item = new inventoryItem();
+        InventoryItem item = new InventoryItem();
         item.productId = productId;
         item.quantity = added;
         _inventoryData.quantityForProductId.Add(item);
