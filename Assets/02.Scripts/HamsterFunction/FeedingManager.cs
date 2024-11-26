@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem.EnhancedTouch;
 using System;
 using UnityEngine.XR.Interaction.Toolkit.AR;
+using System.Collections;
 
 public class FeedingManager : MonoBehaviour
 {
@@ -31,7 +32,9 @@ public class FeedingManager : MonoBehaviour
     [SerializeField] Button _seedBtn; //씨앗 버튼
     [SerializeField] Button _goldSeedBtn; //골드씨앗 버튼
 
+    //Panel
     [SerializeField] GameObject _feedPanel; //먹이 설명 패널
+    [SerializeField] GameObject _feedPanel_darkModeWarning;
 
     //EventTrigger
     [SerializeField] EventTrigger _seedBtnEventTrigger;
@@ -47,10 +50,10 @@ public class FeedingManager : MonoBehaviour
     GameObject _playerObject; 
     private List<ARRaycastHit> _hits = new List<ARRaycastHit>();
 
-
     private void Awake()
     {
         _feedPanel.SetActive(false);    // Feed Instruction panel 
+        _feedPanel_darkModeWarning.SetActive(false);
 
         //일반 먹이 PointerDown 이벤트트리거
         EventTrigger.Entry onPointerDownEntry_seed = new EventTrigger.Entry();
@@ -85,6 +88,11 @@ public class FeedingManager : MonoBehaviour
                     //seed 프리팹 생성시, Seeds리스트에 추가 
                     hamsterScript.AddSeed(_spawnObject);
                     Debug.Log("Seed리스트에 추가 seed count :");
+                }
+
+                if (hamsterScript.isDarken)
+                {
+                    StartCoroutine(ShowPanel(_feedPanel_darkModeWarning, 2f));
                 }
             }
         });
@@ -247,5 +255,21 @@ public class FeedingManager : MonoBehaviour
         {
             _feedBtn.interactable = isInteractable;
         }
-    }    
+    }
+
+    IEnumerator ShowPanel(GameObject gameObject, float seconds)
+    {
+        if (gameObject == null)
+        {
+            Debug.Log("gameObj is null");
+            yield break;
+        }
+        gameObject.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+
+        if (gameObject != null)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }
