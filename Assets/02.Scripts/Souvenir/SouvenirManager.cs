@@ -7,10 +7,10 @@ using UnityEngine.InputSystem;
 public class SouvenirManager : MonoBehaviour
 {
     [SerializeField] private List<SouvenirSpec> _souvenirList = new List<SouvenirSpec>(8);
-    private Vector2 _origin = new Vector2(-140f, 500f);
+    private Vector2 _origin = new Vector2(-250, 755);
     private float _screenWidth;
-    private const float DELTA_X = 280f;
-    private const float DELTA_Y = -230f;
+    private const float DELTA_X = 500;
+    private const float DELTA_Y = -440f;
     private const int ROW = 4;
     private const int COL = 2;
     [SerializeField] private Souvenir _souvenirPrefab;
@@ -60,7 +60,7 @@ public class SouvenirManager : MonoBehaviour
 
             //위치 설정
             obj.transform.SetParent(transform);
-            obj.transform.localPosition = _origin + new Vector2(((i % COL == 0) ? 0 : DELTA_X) + _screenWidth * (i / (ROW*COL)), DELTA_Y * ((i / COL) % ROW));
+            obj.transform.localPosition = _origin + new Vector2(((i % COL == 0) ? 0 : DELTA_X) + 1204 * (i / (ROW*COL)), DELTA_Y * ((i / COL) % ROW));
 
             //OnClickAction 설정
             obj.onClickAction += _souvenirInfo.ActiveInfo;
@@ -96,7 +96,7 @@ public class SouvenirManager : MonoBehaviour
             if (_canvasIdx <= -1) return;
 
             _canvasIdx--;
-            _canvasTransform.DOMoveX(_canvasOrigin - _canvasIdx * _screenWidth, 0.5f);
+            _canvasTransform.DOMoveX(_canvasOrigin - (_screenWidth * _canvasIdx), 0.5f);
         }
         else if(_swipeDir.x < 0)
         {
@@ -104,7 +104,7 @@ public class SouvenirManager : MonoBehaviour
             if (_canvasIdx >= 1) return;
 
             _canvasIdx++;
-            _canvasTransform.DOMoveX(_canvasOrigin - _canvasIdx * _screenWidth, 0.5f);
+            _canvasTransform.DOMoveX(_canvasOrigin - (_screenWidth * _canvasIdx), 0.5f);
         }
     }
     public void ProcessSwipeDelta(InputAction.CallbackContext context)
