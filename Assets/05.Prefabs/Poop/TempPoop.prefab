@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2594392903885159686}
   - component: {fileID: 2682046723838614893}
   - component: {fileID: 2944899726893911266}
+  - component: {fileID: -8826694212456926015}
   m_Layer: 0
   m_Name: TempPoop
   m_TagString: Poop
@@ -110,6 +111,18 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-8826694212456926015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463405870289544092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 916c86a7215f9d540b78a7c14318aee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2105243813176154403
 GameObject:
   m_ObjectHideFlags: 0

@@ -383,11 +383,12 @@ MonoBehaviour:
     type: 3}
   _travelPrefab: {fileID: 8831289666094317482, guid: 7247484d06566714eb12a53b568490f0,
     type: 3}
-  _poopPrefab: {fileID: 1463405870289544092, guid: 61b3ee0348331f340be4872362effe3e,
+  _poopPrefab: {fileID: -8826694212456926015, guid: 61b3ee0348331f340be4872362effe3e,
     type: 3}
   _tapAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018,
     type: 3}
   poopCnt: 0
+  cantAct: 0
   _fullnessPrefab: {fileID: 4826436235547457323, guid: aeeba42809b244d44b1bc14c43c7af50,
     type: 3}
   _cleanlinessPrefab: {fileID: 5115588028633569878, guid: 9a473ee588b5bac40af94fb7144179d6,
