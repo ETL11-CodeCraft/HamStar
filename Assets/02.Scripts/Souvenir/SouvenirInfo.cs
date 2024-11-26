@@ -17,7 +17,7 @@ public class SouvenirInfo : MonoBehaviour
 
     private void Start()
     {
-        gameObject.SetActive(false);
+        transform.parent.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -36,13 +36,15 @@ public class SouvenirInfo : MonoBehaviour
 
         _contents.localPosition = new Vector3(_contents.localPosition.x, 0);
 
-        gameObject.SetActive(true);
+        transform.parent.gameObject.SetActive(true);
 
-        
+        GameManager.instance.cantSwipe = true;
     }
 
     public void DeactiveInfo()
     {
-        gameObject.SetActive(false);
+        transform.parent.gameObject.SetActive(false);
+
+        GameManager.instance.cantSwipe = false;
     }
 }
