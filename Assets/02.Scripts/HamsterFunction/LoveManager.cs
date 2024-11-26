@@ -24,8 +24,6 @@ public class LoveManager : MonoBehaviour
 
     private Coroutine _fullClosenessCoroutine;
 
-    private GameManager _gameManager;
-
     //슬라이더
     [SerializeField] Slider _loveSlider; //슬라이더 추가
     private float _loveIncreaseAmount = 1f; //증가할 애정도의 양 
@@ -36,8 +34,6 @@ public class LoveManager : MonoBehaviour
 
     void Start()
     {
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-
         _lovePanel2.SetActive(false);   
         _lovePanel3.SetActive(false);   
         _loveSlider.gameObject.SetActive(false);
@@ -59,7 +55,7 @@ public class LoveManager : MonoBehaviour
         _dragCurrentPosition.action.performed += OnDraging;
         _dragCurrentPosition.action.canceled += OnDragEnd;
 
-        _gameManager.isGivingLove = !_gameManager.isGivingLove;
+        GameManager.instance.isGivingLove = !GameManager.instance.isGivingLove;
 
     }
     private void OnDragStart(InputAction.CallbackContext context)

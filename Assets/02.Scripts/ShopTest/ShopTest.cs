@@ -28,7 +28,7 @@ public class ShopTest : MonoBehaviour
     public void RefreshInventoryData()
     {
         _inventoryData = _dataLoader.Load<InventoryData>();
-        GameManager.coin = _inventoryData.coin;
+        GameManager.instance.coin = _inventoryData.coin;
         _seedCountText.text = $"{GetQuantityForId(0)}";
         _goldSeedCountText.text = $"{GetQuantityForId(1)}";
         _medicineText.text = $"{GetQuantityForId(2)}";
@@ -42,8 +42,8 @@ public class ShopTest : MonoBehaviour
 
     public void AddCoin()
     {
-        GameManager.coin += 10;
-        _inventoryData.coin = GameManager.coin;
+        GameManager.instance.coin += 10;
+        _inventoryData.coin = GameManager.instance.coin;
         _dataLoader.Save(_inventoryData);
         RefreshInventoryData();
     }

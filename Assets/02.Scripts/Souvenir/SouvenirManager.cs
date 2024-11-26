@@ -32,8 +32,6 @@ public class SouvenirManager : MonoBehaviour
     private int _canvasIdx = 0;
     public Action travelRefreshAction;
 
-    [SerializeField] private GameManager _gameManager;
-
 
     private void Awake()
     {
@@ -47,8 +45,6 @@ public class SouvenirManager : MonoBehaviour
         _swipeControls.Player.Enable();
         _swipeControls.Player.Touch.canceled += ProcessTouchComplete;
         _swipeControls.Player.Swipe.performed += ProcessSwipeDelta;
-
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         _screenWidth = Screen.width;
         _panelOrigin = transform.position.x;
@@ -87,7 +83,7 @@ public class SouvenirManager : MonoBehaviour
 
     public void ProcessTouchComplete(InputAction.CallbackContext context)
     {
-        if (_gameManager.isGivingLove) return;
+        if (GameManager.instance.isGivingLove) return;
 
         Debug.LogWarning($"Swipe Magnitude : {_swipeDir.magnitude}");
         if (Mathf.Abs(_swipeDir.magnitude) < _minimumSwipeMagnitude) return;

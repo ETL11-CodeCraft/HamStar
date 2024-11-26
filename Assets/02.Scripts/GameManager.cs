@@ -2,7 +2,8 @@
 
 public class GameManager : MonoBehaviour
 {
-    public static int coin = 0;
+    public static GameManager instance;
+    public int coin = 0;
     public bool isGivingLove = false;
 
     private DataLoader _dataLoader;
@@ -20,6 +21,15 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         _dataLoader = new DataLoader();
     }
 
@@ -46,8 +56,8 @@ public class GameManager : MonoBehaviour
 
     public void AddCoin()
     {
-        GameManager.coin += 10;
-        _inventoryData.coin = GameManager.coin;
+        coin += 10;
+        _inventoryData.coin = coin;
         _dataLoader.Save(_inventoryData);
         RefreshInventoryData();
     }
