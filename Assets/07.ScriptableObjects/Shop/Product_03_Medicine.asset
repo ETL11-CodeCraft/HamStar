@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d567aa2f7c88ae74b8244b907641ee81, type: 3}
   m_Name: Product_03_Medicine
   m_EditorClassIdentifier: 
-  id: 2
+  id: 10003
   productImage: {fileID: 21300000, guid: e6007981bd4c9494a9d8a83fcd5778c7, type: 3}
   productName: "\uCE58\uB8CC \uBB3C\uC57D"
   description: "\uD751\uD654 \uC0C1\uD0DC\uC758 \uD584\uC2A4\uD130\uB97C \uCE58\uB8CC\uD560
@@ -20,5 +20,4 @@ MonoBehaviour:
     \uC218\uCE58\uAC00 0\uC774 \uB429\uB2C8\uB2E4."
   type: 1
   price: 500
-  quantity: 9999
   prefab: {fileID: 0}
