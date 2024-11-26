@@ -32,6 +32,8 @@ public class LoveManager : MonoBehaviour
     //Effect
     [SerializeField] GameObject _heartEffect;
 
+    private Hamster _hamster;
+
     void Start()
     {
         _lovePanel2.SetActive(false);   
@@ -91,9 +93,15 @@ public class LoveManager : MonoBehaviour
                     if (dragVector.magnitude > 40f)
                     {
                         Debug.Log("쓰다듬기 성공 !");
-                        var hamster = hit.collider.transform.parent.GetComponent<Hamster>();
+                        var tryHamster = hit.collider.transform.parent.GetComponent<Hamster>();
 
-                        IncreaseLoveValue(hamster);
+                        if(tryHamster != null)
+                        { 
+                            _hamster = tryHamster;
+                            _hamster.cantAct = true;
+                        }
+
+                        IncreaseLoveValue(_hamster);
 
                         GameObject loveEffect = Instantiate(_heartEffect, hit.transform.position, Quaternion.identity);
 
@@ -118,6 +126,12 @@ public class LoveManager : MonoBehaviour
     {
         Debug.Log("DragEnd");
         _isDragging = false;
+        
+        if(_hamster != null)
+        {
+            _hamster.cantAct = false;
+            _hamster = null;
+        }
     }
 
     private void IncreaseLoveValue(Hamster hamster)
