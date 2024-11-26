@@ -15,12 +15,14 @@ public class LoveManager : MonoBehaviour
     [SerializeField] GameObject _lovePanel;  //애정주기 설명 버튼
     [SerializeField] GameObject _lovePanel2;  //애정주기 설명 버튼
     [SerializeField] GameObject _lovePanel3;  //애정주기 설명 버튼
-    //[SerializeField] LayerMask _HamsterLayer;  
     private bool _isActiveLoveBtn = false;  // 버튼 활성화 확인
     private List<ARRaycastHit> _hits = new List<ARRaycastHit>();
     private bool _isDragging = false;
     private Vector2 _startDragPosition;
     private float _minDragDistance = 20f;
+
+    private FeedingManager _feedingManager;
+    private PotionManager _potionManager;
 
     //슬라이더
     [SerializeField] Slider _loveSlider; //슬라이더 추가
@@ -32,6 +34,8 @@ public class LoveManager : MonoBehaviour
 
     void Start()
     {
+        _feedingManager = FindObjectOfType<FeedingManager>();
+        _potionManager = FindObjectOfType<PotionManager>();
         _lovePanel2.SetActive(false);   
         _lovePanel3.SetActive(false);   
         _loveSlider.gameObject.SetActive(false);
@@ -43,8 +47,8 @@ public class LoveManager : MonoBehaviour
 
     private void GiveLove()
     {
-        FindObjectOfType<FeedingManager>()?.SetFeedBtnInteractable(_isActiveLoveBtn);
-        FindObjectOfType<PotionManager>()?.SetFeedBtnInteractable(_isActiveLoveBtn);
+        _feedingManager?.SetFeedBtnInteractable(_isActiveLoveBtn);
+        _potionManager?.SetFeedBtnInteractable(_isActiveLoveBtn);
         _loveSlider.value = 0;
         _isActiveLoveBtn = !_isActiveLoveBtn;
         _loveSlider.gameObject.SetActive(_isActiveLoveBtn);

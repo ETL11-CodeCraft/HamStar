@@ -17,6 +17,9 @@ public class FeedingManager : MonoBehaviour
     [SerializeField] InputActionReference _dragCurrentPosition;
     [SerializeField] Camera _xrCamera;
 
+    private LoveManager _loveManager;
+    private PotionManager _potionManager;
+
     //Prefab
     [SerializeField] GameObject _sunflowerSeedPrefab;  //해바라기씨 오브젝트 
     [SerializeField] GameObject _sunflowerGoldSeedPrefab;  //해바라기씨 (특식) 오브젝트 
@@ -187,7 +190,12 @@ public class FeedingManager : MonoBehaviour
             Debug.Log("_feedBtn is null");
         }
 
-    }   
+    }
+    private void Start()
+    {
+        _loveManager = FindObjectOfType<LoveManager>();
+        _potionManager = FindObjectOfType<PotionManager>();
+    }
     private void Update()
     {
         if (!_isHamsterSpawned)
@@ -198,8 +206,8 @@ public class FeedingManager : MonoBehaviour
 
     private void OnShowOtherButton()
     {
-        FindObjectOfType<LoveManager>()?.SetFeedBtnInteractable(_isActiveFeed);
-        FindObjectOfType<PotionManager>()?.SetFeedBtnInteractable(_isActiveFeed);
+        _loveManager?.SetFeedBtnInteractable(_isActiveFeed);
+        _potionManager?.SetFeedBtnInteractable(_isActiveFeed);
 
 
         _isActiveFeed = !_isActiveFeed;
