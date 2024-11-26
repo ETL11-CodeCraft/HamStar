@@ -39,6 +39,10 @@ public class Souvenir : MonoBehaviour
         _souvenirImage = GetComponent<Image>();
         GetComponent<Image>().sprite = _lockedImage;
     }
+    private void Start()
+    {
+        _souvenirButton.onClick.AddListener(SoundManager.instance.PlayButtonSound);
+    }
     public void SetSouvenir(string name, Sprite sprite, string desc, int id)
     {
         SouvenirName = name;
