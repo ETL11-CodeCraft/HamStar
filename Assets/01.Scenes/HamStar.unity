@@ -1350,7 +1350,7 @@ GameObject:
   - component: {fileID: 299782989}
   - component: {fileID: 299782988}
   m_Layer: 5
-  m_Name: Panel-InstructionLove 3
+  m_Name: Panel-LoveFull
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1365,16 +1365,16 @@ RectTransform:
   m_GameObject: {fileID: 299782986}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.306893, y: 1.3789531, z: 0.34298888}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1332429874}
-  m_Father: {fileID: 754627562}
+  m_Father: {fileID: 1295349585}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 265, y: 52.8}
-  m_SizeDelta: {x: 409.2876, y: -16.30583}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 1.6724548, y: 5.735649}
+  m_SizeDelta: {x: 569.2876, y: 12.8967705}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &299782988
 MonoBehaviour:
@@ -4009,10 +4009,8 @@ RectTransform:
   m_LocalScale: {x: 1.5139768, y: 8.432843, z: 1.231296}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1295349585}
   - {fileID: 1467546101}
-  - {fileID: 1619927212}
-  - {fileID: 1853286839}
-  - {fileID: 299782987}
   m_Father: {fileID: 1978868239558508352}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -7391,19 +7389,22 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1295349584}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.9332404, y: 6.1153946, z: 3.5899}
+  m_LocalScale: {x: 3.258465, y: 0.7251878, z: 2.9155464}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1256417393}
   - {fileID: 1780493826}
   - {fileID: 1193807660}
-  m_Father: {fileID: 1978868239558508352}
+  - {fileID: 1619927212}
+  - {fileID: 1853286839}
+  - {fileID: 299782987}
+  m_Father: {fileID: 754627562}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 5, y: -424.0152}
+  m_AnchoredPosition: {x: 259.55045, y: 37.762756}
   m_SizeDelta: {x: 160, y: 30.7974}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1295349586
@@ -8863,16 +8864,16 @@ RectTransform:
   m_GameObject: {fileID: 1619927211}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.306893, y: 1.3789531, z: 0.34298888}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 191229588}
-  m_Father: {fileID: 754627562}
+  m_Father: {fileID: 1295349585}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 238.57562, y: -21.893188}
-  m_SizeDelta: {x: 409.2876, y: -16.30583}
+  m_AnchoredPosition: {x: -6.437027, y: -82.26276}
+  m_SizeDelta: {x: 409.2876, y: -17.10323}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1619927213
 MonoBehaviour:
@@ -10362,7 +10363,7 @@ GameObject:
   - component: {fileID: 1853286841}
   - component: {fileID: 1853286840}
   m_Layer: 5
-  m_Name: Panel-InstructionLove 2
+  m_Name: Panel-PlusLove30
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10377,16 +10378,16 @@ RectTransform:
   m_GameObject: {fileID: 1853286838}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.306893, y: 1.3789531, z: 0.34298888}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 903082732}
-  m_Father: {fileID: 754627562}
+  m_Father: {fileID: 1295349585}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 265, y: 52.8}
-  m_SizeDelta: {x: 409.2876, y: -16.30583}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 1.6724548, y: 5.235649}
+  m_SizeDelta: {x: 569.2876, y: 13.8967705}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1853286840
 MonoBehaviour:
@@ -11098,12 +11099,11 @@ MonoBehaviour:
     type: 3}
   _xrCamera: {fileID: 720088293}
   _loveBtn: {fileID: 754627564}
-  _lovePanel: {fileID: 1619927211}
-  _lovePanel2: {fileID: 1853286838}
-  _lovePanel3: {fileID: 299782986}
+  _lovePanel_Instruction: {fileID: 1619927211}
+  _lovePanel2_LovePlus30: {fileID: 1853286838}
+  _lovePanel3_LoveFull: {fileID: 299782986}
+  _heart: {fileID: 6487062584658817561, guid: 15e45cf5861c7664ca476286f079d6f6, type: 3}
   _loveSlider: {fileID: 1295349586}
-  _heartEffect: {fileID: 1294161412958620413, guid: 15e45cf5861c7664ca476286f079d6f6,
-    type: 3}
 --- !u!4 &1984913293
 Transform:
   m_ObjectHideFlags: 0
@@ -11920,7 +11920,6 @@ RectTransform:
   - {fileID: 1853972179}
   - {fileID: 1274316069}
   - {fileID: 459607713}
-  - {fileID: 1295349585}
   - {fileID: 1537389809}
   m_Father: {fileID: 551838815}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

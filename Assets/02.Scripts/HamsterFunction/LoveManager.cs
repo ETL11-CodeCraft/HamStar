@@ -12,9 +12,9 @@ public class LoveManager : MonoBehaviour
     [SerializeField] InputActionReference _dragCurrentPosition;
     [SerializeField] Camera _xrCamera;
     [SerializeField] Button _loveBtn; //애정주기 버튼
-    [SerializeField] GameObject _lovePanel;  //애정주기 설명 버튼
-    [SerializeField] GameObject _lovePanel2;  //애정주기 설명 버튼
-    [SerializeField] GameObject _lovePanel3;  //애정주기 설명 버튼
+    [SerializeField] GameObject _lovePanel_Instruction;  //패널1_ 햄스터를 쓰다듬어주세요
+    [SerializeField] GameObject _lovePanel2_LovePlus30;  //패널2_쓰다듬기 슬라이드가 다 찼을 때 (+30)
+    [SerializeField] GameObject _lovePanel3_LoveFull;  //패널3_애정도가 이미 100일 때
     private bool _isActiveLoveBtn = false;  // 버튼 활성화 확인
     private List<ARRaycastHit> _hits = new List<ARRaycastHit>();
     private bool _isDragging = false;
@@ -24,27 +24,43 @@ public class LoveManager : MonoBehaviour
     private FeedingManager _feedingManager;
     private PotionManager _potionManager;
 
+    //파티클시스템 
+    [SerializeField] private ParticleSystem _heart;
+    private ParticleSystem _heartInstance;
+
     //슬라이더
     [SerializeField] Slider _loveSlider; //슬라이더 추가
     private float _loveIncreaseAmount = 1f; //증가할 애정도의 양 
     private float _maxLoveValue = 100;
 
-    //Effect
-    [SerializeField] GameObject _heartEffect;
 
     void Start()
     {
+        //하트 파티클 생성 & stop
+        if (_heart != null)
+        {
+            _heartInstance = Instantiate(_heart,transform);
+            _heartInstance.Stop();
+        }
         _feedingManager = FindObjectOfType<FeedingManager>();
         _potionManager = FindObjectOfType<PotionManager>();
-        _lovePanel2.SetActive(false);   
-        _lovePanel3.SetActive(false);   
+        _lovePanel2_LovePlus30.SetActive(false);   
+        _lovePanel3_LoveFull.SetActive(false);   
         _loveSlider.gameObject.SetActive(false);
         _loveSlider.interactable = false;
-        _lovePanel.SetActive(false);
+        _lovePanel_Instruction.SetActive(false);
 
         _loveBtn.onClick.AddListener(GiveLove);
     }
 
+    //파티클 위치를 햄스터 위치로 설정
+    private void SetPariticlePosition(Vector3 hamsterPosition)
+    {
+        if (_heartInstance != null)
+        {
+            _heartInstance.transform.position = hamsterPosition;
+        }
+    }
     private void GiveLove()
     {
         _feedingManager?.SetFeedBtnInteractable(_isActiveLoveBtn);
@@ -52,7 +68,7 @@ public class LoveManager : MonoBehaviour
         _loveSlider.value = 0;
         _isActiveLoveBtn = !_isActiveLoveBtn;
         _loveSlider.gameObject.SetActive(_isActiveLoveBtn);
-        _lovePanel.SetActive(_isActiveLoveBtn);
+        _lovePanel_Instruction.SetActive(_isActiveLoveBtn);
         _dragCurrentPosition.action.started += OnDragStart;
         _dragCurrentPosition.action.performed += OnDraging;
         _dragCurrentPosition.action.canceled += OnDragEnd;
@@ -75,7 +91,6 @@ public class LoveManager : MonoBehaviour
         }
     }
 
-
     private void OnDraging(InputAction.CallbackContext context)
     {
         if (_isDragging)
@@ -93,18 +108,14 @@ public class LoveManager : MonoBehaviour
                         Debug.Log("쓰다듬기 성공 !");
                         IncreaseLoveValue();
 
-                        GameObject loveEffect = Instantiate(_heartEffect, hit.transform.position, Quaternion.identity);
 
-                        //이펙트 생성 후 제거
-                        ParticleSystem particleSystem = _heartEffect.GetComponent<ParticleSystem>();
-                        if (particleSystem != null)
+                        SetPariticlePosition(hit.collider.transform.position);
+                        //Particle System 재생 
+                        if (!_heartInstance.isPlaying)
                         {
-                            Destroy(loveEffect, particleSystem.main.duration + particleSystem.main.startLifetime.constantMax);
+                            _heartInstance.Play();
                         }
-                        else
-                        {
-                            Destroy(loveEffect, 3f);
-                        }
+                        
                     }
                 }
             }
@@ -116,6 +127,12 @@ public class LoveManager : MonoBehaviour
     {
         Debug.Log("DragEnd");
         _isDragging = false;
+        _heart.Stop();
+
+        if (_heartInstance != null && _heartInstance.isPlaying)
+        {
+            _heartInstance.Stop();
+        }
     }
 
     private void IncreaseLoveValue()
@@ -126,11 +143,8 @@ public class LoveManager : MonoBehaviour
         {
             _loveSlider.value = _maxLoveValue;
             Debug.Log("슬라이더 최대치 도달");
-            StartCoroutine(ShowPanel(_lovePanel2, 2f));
+            StartCoroutine(ShowPanel(_lovePanel2_LovePlus30, 2f));
 
-            //애정도가 100이상일 경우 
-            //StartCoroutine(ShowPanel(_lovePanel3, 2f));
-            
         }
     }
 
