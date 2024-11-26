@@ -125,7 +125,7 @@ public class ChestCount : MonoBehaviour
             {
                 int randomCoin = UnityEngine.Random.Range(80, 120);
                 _getCoin += randomCoin;
-                GameManager.coin += randomCoin;
+                GameManager.instance.coin += randomCoin;
                 Image image = Instantiate(_coinImage, _coinContent);
                 image.GetComponentInChildren<TextMeshProUGUI>().text = randomCoin.ToString();
             }
@@ -135,7 +135,7 @@ public class ChestCount : MonoBehaviour
             //열린 코인 상자가 다시 열리지 않도록 _pastChestCount에 저장
             _walkData.pastChestCount = _pastChestCount;
             _dataLoader.Save<WalkData>(_walkData);
-            _inventoryData.coin = GameManager.coin;
+            _inventoryData.coin = GameManager.instance.coin;
             _dataLoader.Save<InventoryData>(_inventoryData);
         }
     }
