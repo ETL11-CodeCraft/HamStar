@@ -4763,6 +4763,8 @@ MonoBehaviour:
   _goldSeedBtn: {fileID: 780338720}
   _feedPanel: {fileID: 1062540507}
   _feedPanel_darkModeWarning: {fileID: 696483793}
+  _seedCount: {fileID: 0}
+  _GoldseedCount: {fileID: 0}
   _seedBtnEventTrigger: {fileID: 506160942}
   _goldSeedBtnTrigger: {fileID: 780338723}
 --- !u!4 &700299879
@@ -13693,6 +13695,18 @@ MonoBehaviour:
       - m_Target: {fileID: 982141484}
         m_TargetAssemblyTypeName: Shop, Assembly-CSharp
         m_MethodName: CloseShop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1657405139}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlayButtonSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
