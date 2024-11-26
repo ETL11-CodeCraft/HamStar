@@ -83,6 +83,8 @@ public class SouvenirManager : MonoBehaviour
 
     public void ProcessTouchComplete(InputAction.CallbackContext context)
     {
+        if (GameManager.instance.cantSwipe) return;
+
         Debug.LogWarning($"Swipe Magnitude : {_swipeDir.magnitude}");
         if (Mathf.Abs(_swipeDir.magnitude) < _minimumSwipeMagnitude) return;
 

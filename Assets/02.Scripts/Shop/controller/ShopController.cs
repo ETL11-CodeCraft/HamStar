@@ -30,6 +30,7 @@ public class ShopController : MonoBehaviour
     public void OpenShop()
     {
         _shopCanvas.enabled = true;
+        GameManager.instance.cantSwipe = true;
         RefreshShop();
         RefeshCoin();
     }
@@ -37,6 +38,7 @@ public class ShopController : MonoBehaviour
     public void CloseShop()
     {
         _shopCanvas.enabled = false;
+        GameManager.instance.cantSwipe = false;
     }
 
     public void OpenItemPopup()
@@ -63,7 +65,7 @@ public class ShopController : MonoBehaviour
 
     private void RefeshCoin()
     {
-        _coinText.text = GameManager.coin.ToString("N0") + "C";
+        _coinText.text = GameManager.instance.coin.ToString("N0") + "C";
     }
 
     private void RefreshShop()
@@ -119,8 +121,8 @@ public class ShopController : MonoBehaviour
 
     private void Buy(Product product)
     {
-        Debug.Log($"구매=> coin: {GameManager.coin}, price: {product.price}, type: {product.type}");
-        GameManager.coin -= product.price;
+        Debug.Log($"구매=> coin: {GameManager.instance.coin}, price: {product.price}, type: {product.type}");
+        GameManager.instance.coin -= product.price;
         RefeshCoin();
 
         if (product.type == ItemType.Food)
@@ -132,7 +134,7 @@ public class ShopController : MonoBehaviour
             AddInventoryData(product.id, 1);
         }
 
-        _inventoryData.coin = GameManager.coin;
+        _inventoryData.coin = GameManager.instance.coin;
         _dataLoader.Save(_inventoryData);
 
         CloseItemPopup();

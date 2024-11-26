@@ -44,7 +44,7 @@ public class ProductController : MonoBehaviour
         {
             SoundManager.instance.PlayButtonSound();
 
-            if (GameManager.coin < _product.price)
+            if (GameManager.instance.coin < _product.price)
             {
                 PopupUI ui = _shopFailPanel.GetComponent<PopupUI>();
                 ui.Popup();

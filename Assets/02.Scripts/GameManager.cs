@@ -2,7 +2,9 @@
 
 public class GameManager : MonoBehaviour
 {
-    public static int coin = 0;
+    public static GameManager instance;
+    public int coin = 0;
+    public bool cantSwipe = false;
 
     private DataLoader _dataLoader;
     private InventoryData _inventoryData;
@@ -19,6 +21,15 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         _dataLoader = new DataLoader();
     }
 
@@ -41,14 +52,6 @@ public class GameManager : MonoBehaviour
     {
         var item = _inventoryData.quantityForProductId.Find((x) => x.productId == id);
         return item.quantity;
-    }
-
-    public void AddCoin()
-    {
-        GameManager.coin += 10;
-        _inventoryData.coin = GameManager.coin;
-        _dataLoader.Save(_inventoryData);
-        RefreshInventoryData();
     }
 
     private void RefreshPlacementData()
