@@ -5,7 +5,6 @@ public class HamsterWheel : MonoBehaviour
 {
     [SerializeField] Transform _ridingTransform;
     private Animator _wheelAnimator;
-    private Animator _hamsterAnimator;
 
     public Action TriggerEnterAction;
     public Action TriggerExitAction;
@@ -27,17 +26,7 @@ public class HamsterWheel : MonoBehaviour
 
     private void Update()
     {
-        if (_hamsterAnimator != null)
-        {
-            if (_hamsterAnimator.GetBool("isMove")) //FIXME: 햄스터 상태에 따라서 쳇바퀴 회전
-            {
-                RunWheel();
-            }
-            else
-            {
-                StopWheel();
-            }
-        }
+        //TODO: 햄스터 동작 상태에 따라 쳇바퀴 회전
     }
 
     private void OnTriggerEnter(Collider other)
@@ -71,8 +60,6 @@ public class HamsterWheel : MonoBehaviour
     public void ActivateWheel(Hamster hamster)
     {
         hamster.transform.position = _ridingTransform.position;
-        hamster.transform.Rotate(_ridingTransform.forward, 0f); //FIXME: 햄스터가 타는 방향에 따라 회전
-
-        _ridingTransform.transform.GetChild(0).gameObject.GetComponent<Rigidbody>().gameObject.SetActive(true);
+        hamster.transform.Rotate(_ridingTransform.forward, 0f); // 햄스터가 타는 방향 고정
     }
 }
