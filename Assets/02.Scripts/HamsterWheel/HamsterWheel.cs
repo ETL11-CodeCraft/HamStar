@@ -9,24 +9,9 @@ public class HamsterWheel : MonoBehaviour
     public Action TriggerEnterAction;
     public Action TriggerExitAction;
 
-    public void RunWheel()
-    {
-        _wheelAnimator.SetFloat("Speed", 1f);
-    }
-
-    public void StopWheel()
-    {
-        _wheelAnimator.SetFloat("Speed", 0f);
-    }
-
     private void Awake()
     {
         _wheelAnimator = GetComponent<Animator>();
-    }
-
-    private void Update()
-    {
-        //TODO: 햄스터 동작 상태에 따라 쳇바퀴 회전
     }
 
     private void OnTriggerEnter(Collider other)
@@ -57,14 +42,22 @@ public class HamsterWheel : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// 햄스터가 쳇바퀴를 탈 때 호출
+    /// </summary>
     public void ActivateWheel(Hamster hamster)
     {
         hamster.transform.position = _ridingTransform.position;
         hamster.transform.Rotate(_ridingTransform.forward, 0f); // 햄스터가 타는 방향 고정
+
+        _wheelAnimator.SetFloat("Speed", 1f);
     }
 
+    /// <summary>
+    /// 햄스터가 쳇바퀴에서 내릴 때 호출
+    /// </summary>
     public void DeactiveWheel()
     {
-        //햄스터가 쳇바퀴에서 내리면 실행
+        _wheelAnimator.SetFloat("Speed", 0f);
     }
 }
