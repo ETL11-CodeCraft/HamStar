@@ -26,7 +26,7 @@ public class SouvenirManager : MonoBehaviour
 
     [SerializeField] private Transform _canvasTransform;
     private SwipeControls _swipeControls;
-    private float _minimumSwipeMagnitude = 10f;
+    private float _minimumSwipeMagnitude = 50f;
     private Vector2 _swipeDir;
     private float _canvasOrigin;
     private int _canvasIdx = 0;
