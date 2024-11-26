@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class TravelData
 {
-    public string travelStartTime;  //¿©ÇàÀ» ½ÃÀÛÇÒ ½Ã°£
-    public string travelEndTime;    //¿©ÇàÀÌ ³¡³ª°í µ¹¾Æ¿Ã ½Ã°£
+    public string travelStartTime;  //ì—¬í–‰ì„ ì‹œì‘í•  ì‹œê°„
+    public string travelEndTime;    //ì—¬í–‰ì´ ëë‚˜ê³  ëŒì•„ì˜¬ ì‹œê°„
 
     public TravelData()
     {
@@ -18,7 +18,7 @@ public class TravelData
 
 public class WalkData
 {
-    public int pastChestCount;   //¿ÀÇÂµÇÁö ¾ÊÀ» º¸¹°»óÀÚÀÇ ¼ö
+    public int pastChestCount;   //ì˜¤í”ˆë˜ì§€ ì•Šì„ ë³´ë¬¼ìƒìì˜ ìˆ˜
 
     public WalkData() 
     {
@@ -34,15 +34,16 @@ public class SouvenirData
 }
 
 [System.Serializable]
-public struct inventoryItem
+public struct InventoryItem
 {
     public int productId;
     public int quantity;
 }
+
 public class InventoryData
 {
     public int coin = 300;
-    public List<inventoryItem> quantityForProductId = new List<inventoryItem>();
+    public List<InventoryItem> quantityForProductId = new List<InventoryItem>();
 
     public InventoryData() { }
 }

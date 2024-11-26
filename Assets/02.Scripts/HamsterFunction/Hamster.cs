@@ -330,6 +330,8 @@ public class Hamster : MonoBehaviour
                                         _seeds.Remove(_currentSeed);
                                         Destroy(_currentSeed);
 
+                                        fullness += 30;
+
                                         _currentSeed = null;
                                         _eatElapse = 0;
 
@@ -555,6 +557,7 @@ public class Hamster : MonoBehaviour
         {
             collision.gameObject.SetActive(false);
             GameObject healingEffect = Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
+            isDarken = false;
 
 
             //이펙트 생성 후 제거
@@ -591,7 +594,14 @@ public class Hamster : MonoBehaviour
         {
             //임시 감소 수치
             fullness -= 2;
-            cleanliness -= poopCnt * 1;
+            if(poopCnt == 0)
+            {
+                cleanliness += 2;
+            }
+            else
+            {
+                cleanliness -= poopCnt * 1;
+            }
             closeness -= 2;
 
             var deltaStress = (4 - fullness / 25) + (4 - cleanliness / 25) + (4 - closeness / 25);
