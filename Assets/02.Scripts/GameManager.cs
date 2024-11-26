@@ -54,14 +54,6 @@ public class GameManager : MonoBehaviour
         return item.quantity;
     }
 
-    public void AddCoin()
-    {
-        coin += 10;
-        _inventoryData.coin = coin;
-        _dataLoader.Save(_inventoryData);
-        RefreshInventoryData();
-    }
-
     private void RefreshPlacementData()
     {
         // 쳇바퀴 배치 정보 로드
