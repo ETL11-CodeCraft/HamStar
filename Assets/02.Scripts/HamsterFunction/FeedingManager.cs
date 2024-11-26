@@ -10,12 +10,16 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem.EnhancedTouch;
 using System;
 using UnityEngine.XR.Interaction.Toolkit.AR;
+using System.Collections;
 
 public class FeedingManager : MonoBehaviour
 {
     [SerializeField] ARRaycastManager _arRaycastManager;
     [SerializeField] InputActionReference _dragCurrentPosition;
     [SerializeField] Camera _xrCamera;
+
+    private LoveManager _loveManager;
+    private PotionManager _potionManager;
 
     //Prefab
     [SerializeField] GameObject _sunflowerSeedPrefab;  //해바라기씨 오브젝트 
@@ -28,7 +32,9 @@ public class FeedingManager : MonoBehaviour
     [SerializeField] Button _seedBtn; //씨앗 버튼
     [SerializeField] Button _goldSeedBtn; //골드씨앗 버튼
 
+    //Panel
     [SerializeField] GameObject _feedPanel; //먹이 설명 패널
+    [SerializeField] GameObject _feedPanel_darkModeWarning;
 
     //EventTrigger
     [SerializeField] EventTrigger _seedBtnEventTrigger;
@@ -44,10 +50,10 @@ public class FeedingManager : MonoBehaviour
     GameObject _playerObject; 
     private List<ARRaycastHit> _hits = new List<ARRaycastHit>();
 
-
     private void Awake()
     {
         _feedPanel.SetActive(false);    // Feed Instruction panel 
+        _feedPanel_darkModeWarning.SetActive(false);
 
         //일반 먹이 PointerDown 이벤트트리거
         EventTrigger.Entry onPointerDownEntry_seed = new EventTrigger.Entry();
@@ -82,6 +88,11 @@ public class FeedingManager : MonoBehaviour
                     //seed 프리팹 생성시, Seeds리스트에 추가 
                     hamsterScript.AddSeed(_spawnObject);
                     Debug.Log("Seed리스트에 추가 seed count :");
+                }
+
+                if (hamsterScript.isDarken)
+                {
+                    StartCoroutine(ShowPanel(_feedPanel_darkModeWarning, 2f));
                 }
             }
         });
@@ -187,7 +198,12 @@ public class FeedingManager : MonoBehaviour
             Debug.Log("_feedBtn is null");
         }
 
-    }   
+    }
+    private void Start()
+    {
+        _loveManager = FindObjectOfType<LoveManager>();
+        _potionManager = FindObjectOfType<PotionManager>();
+    }
     private void Update()
     {
         if (!_isHamsterSpawned)
@@ -198,8 +214,8 @@ public class FeedingManager : MonoBehaviour
 
     private void OnShowOtherButton()
     {
-        FindObjectOfType<LoveManager>()?.SetFeedBtnInteractable(_isActiveFeed);
-        FindObjectOfType<PotionManager>()?.SetFeedBtnInteractable(_isActiveFeed);
+        _loveManager?.SetFeedBtnInteractable(_isActiveFeed);
+        _potionManager?.SetFeedBtnInteractable(_isActiveFeed);
 
 
         _isActiveFeed = !_isActiveFeed;
@@ -239,5 +255,21 @@ public class FeedingManager : MonoBehaviour
         {
             _feedBtn.interactable = isInteractable;
         }
-    }    
+    }
+
+    IEnumerator ShowPanel(GameObject gameObject, float seconds)
+    {
+        if (gameObject == null)
+        {
+            Debug.Log("gameObj is null");
+            yield break;
+        }
+        gameObject.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+
+        if (gameObject != null)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }
