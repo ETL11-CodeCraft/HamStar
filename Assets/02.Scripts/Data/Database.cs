@@ -34,15 +34,16 @@ public class SouvenirData
 }
 
 [System.Serializable]
-public struct inventoryItem
+public struct InventoryItem
 {
     public int productId;
     public int quantity;
 }
+
 public class InventoryData
 {
     public int coin;
-    public List<inventoryItem> quantityForProductId = new List<inventoryItem>();
+    public List<InventoryItem> quantityForProductId = new List<InventoryItem>();
 
     public InventoryData() { }
 }
