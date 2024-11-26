@@ -845,7 +845,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6e86b6d8366a9746b73999c8acf6c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chestCountText: {fileID: 432327251}
+  _chestCountText: {fileID: 0}
+  _getCoinText: {fileID: 0}
   _coinImage: {fileID: 3778738701264607887, guid: 0e04a3a7999dff0438d64163350a4251,
     type: 3}
   _coinContent: {fileID: 1242759428}
@@ -1082,8 +1083,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -11199,8 +11200,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -11411,6 +11412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25118b1efc08a3342a73a6ad3570331a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coin: 0
+  cantSwipe: 0
   _productData: {fileID: 11400000, guid: f5dd48de6bf09b544bfb544a1bbdb119, type: 2}
 --- !u!4 &1657405138
 Transform:
@@ -13417,7 +13420,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 2.79
+  m_PixelsPerUnitMultiplier: 1.5
 --- !u!222 &1987974196
 CanvasRenderer:
   m_ObjectHideFlags: 0
