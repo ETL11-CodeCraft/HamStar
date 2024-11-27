@@ -118,6 +118,7 @@ public class ChestCount : MonoBehaviour
 
         if (_currentChestCount > 0)
         {
+            GameManager.instance.cantSwipe = true;
             SoundManager.instance.PlayButtonSound();
             _chestOpenButton.enabled = false;
             _chestOpenButton.gameObject.GetComponent<Image>().color = Color.gray;
@@ -143,6 +144,7 @@ public class ChestCount : MonoBehaviour
     //오픈한 코인 ui를 닫는 함수(버튼)
     public void ChestClose()
     {
+        GameManager.instance.cantSwipe = false;
         SoundManager.instance.PlayButtonSound();
         ResetChestOpen();
         _chestOpenBackGround.SetActive(false);
