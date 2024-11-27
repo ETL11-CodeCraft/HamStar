@@ -69,7 +69,7 @@ public class LoveManager : MonoBehaviour
     private void GiveLove()
     {
         _feedingManager?.SetFeedBtnInteractable(_isActiveLoveBtn);
-        _potionManager?.SetFeedBtnInteractable(_isActiveLoveBtn);
+        _potionManager?.SetPotionBtnInteractable(_isActiveLoveBtn);
         _loveSlider.value = 0;
         _isActiveLoveBtn = !_isActiveLoveBtn;
         _loveSlider.gameObject.SetActive(_isActiveLoveBtn);

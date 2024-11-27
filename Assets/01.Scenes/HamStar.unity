@@ -4763,8 +4763,6 @@ MonoBehaviour:
   _goldSeedBtn: {fileID: 780338720}
   _feedPanel: {fileID: 1062540507}
   _feedPanel_darkModeWarning: {fileID: 696483793}
-  _seedCount: {fileID: 0}
-  _GoldseedCount: {fileID: 0}
   _seedBtnEventTrigger: {fileID: 506160942}
   _goldSeedBtnTrigger: {fileID: 780338723}
 --- !u!4 &700299879
@@ -7090,12 +7088,12 @@ GameObject:
   - component: {fileID: 909835283}
   - component: {fileID: 909835284}
   m_Layer: 0
-  m_Name: 
+  m_Name: DescriptionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &909835282
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12089,6 +12087,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coin: 0
   cantSwipe: 0
+  _seedCount: {fileID: 135678760}
+  _goldseedCount: {fileID: 222854062}
+  _potionCount: {fileID: 632329319}
   _productData: {fileID: 11400000, guid: f5dd48de6bf09b544bfb544a1bbdb119, type: 2}
 --- !u!4 &1657405138
 Transform:
