@@ -31,6 +31,7 @@ public class Travel : MonoBehaviour
         {
             _souvenirManager.travelRefreshAction += RefreshTravel;
         }
+
         RefreshTravel();
     }
 
@@ -62,8 +63,6 @@ public class Travel : MonoBehaviour
             {
                 hamster.gameObject.SetActive(true);
             }
-
-            Debug.Log("도착");
         }
 
         _startTime = DateTime.ParseExact(_travelData.travelStartTime, "yyyy-MM-dd HH:mm:ss", null);
@@ -96,7 +95,7 @@ public class Travel : MonoBehaviour
         GameObject textObj = _remainTravelText.transform.parent.gameObject;
         //남은 시간 표시
         var remainTime = _endTime - DateTime.Now;
-        _remainTravelText.text = $"{remainTime.Hours}h {remainTime.Minutes}m left";
+        _remainTravelText.text = $"{remainTime.Hours}시간 {remainTime.Minutes}분 남았습니다";
         textObj.SetActive(true);
         //3초뒤 사라지게 하기
 
