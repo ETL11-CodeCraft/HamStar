@@ -601,7 +601,7 @@ public class Hamster : MonoBehaviour
     private void OnTap(InputAction.CallbackContext context)
     {
         Debug.Log("TAP");
-        Vector2 tapPosition = Mouse.current.position.ReadValue();
+        Vector2 tapPosition = context.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(tapPosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
