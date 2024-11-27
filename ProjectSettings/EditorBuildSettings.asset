@@ -6,20 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/01.Scenes/SouvenirScene.unity
-    guid: ca1a44000776084489ca5992e241f4ce
-  - enabled: 0
-    path: Assets/01.Scenes/SampleScene.unity
-    guid: 4755b35b590504809a7525fd2109c2e2
-  - enabled: 0
-    path: Assets/01.Scenes/HamstarScene_.unity
-    guid: a31648b0ed9a4b54dba28c3887c51eb9
-  - enabled: 1
     path: Assets/01.Scenes/HamStar.unity
     guid: 51e6b88190a400b4a92a50eb1b8925ad
-  - enabled: 1
-    path: Assets/01.Scenes/WalkScene.unity
-    guid: 5b020dab485eb614096dda49a5ae722b
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6ee72d15cf39dd748a13eac57397b9af,
       type: 2}
