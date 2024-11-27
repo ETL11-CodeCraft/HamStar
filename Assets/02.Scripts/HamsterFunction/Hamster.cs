@@ -241,6 +241,8 @@ public class Hamster : MonoBehaviour
         _closenessSlider = Instantiate(_closenessPrefab, hamsterPanel.transform).GetComponent<Slider>();
         _stressSlider = Instantiate(_stressPrefab, hamsterPanel.transform).GetComponent<Slider>();
         _darkenMark = Instantiate(_darkenPrefab, hamsterPanel.transform);
+        _darkenMark.SetActive(false);
+
         _fullnessColor = _fullnessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         _cleanlinessColor = _cleanlinessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         _closenessColor = _closenessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
