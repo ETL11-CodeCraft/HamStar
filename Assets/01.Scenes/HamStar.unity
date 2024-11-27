@@ -12121,6 +12121,12 @@ MonoBehaviour:
   sfxClipList:
   - name: ButtonClick
     clip: {fileID: 8300000, guid: f30c4840dbfeeff42a9c918d7ae2edd7, type: 3}
+  - name: GiveLove
+    clip: {fileID: 8300000, guid: f5262b946b6e61947ae5527688f5618d, type: 3}
+  - name: GivePotion
+    clip: {fileID: 8300000, guid: 7910b1f3d7b472249a8152ecdac787b9, type: 3}
+  - name: HamsterWheel
+    clip: {fileID: 8300000, guid: cda32d8fca1191e4db958d4be7ebd40b, type: 3}
 --- !u!82 &1657405140
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12133,7 +12139,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -12230,10 +12236,10 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
