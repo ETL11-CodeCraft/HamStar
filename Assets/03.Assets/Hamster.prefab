@@ -385,7 +385,7 @@ MonoBehaviour:
     type: 3}
   _poopPrefab: {fileID: -8826694212456926015, guid: 61b3ee0348331f340be4872362effe3e,
     type: 3}
-  _tapAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  _tapAction: {fileID: 2494954584338170553, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
   poopCnt: 0
   cantAct: 0
