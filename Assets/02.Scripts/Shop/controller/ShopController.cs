@@ -180,6 +180,7 @@ public class ShopController : MonoBehaviour
 
     private void AddInventoryData(int productId, int added = 1)
     {
+        _inventoryData = _dataLoader.Load<InventoryData>();
         var list = _inventoryData.quantityForProductId;
 
         for (int i = 0; i < list.Count; i++)
