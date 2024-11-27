@@ -35,7 +35,7 @@ public class LoveManager : MonoBehaviour
     private float _loveIncreaseAmount = 1f; //증가할 애정도의 양 
     private float _maxLoveValue = 100;
 
-
+    private bool _hasPlayedSFX = false;
     private Hamster _hamster;
 
     void Start()
@@ -148,12 +148,20 @@ public class LoveManager : MonoBehaviour
         {
             _heartInstance.Stop();
         }
-        
+
         if(_hamster != null)
         {
             _hamster.cantAct = false;
             _hamster = null;
         }
+
+        if (!_hasPlayedSFX)
+        {
+            SoundManager.instance.PlaySFX("GiveLove");
+            _hasPlayedSFX = true;
+        }
+
+        _hasPlayedSFX = false;
     }
 
     private void IncreaseLoveValue(Hamster hamster)
