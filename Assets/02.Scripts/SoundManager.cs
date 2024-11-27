@@ -41,6 +41,8 @@ public class SoundManager : MonoBehaviour
         sfxSource = GetComponents<AudioSource>()[1];
 
         bgmSource.volume = 0.3f;
+        
+        PlayBGM("Chill");
     }
 
     void InitializeAudioClips()

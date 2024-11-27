@@ -51,6 +51,8 @@ public class HamsterWheel : MonoBehaviour
         hamster.transform.Rotate(_ridingTransform.forward, 0f); // 햄스터가 타는 방향 고정
 
         _wheelAnimator.SetFloat("Speed", 1f);
+        
+        SoundManager.instance.PlaySFX("HamsterWheel");
     }
 
     /// <summary>
@@ -59,5 +61,6 @@ public class HamsterWheel : MonoBehaviour
     public void DeactiveWheel()
     {
         _wheelAnimator.SetFloat("Speed", 0f);
+        SoundManager.instance.StopSFX();
     }
 }
