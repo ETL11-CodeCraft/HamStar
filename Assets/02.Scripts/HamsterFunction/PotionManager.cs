@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -40,6 +41,8 @@ public class PotionManager : MonoBehaviour
             _rectTransform.position = TouchPosition;
 
             _potionPanel.SetActive(true);
+            GameManager.instance.ReduceCount(10003);
+
         });
         _potionBtnTrigger.triggers.Add(onPointerDownEntry_Potion);
 
@@ -81,15 +84,44 @@ public class PotionManager : MonoBehaviour
             }
 
             _potionPanel.SetActive(false);
+            GameManager.instance.UpdateCountUI(10003, GameManager.instance._potionCount);
+            //GameManager.instance.RefreshInventoryData();
+
         });
         _potionBtnTrigger.triggers.Add(OnPointerUpEntry_potion);
     }
+    private IEnumerator WaitForGameManager()
+    {
+        // GameManager.instance와 _potionCount가 초기화될 때까지 대기
+        while (GameManager.instance == null || GameManager.instance._potionCount == null)
+        {
+            yield return null; // 다음 프레임까지 대기
+        }
 
-    public void SetFeedBtnInteractable(bool isInteractable)
+        Debug.Log("GameManager and _potionCount are ready!");
+
+        yield return new WaitForSeconds(0.1f);
+
+        GameManager.instance.UpdateCountUI(10003, GameManager.instance._potionCount);
+    }
+
+    private void Start()
+    {
+        StartCoroutine(WaitForGameManager());
+    }
+
+    public void SetPotionBtnInteractable(bool isInteractable)
     {
         if (_potionBtn != null)
         {
             _potionBtn.interactable = isInteractable;
+        }
+    }
+    public void SetPotionEventTriggerActive(bool isActive)
+    {
+        if (_potionBtnTrigger != null)
+        {
+            _potionBtnTrigger.enabled = isActive;
         }
     }
 }
