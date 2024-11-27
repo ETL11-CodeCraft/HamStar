@@ -32,9 +32,9 @@ public class Hamster : MonoBehaviour
     private float _rideElapse = 0;
     private const float RIDE_DURATION = 3f;
     [Header("Poop")]
-    [SerializeField] private GameObject _poopPrefab;
+    [SerializeField] private Poop _poopPrefab;
     [SerializeField] private InputActionReference _tapAction;
-    private List<GameObject> _poopList = new List<GameObject>(4);
+    private List<Poop> _poopList = new List<Poop>(4);
     public int poopCnt = 0;
     private int _maxPoopCnt = 4;
 
@@ -513,11 +513,10 @@ public class Hamster : MonoBehaviour
         for(int i=0;i<_maxPoopCnt;i++)
         {
             var poop = Instantiate(_poopPrefab);
-            poop.SetActive(false);
+            poop.gameObject.SetActive(false);
+            poop.onFallObject += RemovePoop;
             _poopList.Add(poop);
         }
-
-        
     }
 
     void Update()
@@ -549,6 +548,12 @@ public class Hamster : MonoBehaviour
     {
         if (_seeds.Count > 0)
         {
+            if (_seeds[0] == null)
+            {
+                _seeds.RemoveAt(0);
+                AssignNextSeed();
+                return;
+            }
             _currentSeed = _seeds[0];
         }
         else
@@ -564,7 +569,7 @@ public class Hamster : MonoBehaviour
             if(poop.gameObject.activeSelf == false)
             {
                 poop.transform.position = transform.position;
-                poop.SetActive(true);
+                poop.gameObject.SetActive(true);
                 poopCnt++;
                 return;
             }
@@ -602,10 +607,15 @@ public class Hamster : MonoBehaviour
         {
             if (hit.collider.CompareTag("Poop"))
             {
-                poopCnt--;
-                hit.collider.gameObject.SetActive(false);
+                RemovePoop(hit.collider.gameObject);
             }
         }
+    }
+
+    public void RemovePoop(GameObject poop)
+    {
+        poopCnt--;
+        poop.SetActive(false);
     }
 
     IEnumerator HamsterStatUpdate()
