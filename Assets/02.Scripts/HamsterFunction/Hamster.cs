@@ -29,6 +29,8 @@ public class Hamster : MonoBehaviour
     private int _destFlag = -1;             // -1 : 이전 행동이 완료됨  0 : 목적지가 랜덤좌표   1 : 목적지가 쳇바퀴
     private float _rideElapse = 0;
     private const float RIDE_DURATION = 3f;
+    private float _footSoundElapse = 0;
+    private const float FOOT_SOUND_CYCLE = 0.3f;
     [Header("Poop")]
     [SerializeField] private Poop _poopPrefab;
     [SerializeField] private InputActionReference _tapAction;
@@ -311,7 +313,7 @@ public class Hamster : MonoBehaviour
                             {
                                 if (_currentSeed)
                                 {
-                                    if (Vector3.Distance(transform.position, _currentSeed.transform.position) <= 0.1f)
+                                    if (Vector3.Distance(transform.position, _currentSeed.transform.position) <= 0.15f)
                                     {
                                         return NodeState.Success;
                                     }
@@ -325,6 +327,12 @@ public class Hamster : MonoBehaviour
                                     _animator.SetBool("isIdle", false);
                                     _animator.SetBool("isMove", false);
                                     _animator.SetBool("isEat", true);
+
+                                    if(_eatElapse == 0)
+                                    {
+                                        //먹기 시작할 때 한번만 호출
+                                        SoundManager.instance.PlaySFX("Eat");
+                                    }
 
                                     _eatElapse += Time.deltaTime;
                                     if (_eatElapse >= SEED_EATING_DURATION)
@@ -356,6 +364,8 @@ public class Hamster : MonoBehaviour
                                 Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
                                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
                                 gameObject.transform.position += direction * _moveSpeed * Time.deltaTime;
+
+                                StepSound();
 
                                 _animator.SetBool("isIdle", false);
                                 _animator.SetBool("isEat", false);
@@ -451,11 +461,6 @@ public class Hamster : MonoBehaviour
                                 _animator.SetBool("isEat", false);
                                 _animator.SetBool("isMove", true);
 
-                                Vector3 direction = (_destination - gameObject.transform.position).normalized;
-                                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-                                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-                                gameObject.transform.position += direction * _moveSpeed * Time.deltaTime;
-
                                 //목적지에 도착
                                 if ((_destination - gameObject.transform.position).magnitude < 0.1f)
                                 {
@@ -467,6 +472,13 @@ public class Hamster : MonoBehaviour
                                     _destFlag = -1;
                                     return NodeState.Success;
                                 }
+
+                                Vector3 direction = (_destination - gameObject.transform.position).normalized;
+                                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                                gameObject.transform.position += direction * _moveSpeed * Time.deltaTime;
+
+                                StepSound();
                                 //가는 길에 낭떠러지를 만남
                                 if(!Physics.Raycast(transform.position + (transform.forward * 0.1f), Vector3.down,5f))
                                 {
@@ -567,6 +579,16 @@ public class Hamster : MonoBehaviour
                 poopCnt++;
                 return;
             }
+        }
+    }
+
+    public void StepSound()
+    {
+        _footSoundElapse += Time.deltaTime;
+        if(_footSoundElapse >= FOOT_SOUND_CYCLE)
+        {
+            SoundManager.instance.PlaySFX("StepSound");
+            _footSoundElapse = 0;
         }
     }
 
