@@ -92,6 +92,8 @@ public class Hamster : MonoBehaviour
             {
                 _fullnessColor.color = Color.red;
             }
+
+            SaveWellbeingStat();
         }
     }
 
@@ -122,6 +124,8 @@ public class Hamster : MonoBehaviour
             {
                 _cleanlinessColor.color = Color.red;
             }
+
+            SaveWellbeingStat();
         }
     }
 
@@ -152,6 +156,8 @@ public class Hamster : MonoBehaviour
             {
                 _closenessColor.color = Color.red;
             }
+
+            SaveWellbeingStat();
         }
     }
 
@@ -165,6 +171,11 @@ public class Hamster : MonoBehaviour
         {
             _stress = Mathf.Clamp(value, 0, 100);
             _stressSlider.value = _stress;
+
+            if(_stress == 100)
+            {
+                isDarken = true;
+            }
 
             if (_stress >= 75)
             {
@@ -182,6 +193,8 @@ public class Hamster : MonoBehaviour
             {
                 _stressColor.color = Color.blue;
             }
+
+            SaveWellbeingStat();
         }
     }
 
@@ -223,14 +236,13 @@ public class Hamster : MonoBehaviour
         //추후 수정예정
         var hamsterPanel = GameObject.Find("HamsterPanel");
 
-        _travelManager = Instantiate(_travelPrefab, hamsterPanel.transform);
-        _travelManager.hamster = this;
-
         _fullnessSlider = Instantiate(_fullnessPrefab, hamsterPanel.transform).GetComponent<Slider>();
         _cleanlinessSlider = Instantiate(_cleanlinessPrefab, hamsterPanel.transform).GetComponent<Slider>();
         _closenessSlider = Instantiate(_closenessPrefab, hamsterPanel.transform).GetComponent<Slider>();
         _stressSlider = Instantiate(_stressPrefab, hamsterPanel.transform).GetComponent<Slider>();
         _darkenMark = Instantiate(_darkenPrefab, hamsterPanel.transform);
+        _darkenMark.SetActive(false);
+
         _fullnessColor = _fullnessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         _cleanlinessColor = _cleanlinessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         _closenessColor = _closenessSlider.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
@@ -241,29 +253,13 @@ public class Hamster : MonoBehaviour
         _closenessSlider.maxValue = 100;
         _stressSlider.maxValue = 100;
 
-        var recentTime = DateTime.ParseExact(_hamsterStatData.recentChangedDate, "yyyy-MM-dd HH:mm:ss", null);
-        var deltaTime = DateTime.Now - recentTime;
+        fullness = _hamsterStatData.fullness;
+        cleanliness = _hamsterStatData.cleanliness;
+        closeness = _hamsterStatData.closeness;
+        stress = _hamsterStatData.stress;
 
-        fullness = _hamsterStatData.fullness - ((int)deltaTime.TotalMinutes / 30 * 2);
-        cleanliness = _hamsterStatData.cleanliness - ((int)deltaTime.TotalMinutes / 30 * 2);
-        closeness = _hamsterStatData.closeness - ((int)deltaTime.TotalMinutes / 30 * 2);
-        var deltaStress = (4 - (int)deltaTime.TotalMinutes / 30 * 2) * 3;
-        stress += _hamsterStatData.stress + deltaStress;
-
-        if (stress >= 100)
-        {
-            if(_darkenMark)
-            {
-                _darkenMark.SetActive(true);
-            }
-        }
-        else
-        {
-            if(_darkenMark)
-            {
-                _darkenMark.SetActive(false);
-            }
-        }
+        _travelManager = Instantiate(_travelPrefab, hamsterPanel.transform);
+        _travelManager.hamster = this;
 
         _tapAction.action.performed += OnTap;
 
@@ -583,7 +579,7 @@ public class Hamster : MonoBehaviour
             collision.gameObject.SetActive(false);
             GameObject healingEffect = Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
             isDarken = false;
-
+            SoundManager.instance.PlaySFX("GivePotion");
 
             //이펙트 생성 후 제거
             ParticleSystem particleSystem = _healingEffect.GetComponent<ParticleSystem>();
@@ -618,32 +614,55 @@ public class Hamster : MonoBehaviour
         poop.SetActive(false);
     }
 
+    public void SaveWellbeingStat()
+    {
+        _hamsterStatData.fullness = fullness;
+        _hamsterStatData.cleanliness = cleanliness;
+        _hamsterStatData.closeness = closeness;
+        _hamsterStatData.stress = stress;
+        _hamsterStatData.recentChangedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+        _dataLoader.Save(_hamsterStatData);
+    }
+
+    public void InitStat()
+    {
+        if (_travelManager.isTraveling) return;
+
+        var recentTime = DateTime.ParseExact(_hamsterStatData.recentChangedDate, "yyyy-MM-dd HH:mm:ss", null);
+        var deltaTime = DateTime.Now - recentTime;
+
+        //미접속중 변화하는 스텟
+        fullness = _hamsterStatData.fullness - ((int)deltaTime.TotalMinutes / 30 * 2);
+        cleanliness = _hamsterStatData.cleanliness - ((int)deltaTime.TotalMinutes / 30 * 2);
+        closeness = _hamsterStatData.closeness - ((int)deltaTime.TotalMinutes / 30 * 2);
+        var deltaStress = ((int)deltaTime.TotalMinutes / 30 * 2);
+        stress += _hamsterStatData.stress + deltaStress;
+    }
+
     IEnumerator HamsterStatUpdate()
     {
         while (true)
         {
-            //임시 감소 수치
-            fullness -= 2;
-            if(poopCnt == 0)
+            if(_travelManager && _travelManager.isTraveling)
             {
-                cleanliness += 2;
+                //임시 감소 수치
+                fullness -= 2;
+                if (poopCnt == 0)
+                {
+                    cleanliness += 2;
+                }
+                else
+                {
+                    cleanliness -= poopCnt * 1;
+                }
+                closeness -= 2;
+
+                var deltaStress = (4 - fullness / 25) + (4 - cleanliness / 25) + (4 - closeness / 25);
+                stress += deltaStress;
             }
-            else
-            {
-                cleanliness -= poopCnt * 1;
-            }
-            closeness -= 2;
 
-            var deltaStress = (4 - fullness / 25) + (4 - cleanliness / 25) + (4 - closeness / 25);
-            stress += deltaStress;
-
-            _hamsterStatData.fullness = fullness;
-            _hamsterStatData.cleanliness = cleanliness;
-            _hamsterStatData.closeness = closeness;
-            _hamsterStatData.stress = stress;
-            _hamsterStatData.recentChangedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
-            _dataLoader.Save(_hamsterStatData);
+            SaveWellbeingStat();
 
             yield return new WaitForSeconds(_statRefreshInterval);
         }

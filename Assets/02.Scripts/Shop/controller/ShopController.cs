@@ -66,6 +66,9 @@ public class ShopController : MonoBehaviour
     private void RefeshCoin()
     {
         _coinText.text = GameManager.instance.coin.ToString("N0") + "C";
+        //GameManager.instance.UpdateCountUI(10001, GameManager.instance._seedCount);
+        //GameManager.instance.UpdateCountUI(10002, GameManager.instance._goldseedCount);
+        //GameManager.instance.UpdateCountUI(10003, GameManager.instance._potionCount);
     }
 
     private void RefreshShop()
@@ -137,6 +140,20 @@ public class ShopController : MonoBehaviour
         _inventoryData.coin = GameManager.instance.coin;
         _dataLoader.Save(_inventoryData);
 
+        // GameManager를 통해 UI 업데이트
+        if (product.id == 10001) // 씨앗 ID
+        {
+            GameManager.instance.UpdateCountUI(10001, GameManager.instance._seedCount);
+        }
+        else if (product.id == 10002) // 골드 씨앗 ID
+        {
+            GameManager.instance.UpdateCountUI(10002, GameManager.instance._goldseedCount);
+        }
+        else if (product.id == 10003) // 물약 ID
+        {
+            GameManager.instance.UpdateCountUI(10003, GameManager.instance._potionCount);
+        }
+
         CloseItemPopup();
     }
 
@@ -163,6 +180,7 @@ public class ShopController : MonoBehaviour
 
     private void AddInventoryData(int productId, int added = 1)
     {
+        _inventoryData = _dataLoader.Load<InventoryData>();
         var list = _inventoryData.quantityForProductId;
 
         for (int i = 0; i < list.Count; i++)

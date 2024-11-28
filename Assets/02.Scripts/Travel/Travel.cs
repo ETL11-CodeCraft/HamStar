@@ -11,7 +11,7 @@ public class Travel : MonoBehaviour
     private SouvenirManager _souvenirManager;
     DateTime _startTime;
     DateTime _endTime;
-    bool _isTraveling = false;
+    public bool isTraveling = false;
     Coroutine _HideCoroutine;
     private DataLoader _dataLoader;
     private TravelData _travelData;
@@ -33,6 +33,8 @@ public class Travel : MonoBehaviour
         }
 
         RefreshTravel();
+
+        hamster.InitStat();
     }
 
     /// <summary>
@@ -40,10 +42,30 @@ public class Travel : MonoBehaviour
     /// </summary>
     public void RefreshTravel()
     {
+        //흑화 상태라면 여행시간 재설정
+        if (hamster.isDarken)
+        {
+            isTraveling = false;
+
+            var rand = UnityEngine.Random.Range(-3.5f, 3.5f);
+            _travelData.travelStartTime = DateTime.Now.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss");
+            _travelData.travelEndTime = DateTime.Now.AddHours(16 + rand).ToString("yyyy-MM-dd HH:mm:ss");
+
+            //재설정 된 시간 저장
+            _dataLoader.Save(_travelData);
+
+            if (hamster)
+            {
+                hamster.gameObject.SetActive(true);
+            }
+
+            return;
+        }
+
         _endTime = DateTime.ParseExact(_travelData.travelEndTime, "yyyy-MM-dd HH:mm:ss", null);
         if (_endTime < DateTime.Now)
         {
-            _isTraveling = false;
+            isTraveling = false;
             //도착
             //출발 시간 및 도착시간 재설정
             var rand = UnityEngine.Random.Range(-3.5f, 3.5f);
@@ -66,24 +88,20 @@ public class Travel : MonoBehaviour
         }
 
         _startTime = DateTime.ParseExact(_travelData.travelStartTime, "yyyy-MM-dd HH:mm:ss", null);
-        if (_isTraveling == false && _startTime < DateTime.Now)
+        if (isTraveling == false && _startTime < DateTime.Now)
         {
-            //흑화 상태라면 여행을 출발하지 않음
-            if (!hamster.isDarken)
+            isTraveling = true;
+            //출발
+            //햄스터 안보이도록 설정
+            if (hamster)
             {
-                _isTraveling = true;
-                //출발
-                //햄스터 안보이도록 설정
-                if (hamster)
-                {
-                    hamster.gameObject.SetActive(false);
-                }
+                hamster.gameObject.SetActive(false);
             }
         }
 
         if (_travelIcon != null)
         {
-            _travelIcon.SetActive(_isTraveling);
+            _travelIcon.SetActive(isTraveling);
         }
     }
 

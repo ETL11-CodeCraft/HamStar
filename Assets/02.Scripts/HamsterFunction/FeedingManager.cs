@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
@@ -11,6 +11,7 @@ using UnityEngine.InputSystem.EnhancedTouch;
 using System;
 using UnityEngine.XR.Interaction.Toolkit.AR;
 using System.Collections;
+using TMPro;
 
 public class FeedingManager : MonoBehaviour
 {
@@ -20,25 +21,27 @@ public class FeedingManager : MonoBehaviour
 
     private LoveManager _loveManager;
     private PotionManager _potionManager;
+    private DataLoader _dataLoader;
+    private InventoryData _inventoryData;
 
     //Prefab
-    [SerializeField] GameObject _sunflowerSeedPrefab;  //ÇØ¹Ù¶ó±â¾¾ ¿ÀºêÁ§Æ® 
-    [SerializeField] GameObject _sunflowerGoldSeedPrefab;  //ÇØ¹Ù¶ó±â¾¾ (Æ¯½Ä) ¿ÀºêÁ§Æ® 
-    [SerializeField] GameObject _hamsterPrefab;  //ÇÜ½ºÅÍ ÇÁ¸®ÆÕ
+    [SerializeField] GameObject _sunflowerSeedPrefab;  //í•´ë°”ë¼ê¸°ì”¨ ì˜¤ë¸Œì íŠ¸ 
+    [SerializeField] GameObject _sunflowerGoldSeedPrefab;  //í•´ë°”ë¼ê¸°ì”¨ (íŠ¹ì‹) ì˜¤ë¸Œì íŠ¸ 
+    [SerializeField] GameObject _hamsterPrefab;  //í–„ìŠ¤í„° í”„ë¦¬íŒ¹
     [SerializeField] LayerMask _draggable;
 
     //Button
-    [SerializeField] Button _feedBtn; //¸ÔÀÌ ¹öÆ° 
-    [SerializeField] Button _seedBtn; //¾¾¾Ñ ¹öÆ°
-    [SerializeField] Button _goldSeedBtn; //°ñµå¾¾¾Ñ ¹öÆ°
+    [SerializeField] Button _feedBtn; //ë¨¹ì´ ë²„íŠ¼ 
+    [SerializeField] Button _seedBtn; //ì”¨ì•— ë²„íŠ¼
+    [SerializeField] Button _goldSeedBtn; //ê³¨ë“œì”¨ì•— ë²„íŠ¼
 
     //Panel
-    [SerializeField] GameObject _feedPanel; //¸ÔÀÌ ¼³¸í ÆĞ³Î
-    [SerializeField] GameObject _feedPanel_darkModeWarning;
+    [SerializeField] GameObject _feedPanel; //ë¨¹ì´ ì„¤ëª… íŒ¨ë„
+    [SerializeField] GameObject _feedPanel_darkModeWarning;  //í‘í™”ëª¨ë“œ ì‹œ ê²½ê³ íŒ¨ë„
 
     //EventTrigger
     [SerializeField] EventTrigger _seedBtnEventTrigger;
-    [SerializeField] EventTrigger _goldSeedBtnTrigger;
+    [SerializeField] EventTrigger _goldSeedBtnEventTrigger;
 
     bool _isActiveFeed = false;
     bool _isDraging = false;
@@ -52,10 +55,14 @@ public class FeedingManager : MonoBehaviour
 
     private void Awake()
     {
+        _dataLoader = new DataLoader();
+        _inventoryData = _dataLoader.Load<InventoryData>();
+        
+
         _feedPanel.SetActive(false);    // Feed Instruction panel 
         _feedPanel_darkModeWarning.SetActive(false);
-
-        //ÀÏ¹İ ¸ÔÀÌ PointerDown ÀÌº¥Æ®Æ®¸®°Å
+         
+        //ì¼ë°˜ ë¨¹ì´ PointerDown ì´ë²¤íŠ¸íŠ¸ë¦¬ê±°
         EventTrigger.Entry onPointerDownEntry_seed = new EventTrigger.Entry();
         onPointerDownEntry_seed.eventID = EventTriggerType.PointerDown;
         onPointerDownEntry_seed.callback.AddListener(eventData =>
@@ -71,9 +78,9 @@ public class FeedingManager : MonoBehaviour
             {
                 Pose hitPose = _hits[0].pose;
 
-                Vector3 spawnPosition = hitPose.position + new Vector3(0, 0.1f, 0); // YÃàÀ¸·Î 0.1m ¶ç¿ì±â
+                Vector3 spawnPosition = hitPose.position + new Vector3(0, 0.1f, 0); // Yì¶•ìœ¼ë¡œ 0.1m ë„ìš°ê¸°
                 _spawnObject = Instantiate(_sunflowerSeedPrefab, spawnPosition, Quaternion.Euler(40f, -26f, 12f));
-                _spawnObject.GetComponent<Rigidbody>().isKinematic = true;  //ÃÊ±â¿¡´Â ¿òÁ÷ÀÌÁö ¾Êµµ·Ï
+                _spawnObject.GetComponent<Rigidbody>().isKinematic = true;  //ì´ˆê¸°ì—ëŠ” ì›€ì§ì´ì§€ ì•Šë„ë¡
             }
             else
             {
@@ -85,9 +92,9 @@ public class FeedingManager : MonoBehaviour
                 Hamster hamsterScript = _playerObject.GetComponent<Hamster>();
                 if (hamsterScript != null)
                 {
-                    //seed ÇÁ¸®ÆÕ »ı¼º½Ã, Seeds¸®½ºÆ®¿¡ Ãß°¡ 
+                    //seed í”„ë¦¬íŒ¹ ìƒì„±ì‹œ, Seedsë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€ 
                     hamsterScript.AddSeed(_spawnObject);
-                    Debug.Log("Seed¸®½ºÆ®¿¡ Ãß°¡ seed count :");
+                    Debug.Log("Seedë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€ seed count :");
                 }
 
                 if (hamsterScript.isDarken)
@@ -95,10 +102,11 @@ public class FeedingManager : MonoBehaviour
                     StartCoroutine(ShowPanel(_feedPanel_darkModeWarning, 2f));
                 }
             }
+            GameManager.instance.ReduceCount(10001);  //10001ë²ˆì˜ ì•„ì´í…œ ê°œìˆ˜ 1 ê°ì†Œ
         });
         _seedBtnEventTrigger.triggers.Add(onPointerDownEntry_seed);
 
-        //Æ¯½Ä ¸ÔÀÌ PointerDown ÀÌº¥Æ® Æ®¸®°Å
+        //íŠ¹ì‹ ë¨¹ì´ PointerDown ì´ë²¤íŠ¸ íŠ¸ë¦¬ê±°
         EventTrigger.Entry onPointerDownEntry_goldseed = new EventTrigger.Entry();
         onPointerDownEntry_goldseed.eventID = EventTriggerType.PointerDown;
         onPointerDownEntry_goldseed.callback.AddListener(eventData =>
@@ -114,9 +122,9 @@ public class FeedingManager : MonoBehaviour
             {
                 Pose hitPose = _hits[0].pose;
 
-                Vector3 spawnPosition = hitPose.position + new Vector3(0, 0.1f, 0); // YÃàÀ¸·Î 0.1m ¶ç¿ì±â
+                Vector3 spawnPosition = hitPose.position + new Vector3(0, 0.1f, 0); // Yì¶•ìœ¼ë¡œ 0.1m ë„ìš°ê¸°
                 _spawnObject = Instantiate(_sunflowerGoldSeedPrefab, spawnPosition, Quaternion.Euler(40f,-26f,12f));
-                _spawnObject.GetComponent<Rigidbody>().isKinematic = true;  //ÃÊ±â¿¡´Â ¿òÁ÷ÀÌÁö ¾Êµµ·Ï
+                _spawnObject.GetComponent<Rigidbody>().isKinematic = true;  //ì´ˆê¸°ì—ëŠ” ì›€ì§ì´ì§€ ì•Šë„ë¡
             }
             else
             {
@@ -128,15 +136,21 @@ public class FeedingManager : MonoBehaviour
                 Hamster hamsterScript = _playerObject.GetComponent<Hamster>();
                 if (hamsterScript != null)
                 {
-                    //seed ÇÁ¸®ÆÕ »ı¼º½Ã, Seeds¸®½ºÆ®¿¡ Ãß°¡ 
+                    //seed í”„ë¦¬íŒ¹ ìƒì„±ì‹œ, Seedsë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€ 
                     hamsterScript.AddSeed(_spawnObject);
-                    Debug.Log("Seed¸®½ºÆ®¿¡ Ãß°¡ seed count :");
+                    Debug.Log("Seedë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€ seed count :");
+                }
+
+                if (hamsterScript.isDarken)
+                {
+                    StartCoroutine(ShowPanel(_feedPanel_darkModeWarning, 2f));
                 }
             }
+            GameManager.instance.ReduceCount(10002);  //id : 10002ë²ˆì˜ ì•„ì´í…œ ê°œìˆ˜ ì¤„ì´ê¸° 
         });
-        _goldSeedBtnTrigger.triggers.Add(onPointerDownEntry_goldseed);
+        _goldSeedBtnEventTrigger.triggers.Add(onPointerDownEntry_goldseed);
 
-        //Drag ÀÌº¥Æ® Æ®¸®°Å 
+        //Drag ì´ë²¤íŠ¸ íŠ¸ë¦¬ê±° 
         EventTrigger.Entry onPointerDragEntry = new EventTrigger.Entry();
         onPointerDragEntry.eventID = EventTriggerType.Drag;
         onPointerDragEntry.callback.AddListener(eventData =>
@@ -144,26 +158,26 @@ public class FeedingManager : MonoBehaviour
             Debug.Log("OnDrag");
             if (_isDraging && _spawnObject != null)
             {
-                // ÅÍÄ¡ Æ÷Áö¼ÇÀ» °¡Á®¿Â´Ù
+                // í„°ì¹˜ í¬ì§€ì…˜ì„ ê°€ì ¸ì˜¨ë‹¤
                 Vector2 touchPosition = ((PointerEventData)eventData).position;
 
                 Ray ray = _xrCamera.ScreenPointToRay(touchPosition);
 
-                // AR ·¹ÀÌÄ³½ºÆ® ¼öÇà
+                // AR ë ˆì´ìºìŠ¤íŠ¸ ìˆ˜í–‰
                 if (_arRaycastManager.Raycast(ray, _hits, TrackableType.Planes))
                 {
-                    // Ã¹ ¹øÂ° È÷Æ®µÈ Æ®·¢ÅÍºí(AR Æò¸é)¿¡ ´ëÇØ ¿ÀºêÁ§Æ® À§Ä¡ °»½Å
+                    // ì²« ë²ˆì§¸ íˆíŠ¸ëœ íŠ¸ë™í„°ë¸”(AR í‰ë©´)ì— ëŒ€í•´ ì˜¤ë¸Œì íŠ¸ ìœ„ì¹˜ ê°±ì‹ 
                     Pose hitPose = _hits[0].pose;
                     _spawnObject.transform.position = hitPose.position + new Vector3(0, 0.15f, 0);
                     _spawnObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
-                    //_spawnObject.GetComponent<Rigidbody>().isKinematic = false;  //¹°¸®È¿°ú Àû¿ë
+                    //_spawnObject.GetComponent<Rigidbody>().isKinematic = false;  //ë¬¼ë¦¬íš¨ê³¼ ì ìš©
                 }
             }
         });
         _seedBtnEventTrigger.triggers.Add(onPointerDragEntry);
-        _goldSeedBtnTrigger.triggers.Add(onPointerDragEntry);
+        _goldSeedBtnEventTrigger.triggers.Add(onPointerDragEntry);
 
-        //¸ÔÀÌ PointerUp ÀÌº¥Æ® Æ®¸®°Å
+        //ë¨¹ì´ PointerUp ì´ë²¤íŠ¸ íŠ¸ë¦¬ê±°
         EventTrigger.Entry OnPointerUpEntry = new EventTrigger.Entry();
         OnPointerUpEntry.eventID = EventTriggerType.PointerUp;
         OnPointerUpEntry.callback.AddListener(eventData =>
@@ -173,22 +187,26 @@ public class FeedingManager : MonoBehaviour
                 _isDraging = false;
                 Rigidbody rb = _spawnObject.GetComponent<Rigidbody>();
                 rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-                rb.isKinematic = false;  //¹°¸®È¿°ú Àû¿ë
+                rb.isKinematic = false;  //ë¬¼ë¦¬íš¨ê³¼ ì ìš©
 
                 rb.angularVelocity = Vector3.zero;
 
-                _spawnObject = null;  //¾¾¾Ñ ÂüÁ¶ ÃÊ±âÈ­
+                _spawnObject = null;  //ì”¨ì•— ì°¸ì¡° ì´ˆê¸°í™”
                 _isPressSeedBtn = false;
+
+                
+                GameManager.instance.UpdateCountUI(10001, GameManager.instance._seedCount);
+                GameManager.instance.UpdateCountUI(10002, GameManager.instance._goldseedCount);
             }
         });
         _seedBtnEventTrigger.triggers.Add(OnPointerUpEntry);
-        _goldSeedBtnTrigger.triggers.Add(OnPointerUpEntry);
+        _goldSeedBtnEventTrigger.triggers.Add(OnPointerUpEntry);
 
 
         _seedBtn.gameObject.SetActive(_isActiveFeed);
         _goldSeedBtn.gameObject.SetActive(_isActiveFeed);
 
-        // ¸ÔÀÌ ¹öÆ° ¸®½º³Ê Ãß°¡
+        // ë¨¹ì´ ë²„íŠ¼ ë¦¬ìŠ¤ë„ˆ ì¶”ê°€
         if (_feedBtn != null)
         {
             _feedBtn.onClick.AddListener(OnShowOtherButton);
@@ -214,8 +232,12 @@ public class FeedingManager : MonoBehaviour
 
     private void OnShowOtherButton()
     {
+        GameManager.instance.UpdateCountUI(10001, GameManager.instance._seedCount);
+        GameManager.instance.UpdateCountUI(10002, GameManager.instance._goldseedCount);
+        GameManager.instance.UpdateCountUI(10003, GameManager.instance._potionCount);
         _loveManager?.SetFeedBtnInteractable(_isActiveFeed);
-        _potionManager?.SetFeedBtnInteractable(_isActiveFeed);
+        _potionManager?.SetPotionBtnInteractable(_isActiveFeed);
+        _potionManager?.SetPotionEventTriggerActive(_isActiveFeed);
 
 
         _isActiveFeed = !_isActiveFeed;
@@ -227,25 +249,25 @@ public class FeedingManager : MonoBehaviour
 
     private void SpawnHamsterAtCenter()
     {
-        // È­¸é Áß¾Ó À§Ä¡¸¦ ±âÁØÀ¸·Î ·¹ÀÌÄ³½ºÆ® ¼öÇà
+        // í™”ë©´ ì¤‘ì•™ ìœ„ì¹˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë ˆì´ìºìŠ¤íŠ¸ ìˆ˜í–‰
         Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
         if (_arRaycastManager.Raycast(screenCenter, _hits, TrackableType.Planes))
         {
             if (!_isHamsterSpawned)
             {
-                Pose hitPose = _hits[0].pose;  // Ã¹ ¹øÂ°·Î °¨ÁöµÈ Æò¸éÀÇ À§Ä¡ °¡Á®¿À±â
+                Pose hitPose = _hits[0].pose;  // ì²« ë²ˆì§¸ë¡œ ê°ì§€ëœ í‰ë©´ì˜ ìœ„ì¹˜ ê°€ì ¸ì˜¤ê¸°
 
-                // ÇÜ½ºÅÍ ¿ÀºêÁ§Æ® »ı¼º
+                // í–„ìŠ¤í„° ì˜¤ë¸Œì íŠ¸ ìƒì„±
                 _playerObject = Instantiate(_hamsterPrefab, hitPose.position, hitPose.rotation);
 
                 _isHamsterSpawned = true;
-                Debug.Log("ÇÜ½ºÅÍ°¡ È­¸é Áß¾Ó ¹Ù´Ú¿¡ »ı¼ºµÇ¾ú½À´Ï´Ù.");
+                Debug.Log("í–„ìŠ¤í„°ê°€ í™”ë©´ ì¤‘ì•™ ë°”ë‹¥ì— ìƒì„±ë˜ì—ˆìŠµë‹ˆë‹¤.");
             }
         }
         else
         {
-            Debug.Log("AR Æò¸éÀÌ °¨ÁöµÇÁö ¾Ê¾Ò½À´Ï´Ù. ÇÜ½ºÅÍ¸¦ »ı¼ºÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("AR í‰ë©´ì´ ê°ì§€ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. í–„ìŠ¤í„°ë¥¼ ìƒì„±í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
@@ -254,6 +276,36 @@ public class FeedingManager : MonoBehaviour
         if (_feedBtn != null)
         {
             _feedBtn.interactable = isInteractable;
+        }
+    }
+
+    public void SetSeedBtnInteractable(bool isInteractable)
+    {
+        if (_seedBtn != null)
+        {
+            _seedBtn.interactable = isInteractable;
+        }
+    }
+    public void SetGoldSeedBtnInteractable(bool isInteractable)
+    {
+        if (_goldSeedBtn != null)
+        {
+            _goldSeedBtn.interactable = isInteractable;
+        }
+    }
+
+    public void SetSeedEventTriggerActive(bool isActive)
+    {
+        if (_seedBtnEventTrigger != null)
+        {
+            _seedBtnEventTrigger.enabled = isActive;
+        }
+    }
+    public void SetGoldSeedEvnetTriggerActive(bool isActive)
+    {
+        if (_goldSeedBtnEventTrigger != null)
+        {
+            _goldSeedBtnEventTrigger.enabled = isActive;
         }
     }
 
@@ -272,4 +324,5 @@ public class FeedingManager : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+
 }
