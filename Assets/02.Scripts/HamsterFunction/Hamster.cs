@@ -42,6 +42,7 @@ public class Hamster : MonoBehaviour
     private int _cleanliness = 100;
     private int _closeness = 100;
     private int _stress = 0;
+    private string _recentDate;
     private bool _isDarken = false;
     public bool cantAct = false;
 
@@ -227,6 +228,8 @@ public class Hamster : MonoBehaviour
     {
         _dataLoader = new DataLoader();
         _hamsterStatData = _dataLoader.Load<HamsterStatData>();
+
+        _recentDate = _hamsterStatData.recentChangedDate;
     }
 
     void Start()
@@ -650,7 +653,7 @@ public class Hamster : MonoBehaviour
     {
         if (_travelManager.isTraveling) return;
 
-        var recentTime = DateTime.ParseExact(_hamsterStatData.recentChangedDate, "yyyy-MM-dd HH:mm:ss", null);
+        var recentTime = DateTime.ParseExact(_recentDate, "yyyy-MM-dd HH:mm:ss", null);
         var deltaTime = DateTime.Now - recentTime;
 
         //미접속중 변화하는 스텟
@@ -659,6 +662,10 @@ public class Hamster : MonoBehaviour
         closeness = _hamsterStatData.closeness - ((int)deltaTime.TotalMinutes / 30 * 2);
         var deltaStress = ((int)deltaTime.TotalMinutes / 30 * 2);
         stress += _hamsterStatData.stress + deltaStress;
+
+        Debug.Log((int)deltaTime.TotalMinutes / 30);
+
+        SaveWellbeingStat();
     }
 
     IEnumerator HamsterStatUpdate()
