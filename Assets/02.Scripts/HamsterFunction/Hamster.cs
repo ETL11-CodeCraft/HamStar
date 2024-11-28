@@ -579,7 +579,7 @@ public class Hamster : MonoBehaviour
             collision.gameObject.SetActive(false);
             GameObject healingEffect = Instantiate(_healingEffect, gameObject.transform.position, Quaternion.identity);
             isDarken = false;
-
+            SoundManager.instance.PlaySFX("GivePotion");
 
             //이펙트 생성 후 제거
             ParticleSystem particleSystem = _healingEffect.GetComponent<ParticleSystem>();

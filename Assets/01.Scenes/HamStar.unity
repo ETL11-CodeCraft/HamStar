@@ -12225,6 +12225,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 7910b1f3d7b472249a8152ecdac787b9, type: 3}
   - name: HamsterWheel
     clip: {fileID: 8300000, guid: cda32d8fca1191e4db958d4be7ebd40b, type: 3}
+  - name: Eat
+    clip: {fileID: 8300000, guid: 2548a55e0c0a90f438428255ff46e7cb, type: 3}
+  - name: StepSound
+    clip: {fileID: 8300000, guid: a989a7f78c1698f4db59660c19a65606, type: 3}
 --- !u!82 &1657405140
 AudioSource:
   m_ObjectHideFlags: 0
