@@ -256,10 +256,10 @@ public class Hamster : MonoBehaviour
         _closenessSlider.maxValue = 100;
         _stressSlider.maxValue = 100;
 
-        fullness = _hamsterStatData.fullness;
-        cleanliness = _hamsterStatData.cleanliness;
-        closeness = _hamsterStatData.closeness;
-        stress = _hamsterStatData.stress;
+        _fullness = _hamsterStatData.fullness;
+        _cleanliness = _hamsterStatData.cleanliness;
+        _closeness = _hamsterStatData.closeness;
+        _stress = _hamsterStatData.stress;
 
         _travelManager = Instantiate(_travelPrefab, hamsterPanel.transform);
         _travelManager.hamster = this;
@@ -282,7 +282,6 @@ public class Hamster : MonoBehaviour
                         return NodeState.Success;
                     }
 
-                    isDarken = false;
                     return NodeState.Failure;
                 })                  //IsDarken (흑화 상태에 들어가면 이후 행동을 진행하지 않음)
                 .Node(() =>
@@ -661,6 +660,8 @@ public class Hamster : MonoBehaviour
         cleanliness = _hamsterStatData.cleanliness - ((int)deltaTime.TotalMinutes / 15);
         closeness = _hamsterStatData.closeness - ((int)deltaTime.TotalMinutes / 15);
         var deltaStress = ((int)deltaTime.TotalMinutes / 15);
+
+        Debug.Log($"{_hamsterStatData.stress}, {deltaStress}");
         stress += _hamsterStatData.stress + deltaStress;
 
         SaveWellbeingStat();
@@ -670,7 +671,6 @@ public class Hamster : MonoBehaviour
     {
         while (true)
         {
-            Debug.LogWarning("?");
             if (_travelManager && !_travelManager.isTraveling)
             {
                 //임시 감소 수치
