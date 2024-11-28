@@ -657,13 +657,11 @@ public class Hamster : MonoBehaviour
         var deltaTime = DateTime.Now - recentTime;
 
         //미접속중 변화하는 스텟
-        fullness = _hamsterStatData.fullness - ((int)deltaTime.TotalMinutes / 30 * 2);
-        cleanliness = _hamsterStatData.cleanliness - ((int)deltaTime.TotalMinutes / 30 * 2);
-        closeness = _hamsterStatData.closeness - ((int)deltaTime.TotalMinutes / 30 * 2);
-        var deltaStress = ((int)deltaTime.TotalMinutes / 30 * 2);
+        fullness = _hamsterStatData.fullness - ((int)deltaTime.TotalMinutes / 15);
+        cleanliness = _hamsterStatData.cleanliness - ((int)deltaTime.TotalMinutes / 15);
+        closeness = _hamsterStatData.closeness - ((int)deltaTime.TotalMinutes / 15);
+        var deltaStress = ((int)deltaTime.TotalMinutes / 15);
         stress += _hamsterStatData.stress + deltaStress;
-
-        Debug.Log((int)deltaTime.TotalMinutes / 30);
 
         SaveWellbeingStat();
     }
@@ -672,17 +670,18 @@ public class Hamster : MonoBehaviour
     {
         while (true)
         {
-            if(_travelManager && _travelManager.isTraveling)
+            Debug.LogWarning("?");
+            if (_travelManager && !_travelManager.isTraveling)
             {
                 //임시 감소 수치
                 fullness -= 2;
                 if (poopCnt == 0)
                 {
-                    cleanliness += 2;
+                    cleanliness += 1;
                 }
                 else
                 {
-                    cleanliness -= poopCnt * 1;
+                    cleanliness -= poopCnt;
                 }
                 closeness -= 2;
 
