@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
         {
             return _wheel;
         }
+        set
+        {
+            _wheel = value;
+        }
     }
 
     private void Awake()
