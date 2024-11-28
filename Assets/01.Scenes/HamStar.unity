@@ -12215,7 +12215,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 0}
   sfxSource: {fileID: 0}
-  bgmClipList: []
+  bgmClipList:
+  - name: Chill
+    clip: {fileID: 8300000, guid: 44742a134d40cea41bc3d22d95efb98e, type: 3}
   sfxClipList:
   - name: ButtonClick
     clip: {fileID: 8300000, guid: f30c4840dbfeeff42a9c918d7ae2edd7, type: 3}
