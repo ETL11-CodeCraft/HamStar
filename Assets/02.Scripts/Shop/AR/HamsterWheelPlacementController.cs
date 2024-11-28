@@ -177,11 +177,11 @@ public class HamsterWheelPlacementController : MonoBehaviour
     private void OnTap(InputAction.CallbackContext context)
     {
         if (!_isPlacementMode) return;
-        //Debug.Log($"OnTap => {context.time} {context.startTime} {context.duration}");
-
+        
         InfoVisible = false;
 
         Vector2 tapPosition = context.ReadValue<Vector2>();
+        Debug.Log($"OnTap => {tapPosition} [HamsterWheelController]");
 
         if (_currentHamsterWheel == null)
         {
