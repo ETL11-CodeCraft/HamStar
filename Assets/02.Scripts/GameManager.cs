@@ -50,15 +50,16 @@ public class GameManager : MonoBehaviour
 
         _potionManager = FindObjectOfType<PotionManager>();
         _feedingManager = FindObjectOfType<FeedingManager>();
+
+        UpdateCountUI(10001, _seedCount);
+        UpdateCountUI(10002, _goldseedCount);
+        UpdateCountUI(10003, _potionCount);
     }
 
     public void RefreshInventoryData()
     {
         _inventoryData = _dataLoader.Load<InventoryData>();
         coin = _inventoryData.coin;
-        //_seedCount.text = $"{GetQuantityForId(0)}";
-        //_goldseedCount.text = $"{GetQuantityForId(1)}";
-        //_potionCount.text = $"{GetQuantityForId(2)}";
     }
 
     private int GetQuantityForId(int id)
