@@ -4,8 +4,6 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.InputSystem;
 using System;
-using UnityEngine.XR.ARFoundation;
-using UnityEngine.XR.ARSubsystems;
 
 public class Hamster : MonoBehaviour
 {
@@ -324,7 +322,7 @@ public class Hamster : MonoBehaviour
                             {
                                 if (_currentSeed)
                                 {
-                                    _animator.SetBool("IsIdle", false);
+                                    _animator.SetBool("isIdle", false);
                                     _animator.SetBool("isMove", false);
                                     _animator.SetBool("isEat", true);
 
@@ -597,7 +595,7 @@ public class Hamster : MonoBehaviour
     private void OnTap(InputAction.CallbackContext context)
     {
         Debug.Log("TAP");
-        Vector2 tapPosition = Mouse.current.position.ReadValue();
+        Vector2 tapPosition = context.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(tapPosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
