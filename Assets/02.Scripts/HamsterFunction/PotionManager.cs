@@ -22,11 +22,15 @@ public class PotionManager : MonoBehaviour
     GameObject _spawnObject;
     private List<ARRaycastHit> _hits = new List<ARRaycastHit>();
 
+    private DataLoader _dataLoader;
+    private InventoryData _inventoryData;
+
     private void Awake()
     {
+        _dataLoader = new DataLoader();
+
         _potionPanel.SetActive(false);  // Potion Instruction panel
         _potionImg.gameObject.SetActive(false);  //Potion drag image
-
 
         // Potion PointerDown 이벤트 트리거 
         _rectTransform = _potionImg.GetComponent<RectTransform>();
@@ -35,6 +39,9 @@ public class PotionManager : MonoBehaviour
         onPointerDownEntry_Potion.eventID = EventTriggerType.PointerDown;
         onPointerDownEntry_Potion.callback.AddListener(eventData =>
         {
+            _inventoryData = _dataLoader.Load<InventoryData>();
+            if (_inventoryData.quantityForProductId.Find(v => v.productId == 10003).productId == 0) return;
+
             Vector2 TouchPosition = ((PointerEventData)eventData).position;
 
             _potionImg.gameObject.SetActive(true);
@@ -52,6 +59,8 @@ public class PotionManager : MonoBehaviour
         onPointerDragEntry_potion.callback.AddListener(eventData =>
         {
             Debug.Log("OnDrag");
+            
+            if (_inventoryData.quantityForProductId.Find(v => v.productId == 10003).productId == 0) return;
 
             // 터치 포지션을 가져온다
             Vector2 touchPosition = ((PointerEventData)eventData).position;
@@ -65,6 +74,8 @@ public class PotionManager : MonoBehaviour
         OnPointerUpEntry_potion.eventID = EventTriggerType.PointerUp;
         OnPointerUpEntry_potion.callback.AddListener(eventData =>
         {
+            if (_inventoryData.quantityForProductId.Find(v => v.productId == 10003).productId == 0) return;
+
             _potionImg.gameObject.SetActive(false);
 
             Vector2 TouchPosition = ((PointerEventData)eventData).position;

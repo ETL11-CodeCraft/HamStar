@@ -3,15 +3,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
-using UnityEngine.XR.Interaction.Toolkit.Inputs.Readers;
 using UnityEngine.EventSystems;
-using NUnit.Framework;
 using System.Collections.Generic;
-using UnityEngine.InputSystem.EnhancedTouch;
-using System;
-using UnityEngine.XR.Interaction.Toolkit.AR;
 using System.Collections;
-using TMPro;
 
 public class FeedingManager : MonoBehaviour
 {
@@ -68,6 +62,10 @@ public class FeedingManager : MonoBehaviour
         onPointerDownEntry_seed.callback.AddListener(eventData =>
         {
             Debug.Log("OnTouch");
+
+            _inventoryData = _dataLoader.Load<InventoryData>();
+            if (_inventoryData.quantityForProductId.Find(v => v.productId == 10001).productId == 0) return;
+            
             _isDraging = true;
 
             Vector2 TouchPosition = ((PointerEventData)eventData).position;
@@ -113,6 +111,9 @@ public class FeedingManager : MonoBehaviour
         {
             Debug.Log("OnTouch");
             _isDraging = true;
+
+            _inventoryData = _dataLoader.Load<InventoryData>();
+            if (_inventoryData.quantityForProductId.Find(v => v.productId == 10002).productId == 0) return;
 
             Vector2 TouchPosition = ((PointerEventData)eventData).position;
             Ray ray = _xrCamera.ScreenPointToRay(TouchPosition);
