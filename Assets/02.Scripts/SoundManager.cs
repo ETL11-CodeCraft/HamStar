@@ -112,14 +112,4 @@ public class SoundManager : MonoBehaviour
     {
         PlaySFX("ButtonClick");
     }
-
-    public void PlayEatingSound()
-    {
-        PlaySFX("Eat");
-    }
-
-    public void PlayStepSound()
-    {
-        PlaySFX("StepSound");
-    }
 }
