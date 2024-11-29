@@ -107,6 +107,7 @@ public class HamsterWheelPlacementController : MonoBehaviour
             SavePlacementData();
             _isPlacementMode = false;
             _isRotationMode = false;
+            GameManager.instance.Wheel = _currentHamsterWheel.GetComponent<HamsterWheel>();
         };
     }
 
