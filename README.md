@@ -1,6 +1,9 @@
 # HamStar
 AR을 활용한 키우기 시뮬레이션 게임
 
+## 시연 영상
+https://www.youtube.com/watch?v=HV57NlRkIUM&ab_channel=%EC%8B%AC%EB%8B%A4%EC%9D%80
+
 ## 시스템
 ### 상점
 
@@ -22,5 +25,3 @@ AR을 활용한 키우기 시뮬레이션 게임
 
 ## 발표 자료
 https://docs.google.com/presentation/d/1Zfw-qobvhjeH6-kPZh__HsgqdblyWbvfEexq6TY8pkU/edit#slide=id.p6
-## 시연 영상
-https://www.youtube.com/watch?v=HV57NlRkIUM&ab_channel=%EC%8B%AC%EB%8B%A4%EC%9D%80
